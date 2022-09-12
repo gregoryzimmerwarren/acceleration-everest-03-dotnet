@@ -2,12 +2,15 @@
 
 namespace Data.Repositories
 {
-    public interface IBaseRepository<TEntity> where TEntity : BaseEntity
+    public interface IBaseRepository<TEntity> 
+        where TEntity : BaseEntity
     {
-        int Create(TEntity entity);
-        int Delete(int id);
-        int Update(TEntity entity);
+        bool CpfNotFound(TEntity entityToUpdate);
+        bool EmailNotFound(TEntity entityToUpdate);
+        string Create(TEntity entity);
+        string Delete(long id);
+        string Update(TEntity entity);
         List<TEntity> GetAll();
-        TEntity GetById(int id);
+        TEntity GetById(long id);
     }
 }

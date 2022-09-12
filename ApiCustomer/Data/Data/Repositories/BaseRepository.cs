@@ -1,40 +1,65 @@
-﻿using Data.Context;
-using Data.Entities;
+﻿using Data.Entities;
 
 namespace Data.Repositories
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity>
+        where TEntity : BaseEntity
     {
-        private readonly CustomerApiContext _context;
+        private readonly List<TEntity> _entityList;
 
-        public BaseRepository(CustomerApiContext context)
+        public BaseRepository(List<TEntity> entityList)
         {
-            _context = context;
+            _entityList = entityList;
         }
 
-        public int Create(TEntity entity)
+        public virtual bool CpfNotFound(TEntity entityToUpdate)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public int Delete(int id)
+        public virtual string Create(TEntity entity)
         {
-            throw new NotImplementedException();
+            entity.Id = _entityList.Count + 1;
+            _entityList.Add(entity);
+
+            return "Created";
         }
 
-        public List<TEntity> GetAll()
+        public virtual string Delete(long id)
         {
-            throw new NotImplementedException();
+            var entity = GetById(id);
+
+            if (entity == null)
+                return "Not found";
+
+            _entityList.Remove(entity);
+
+            return "Deleted";
         }
 
-        public TEntity GetById(int id)
+        public virtual bool EmailNotFound(TEntity entityToUpdate)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public int Update(TEntity entity)
+        public virtual List<TEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return _entityList;
+        }
+
+        public virtual TEntity GetById(long id)
+        {
+            TEntity entity = _entityList.Where(customer => customer.Id == id).FirstOrDefault();
+
+            if (entity == null)
+                return null;
+
+            return entity;
+        }
+
+        public virtual string Update(TEntity entityToUpdate)
+        {
+            return "Updated";
         }
     }
 }
