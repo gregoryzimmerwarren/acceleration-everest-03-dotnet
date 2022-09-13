@@ -9,14 +9,14 @@ namespace CostumerApi.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _repository;
+        private readonly ICustomerRepository _repository;        
+
+        CustomerValidator _validator = new();
 
         public CustomerController(ICustomerRepository repository)
         {
             _repository = repository;
         }
-
-        readonly CustomerValidator _validator = new();
 
         [HttpDelete]
         public IActionResult Delete(long id)
@@ -50,29 +50,27 @@ namespace CostumerApi.Controllers
         [HttpPost]
         public IActionResult Post(CustomerEntity entity)
         {
-            var result = _validator.Validate(entity);
-            var cpfNotFound = _repository.CpfNotFound(entity);
-            var emailNotFound = _repository.CpfNotFound(entity);
+            var validator = _validator.Validate(entity);
+            var result = _repository.Create(entity);
 
-            if (!result.IsValid)
+            if (!validator.IsValid)
             {
                 return BadRequest(result.ToString());
             }
-            else if (result.IsValid && cpfNotFound == false && emailNotFound == true)
+            else if (result == 4091)
             {
                 return BadRequest("Cpf is already registered");
             }
-            else if (result.IsValid && cpfNotFound == true && emailNotFound == false)
+            else if (result == 4092)
             {
                 return BadRequest("Email is already registered");
             }
-            else if (result.IsValid && cpfNotFound == false && emailNotFound == false)
+            else if (result == 4093)
             {
                 return BadRequest("Cpf and Email are already registered");
             }
             else
-            {
-                _repository.Create(entity);
+            {                
                 return Created("", entity.Id);
             }                            
         }
@@ -80,7 +78,12 @@ namespace CostumerApi.Controllers
         [HttpPut]
         public IActionResult Update(CustomerEntity entity)
         {
-            return Ok(_repository.Update(entity));
+            var result = _repository.Update(entity);
+
+            if (result == 404)
+                return NotFound();
+
+            return Ok(result);
         }
     }
 }
