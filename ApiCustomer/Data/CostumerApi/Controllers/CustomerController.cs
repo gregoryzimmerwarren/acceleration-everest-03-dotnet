@@ -7,30 +7,37 @@ namespace CostumerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : GenericController<CustomerEntity, CustomerRepository>
+    public class CustomerController : ControllerBase
     {
-        private ICustomerRepository _repository;
-        CustomerValidator _validator = new CustomerValidator();
+        private readonly ICustomerRepository _repository;
 
-        public CustomerController(CustomerRepository repository) : base(repository)
+        public CustomerController(ICustomerRepository repository)
         {
             _repository = repository;
         }
 
+        readonly CustomerValidator _validator = new();
+
         [HttpDelete]
-        public override IActionResult Delete(long id)
+        public IActionResult Delete(long id)
         {
             var result = _repository.Delete(id);
 
-            if (result == "Not found")
+            if (result == 404)
                 return NotFound();
 
 
             return Ok(result);
         }
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            return Ok(_repository.GetAll());
+        }
+
         [HttpGet("{id}")]
-        public override IActionResult GetById(long id)
+        public IActionResult GetById(long id)
         {
             var result = _repository.GetById(id);
 
@@ -41,36 +48,39 @@ namespace CostumerApi.Controllers
         }
 
         [HttpPost]
-        public override IActionResult Post(CustomerEntity entity)
+        public IActionResult Post(CustomerEntity entity)
         {
             var result = _validator.Validate(entity);
             var cpfNotFound = _repository.CpfNotFound(entity);
             var emailNotFound = _repository.CpfNotFound(entity);
 
-            if (result.IsValid && cpfNotFound == true && emailNotFound == true)
-            {
-                _repository.Create(entity);
-                return CreatedAtAction(nameof(GetById), new {id = entity.Id}, entity);
-            }
-            else if (!result.IsValid)
+            if (!result.IsValid)
             {
                 return BadRequest(result.ToString());
             }
-            else if (cpfNotFound == false && emailNotFound == true)
+            else if (result.IsValid && cpfNotFound == false && emailNotFound == true)
             {
                 return BadRequest("Cpf is already registered");
             }
-            else if (cpfNotFound == true && emailNotFound == false)
+            else if (result.IsValid && cpfNotFound == true && emailNotFound == false)
             {
                 return BadRequest("Email is already registered");
             }
-            return BadRequest("Cpf and Email are already registered");
+            else if (result.IsValid && cpfNotFound == false && emailNotFound == false)
+            {
+                return BadRequest("Cpf and Email are already registered");
+            }
+            else
+            {
+                _repository.Create(entity);
+                return Created("", entity.Id);
+            }                            
         }
 
         [HttpPut]
-        public override IActionResult Update(CustomerEntity entity)
+        public IActionResult Update(CustomerEntity entity)
         {
-            return base.Update(entity);
+            return Ok(_repository.Update(entity));
         }
     }
 }

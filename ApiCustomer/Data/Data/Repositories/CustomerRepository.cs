@@ -1,76 +1,99 @@
 ﻿using Data.Entities;
+using Data.Validator;
 
 namespace Data.Repositories
 {
-    public class CustomerRepository : BaseRepository<CustomerEntity>, 
-        ICustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
-        private List<CustomerEntity> _customerList;
+        private readonly List<CustomerEntity> _customersList = new();
 
-        public CustomerRepository(List<CustomerEntity> entityList) : base(entityList)
-        {
-            _customerList = entityList;
-        }
-
-        public override string Create(CustomerEntity entity)
+        public int Create(CustomerEntity entity)
         {
             entity.Cpf = entity.Cpf.Trim().Replace(".", "").Replace("-", "");
 
-            for (var i = 0; i < _customerList.Count; i++)
-            {
-                var customer = _customerList[i];
+            var exists = _customersList.Any(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email);
 
-                if (customer.Cpf == entity.Cpf || customer.Email == entity.Email)
-                {
-                    return "Customer already exist";
-                }
-            }
+            if (exists)
+                return 409;
 
-            return Create(entity);
+            entity.Id = _customersList.Count + 1;
+
+            _customersList.Add(entity);
+
+            return 201;    
+
         }
 
-        public override string Update(CustomerEntity entityToUpdate)
+        public bool CpfNotFound(CustomerEntity entityToUpdate)
+        {
+            var customer = _customersList.Where(customer => customer.Cpf == entityToUpdate.Cpf).FirstOrDefault();
+
+            if (customer == null)
+                return true;
+
+            return false;
+        }
+
+        public int Delete(long id)
+        {
+            var entity = GetById(id);
+
+            if (entity == null)
+                return 404;
+
+            _customersList.Remove(entity);
+
+            return 200;
+        }
+
+        public bool EmailNotFound(CustomerEntity entityToUpdate)
+        {
+            var customer = _customersList.Where(customer => customer.Email == entityToUpdate.Email).FirstOrDefault();
+
+            if (customer == null)
+                return true;
+
+            return false;
+        }
+
+        public List<CustomerEntity> GetAll()
+        {
+            return _customersList;
+        }
+
+        public CustomerEntity GetById(long id)
+        {
+            var entity = _customersList.Where(customer => customer.Id == id).FirstOrDefault();
+
+            if (entity == null)
+                return null;
+
+            return entity;
+        }
+
+        public int Update(CustomerEntity entityToUpdate)
         {
             var entity = GetById(entityToUpdate.Id);
 
             if (entity == null)
-                return "Not found";
+                return 404;
 
             entityToUpdate.Cpf = entityToUpdate.Cpf.Trim().Replace(".", "").Replace("-", "");
+          
+            var customer = _customersList.Where(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email).FirstOrDefault();
 
-            for (var i = 0; i < _customerList.Count; i++)
+            if (customer != null)
             {
-                var customer = _customerList[i];
+                entityToUpdate.Id = customer.Id;
 
-                if (customer.Cpf == entityToUpdate.Cpf && customer.Email == entityToUpdate.Email)
-                {
-                    entityToUpdate.Id = customer.Id;
+                var index = _customersList.IndexOf(customer);
 
-                    return Update(entityToUpdate);
-                }
+                _customersList[index] = entityToUpdate;
+
+                return 200;
             }
 
-            return "Not found";
-        }
-
-        public override bool CpfNotFound(CustomerEntity entityToUpdate)
-        {
-            var customer = _customerList.Where(customer => customer.Cpf == entityToUpdate.Cpf).FirstOrDefault();
-
-            if (customer != null)
-                return false;
-
-            return true;
-        }
-
-        public override bool EmailNotFound(CustomerEntity entityToUpdate)
-        {
-            var customer = _customerList.Where(customer => customer.Email == entityToUpdate.Email).FirstOrDefault();
-
-            if (customer != null)
-                return false;
-
-            return true;
+            return 404;
         }
     }
 }

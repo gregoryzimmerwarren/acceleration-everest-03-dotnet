@@ -17,12 +17,10 @@ namespace Data.Validator
                 .NotEmpty()
                 .WithMessage("Email must not be empty.")
                 .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-                .WithMessage("Email must have a valid format.");
-
-            RuleFor(costumer => costumer.EmailConfirmation)
-                .Equal(costumer => costumer.Email)
+                .WithMessage("Email must have a valid format.")
+                .Equal(costumer => costumer.EmailConfirmation)
                 .WithMessage("Email and EmailConfirmation must be the same.");
-
+               
             RuleFor(costumer => costumer.Cpf)
                 .NotEmpty()
                 .WithMessage("Cpf must not be empty.")
@@ -35,9 +33,7 @@ namespace Data.Validator
 
             RuleFor(costumer => costumer.Cellphone)
                 .NotEmpty()
-                .WithMessage("Cellphone must not be empty.")
-                .Matches(@"^\([0-9]{2})\s+9+\([0-9]{8})$")
-                .WithMessage("Cellphone must have a valid format xx 9xxxxxxxx.");
+                .WithMessage("Cellphone must not be empty.");
 
             RuleFor(costumer => costumer.Country)
                 .NotEmpty()
@@ -57,9 +53,7 @@ namespace Data.Validator
             
             RuleFor(costumer => costumer.PostalCode)
                 .NotEmpty()
-                .WithMessage("Postal code must not be empty.")
-                .Matches(@"^\([0-9]{5})+-+\([0-9]{3})$")
-                .WithMessage("Postal code must have a valid format xxxxx-xxx.");
+                .WithMessage("Postal code must not be empty.");
 
             RuleFor(costumer => costumer.Number)
                 .NotEmpty()
