@@ -1,5 +1,4 @@
 ﻿using Data.Entities;
-using Data.Validator;
 
 namespace Data.Repositories
 {
