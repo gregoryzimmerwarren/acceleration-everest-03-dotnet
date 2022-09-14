@@ -50,5 +50,4 @@
             return cpf.Trim().Replace(".", "").Replace(",", "").Replace("-", "");
         }
     }
-
 }

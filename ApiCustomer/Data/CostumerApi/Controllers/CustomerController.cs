@@ -9,9 +9,7 @@ namespace CostumerApi.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _repository;        
-
-        CustomerValidator _validator = new();
+        private readonly ICustomerRepository _repository;
 
         public CustomerController(ICustomerRepository repository)
         {
@@ -23,11 +21,10 @@ namespace CostumerApi.Controllers
         {
             var result = _repository.Delete(id);
 
-            if (result == "404")
+            if (result == false)
                 return NotFound($"Did not found customer for Id: {id}");
 
-
-            return Ok(result);
+            return Ok();
         }
 
         [HttpGet]
@@ -50,30 +47,37 @@ namespace CostumerApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(CustomerEntity entity)
+        public IActionResult Post(CustomerEntity customer)
         {
-            var result = _repository.Create(entity);
-
             try
             {
-                return Created("", entity.Id);    
+                _repository.Create(customer);
+                return Created("", customer.Id);
             }
-            catch (Exception ex)
+            catch (ArgumentException exception)
             {
-                 var message = ex.InnerException?.Message ?? ex.Message
-                 return BadRequest(message);
-            }       
+                var message = exception.InnerException?.Message ?? exception.Message;
+                return BadRequest(message);
+            }
         }
 
         [HttpPut]
-        public IActionResult Update(CustomerEntity entity)
+        public IActionResult Update(CustomerEntity customerToUpdate)
         {
-            var result = _repository.Update(entity);
+            try
+            {
+                var result = _repository.Update(customerToUpdate);
 
-            if (result == "404")
-                return NotFound($"Did not found customer for Id: {id}");
+                if (result == false)
+                    return NotFound($"Did not found customer for Id: {customerToUpdate.Id}");
 
-            return Ok(result);
+                return Ok();
+            }
+            catch (ArgumentException exception)
+            {
+                var message = exception.InnerException?.Message ?? exception.Message;
+                return NotFound(message);
+            }
         }
     }
 }

@@ -4,10 +4,10 @@ namespace Data.Repositories
 {
     public interface ICustomerRepository
     {
-        string Create(CustomerEntity entity);
+        void Create(CustomerEntity customerToCreate);
         bool Delete(long id);
-        bool Update(CustomerEntity entity);
         List<CustomerEntity> GetAll();
         CustomerEntity GetById(long id);
+        bool Update(CustomerEntity customerToUpdate);
     }
 }

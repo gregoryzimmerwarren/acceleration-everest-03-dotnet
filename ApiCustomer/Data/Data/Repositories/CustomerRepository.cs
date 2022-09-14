@@ -7,39 +7,39 @@ namespace Data.Repositories
     {
         private readonly List<CustomerEntity> _customersList = new();
 
-        public string Create(CustomerEntity entity)
+        public void Create(CustomerEntity customerToCreate)
         {
-            var customer = _customersList.Where(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email).FirstOrDefault();
+            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCreate.Cpf);
+            var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
 
-            if (cpfExists == false && emailpfExists == true)
+            if (cpfExists == false && emailExists == true)
             {
-                return "4091";
-            }
-            else if (cpfExists == true && emailpfExists == false)
-            {
-                return "4092";
-            }
-            else
-            {
-                return "4093";
+                throw new ArgumentException("Email is already registered");
             }
 
-            entity.Id = _customersList.Count + 1;
+            if (cpfExists == true && emailExists == false)
+            {
+                throw new ArgumentException("Cpf is already registered");
+            }
 
-            _customersList.Add(entity);
+            if (cpfExists == true && emailExists == true)
+            {
+                throw new ArgumentException("Cpf and Email are already registered");
+            }
 
-            return "201";
+            customerToCreate.Id = _customersList.Count + 1;
 
+            _customersList.Add(customerToCreate);
         }
 
         public bool Delete(long id)
         {
-            var entity = GetById(id);
+            var customer = GetById(id);
 
-            if (entity == null)
+            if (customer == null)
                 return false;
 
-            _customersList.Remove(entity);
+            _customersList.Remove(customer);
 
             return true;
         }
@@ -51,19 +51,34 @@ namespace Data.Repositories
 
         public CustomerEntity GetById(long id)
         {
-            var entity = _customersList.FirstOrDefault(customer => customer.Id == id);
+            var customers = _customersList.FirstOrDefault(customer => customer.Id == id);
 
-            return entity;
+            return customers;
         }
 
         public bool Update(CustomerEntity entityToUpdate)
         {
-            var index = _customersList.FindIndex(customer => customer.Cpf == entityToUpdate.Cpf && customer.Email == entityToUpdate.Email);
+            var cpfExists = _customersList.Any(customer => customer.Cpf == entityToUpdate.Cpf);
+            var emailExists = _customersList.Any(customer => customer.Email == entityToUpdate.Email);
 
-            if (index == -1)
+            if (cpfExists == false && emailExists == true)
+            {
+                throw new ArgumentException($"Did not found customer for Cpf: {entityToUpdate.Cpf}");
+            }
+
+            if (cpfExists == true && emailExists == false)
+            {
+                throw new ArgumentException($"Did not found customer for Email: {entityToUpdate.Email}"); ;
+            }
+
+            var customer = _customersList.Any(customer => customer.Id == entityToUpdate.Id);
+
+            if (customer == false)
             {
                 return false;
-            }          
+            }
+
+            var index = _customersList.FindIndex(customer => customer.Id == entityToUpdate.Id);
 
             entityToUpdate.Id = _customersList[index].Id;
 
@@ -72,4 +87,5 @@ namespace Data.Repositories
             return true;
         }
     }
+}
 
