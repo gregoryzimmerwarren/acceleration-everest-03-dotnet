@@ -8,22 +8,16 @@ namespace Data.Repositories
 
         public void Create(CustomerEntity customerToCreate)
         {
-            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCreate.Cpf);
             var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
-
-            if (cpfExists == false && emailExists == true)
+            if (emailExists)
             {
                 throw new ArgumentException("Email is already registered");
             }
-
-            if (cpfExists == true && emailExists == false)
+            
+            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCreate.Cpf);
+            if (cpfExists)
             {
                 throw new ArgumentException("Cpf is already registered");
-            }
-
-            if (cpfExists == true && emailExists == true)
-            {
-                throw new ArgumentException("Cpf and Email are already registered");
             }
 
             customerToCreate.Id = _customersList.Count + 1;
