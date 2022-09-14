@@ -23,7 +23,7 @@ namespace CostumerApi.Controllers
         {
             var result = _repository.Delete(id);
 
-            if (result == 404)
+            if (result == "404")
                 return NotFound();
 
 
@@ -50,22 +50,17 @@ namespace CostumerApi.Controllers
         [HttpPost]
         public IActionResult Post(CustomerEntity entity)
         {
-            var validator = _validator.Validate(entity);
             var result = _repository.Create(entity);
 
-            if (!validator.IsValid)
-            {
-                return BadRequest(result.ToString());
-            }
-            else if (result == 4091)
+            if (result == "4091")
             {
                 return BadRequest("Cpf is already registered");
             }
-            else if (result == 4092)
+            else if (result == "4092")
             {
                 return BadRequest("Email is already registered");
             }
-            else if (result == 4093)
+            else if (result == "4093")
             {
                 return BadRequest("Cpf and Email are already registered");
             }
@@ -80,7 +75,7 @@ namespace CostumerApi.Controllers
         {
             var result = _repository.Update(entity);
 
-            if (result == 404)
+            if (result == "404")
                 return NotFound();
 
             return Ok(result);

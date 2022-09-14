@@ -6,9 +6,9 @@ namespace Data.Repositories
     {
         bool CpfNotFound(CustomerEntity entityToUpdate);
         bool EmailNotFound(CustomerEntity entityToUpdate);
-        int Create(CustomerEntity entity);
-        int Delete(long id);
-        int Update(CustomerEntity entity);
+        string Create(CustomerEntity entity);
+        string Delete(long id);
+        string Update(CustomerEntity entity);
         List<CustomerEntity> GetAll();
         CustomerEntity GetById(long id);
     }

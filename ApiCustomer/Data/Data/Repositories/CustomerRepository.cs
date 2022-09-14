@@ -7,8 +7,9 @@ namespace Data.Repositories
     {
         private readonly List<CustomerEntity> _customersList = new();
 
-        public int Create(CustomerEntity entity)
+        public string Create(CustomerEntity entity)
         {
+
             entity.Cpf = entity.Cpf.Trim().Replace(".", "").Replace("-", "");
 
             var customer = _customersList.Where(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email).FirstOrDefault();
@@ -20,15 +21,15 @@ namespace Data.Repositories
 
                 if (cpfNotFound == false && emailNotFound == true)
                 {
-                    return 4091;
+                    return "4091";
                 }
                 else if (cpfNotFound == true && emailNotFound == false)
                 {
-                    return 4092;
+                    return "4092";
                 }
                 else
                 {
-                    return 4093;
+                    return "4093";
                 }
             }
 
@@ -36,7 +37,8 @@ namespace Data.Repositories
 
             _customersList.Add(entity);
 
-            return 201;
+            return "201";
+
         }
 
         public bool CpfNotFound(CustomerEntity entityToUpdate)
@@ -49,16 +51,16 @@ namespace Data.Repositories
             return true;
         }
 
-        public int Delete(long id)
+        public string Delete(long id)
         {
             var entity = GetById(id);
 
             if (entity == null)
-                return 404;
+                return "404";
 
             _customersList.Remove(entity);
 
-            return 200;
+            return "200";
         }
 
         public bool EmailNotFound(CustomerEntity entityToUpdate)
@@ -86,7 +88,7 @@ namespace Data.Repositories
             return entity;
         }
 
-        public int Update(CustomerEntity entityToUpdate)
+        public string Update(CustomerEntity entityToUpdate)
         {
             var entity = _customersList.Where(customer => customer.Cpf == entityToUpdate.Cpf || customer.Email == entityToUpdate.Email).FirstOrDefault();
 
@@ -100,10 +102,10 @@ namespace Data.Repositories
 
                 _customersList[index] = entityToUpdate;
 
-                return 200;
+                return "200";
             }
 
-            return 404;
+            return "404";
         }
     }
 }
