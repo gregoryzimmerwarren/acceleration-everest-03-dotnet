@@ -42,7 +42,7 @@ namespace CostumerApi.Controllers
             var result = _repository.GetById(id);
 
             if (result == null)
-                return NotFound();
+                return NotFound($"Did not found customer for Id: {id}");
 
             return Ok(result);
         }
