@@ -77,10 +77,7 @@ namespace Data.Repositories
 
         public CustomerEntity GetById(long id)
         {
-            var entity = _customersList.Where(customer => customer.Id == id).FirstOrDefault();
-
-            if (entity == null)
-                return null;
+            var entity = _customersList.FirstOrDefault(customer => customer.Id == id);
 
             return entity;
         }
