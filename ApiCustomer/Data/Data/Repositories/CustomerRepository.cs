@@ -9,9 +9,6 @@ namespace Data.Repositories
 
         public string Create(CustomerEntity entity)
         {
-
-            entity.Cpf = entity.Cpf.Trim().Replace(".", "").Replace("-", "");
-
             var customer = _customersList.Where(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email).FirstOrDefault();
 
             if (customer != null)
