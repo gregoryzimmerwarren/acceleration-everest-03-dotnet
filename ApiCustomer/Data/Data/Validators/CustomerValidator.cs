@@ -25,9 +25,6 @@ namespace Data.Validator
                 .NotEmpty()
                 .WithMessage("Cpf must not be empty.")
                 .MinimumLength(11)
-                .WithMessage("Cpf must be at least 11 characters long.")
-                .MaximumLength(14)
-                .WithMessage("Cpf must not be more than 14 characters long.")
                 .Must(BeValidCpf)
                 .WithMessage("Cpf must be valid.");
 
@@ -67,16 +64,12 @@ namespace Data.Validator
         }
 
         public bool BeValidCpf(string cpf)
-        {
-            cpf = cpf.Trim();
-            cpf = cpf.Replace(".", "").Replace("-", "");
-
+        {           
             if (cpf.Length != 11)
                 return false;
 
             int[] multiplier1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplier2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            string temporaryCpf = cpf.Substring(0, 9);
             string digit;
             int sum;
             int rest;
@@ -84,7 +77,7 @@ namespace Data.Validator
             sum = 0;
 
             for (int i = 0; i < 9; i++)
-                sum += Convert.ToInt32(temporaryCpf[i].ToString()) * multiplier1[i];
+                sum += Convert.ToInt32(cpf[i].ToString()) * multiplier1[i];
 
             rest = sum % 11;
 
@@ -95,12 +88,10 @@ namespace Data.Validator
 
             digit = rest.ToString();
 
-            temporaryCpf = temporaryCpf + digit;
-
             sum = 0;
 
             for (int i = 0; i < 10; i++)
-                sum += Convert.ToInt32(temporaryCpf[i].ToString()) * multiplier2[i];
+                sum += Convert.ToInt32(cpf[i].ToString()) * multiplier2[i];
 
             rest = sum % 11;
 

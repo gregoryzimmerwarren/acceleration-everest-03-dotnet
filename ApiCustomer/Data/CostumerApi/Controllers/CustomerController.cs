@@ -15,7 +15,7 @@ namespace CostumerApi.Controllers
 
         public CustomerController(ICustomerRepository repository)
         {
-            _repository = repository;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         [HttpDelete]
@@ -24,7 +24,7 @@ namespace CostumerApi.Controllers
             var result = _repository.Delete(id);
 
             if (result == "404")
-                return NotFound();
+                return NotFound($"Did not found customer for Id: {id}");
 
 
             return Ok(result);
@@ -33,7 +33,9 @@ namespace CostumerApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_repository.GetAll());
+            var result = _repository.GetAll();
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -76,7 +78,7 @@ namespace CostumerApi.Controllers
             var result = _repository.Update(entity);
 
             if (result == "404")
-                return NotFound();
+                return NotFound($"Did not found customer for Id: {id}");
 
             return Ok(result);
         }

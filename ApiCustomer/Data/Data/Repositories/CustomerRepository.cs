@@ -12,25 +12,20 @@ namespace Data.Repositories
 
             entity.Cpf = entity.Cpf.Trim().Replace(".", "").Replace("-", "");
 
-            var customer = _customersList.Where(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email).FirstOrDefault();
+            var cpfExists = _customersList.Any(customer => customer.Cpf == entity.Cpf);
+            var emailpfExists = _customersList.Any(customer => customer.Email == entity.Email);
 
-            if (customer != null)
+            if (cpfExists == false && emailpfExists == true)
             {
-                var cpfNotFound = CpfNotFound(entity);
-                var emailNotFound = EmailNotFound(entity);
-
-                if (cpfNotFound == false && emailNotFound == true)
-                {
-                    return "4091";
-                }
-                else if (cpfNotFound == true && emailNotFound == false)
-                {
-                    return "4092";
-                }
-                else
-                {
-                    return "4093";
-                }
+                return "4091";
+            }
+            else if (cpfExists == true && emailpfExists == false)
+            {
+                return "4092";
+            }
+            else
+            {
+                return "4093";
             }
 
             entity.Id = _customersList.Count + 1;
@@ -41,34 +36,14 @@ namespace Data.Repositories
 
         }
 
-        public bool CpfNotFound(CustomerEntity entityToUpdate)
-        {
-            var customer = _customersList.Where(customer => customer.Cpf == entityToUpdate.Cpf);
-
-            if (customer == null)
-                return false;
-
-            return true;
-        }
-
-        public string Delete(long id)
+        public bool Delete(long id)
         {
             var entity = GetById(id);
 
             if (entity == null)
-                return "404";
+                return false;
 
             _customersList.Remove(entity);
-
-            return "200";
-        }
-
-        public bool EmailNotFound(CustomerEntity entityToUpdate)
-        {
-            var customer = _customersList.Where(customer => customer.Email == entityToUpdate.Email);
-
-            if (customer == null)
-                return false;
 
             return true;
         }
@@ -88,24 +63,20 @@ namespace Data.Repositories
             return entity;
         }
 
-        public string Update(CustomerEntity entityToUpdate)
+        public bool Update(CustomerEntity entityToUpdate)
         {
-            var entity = _customersList.Where(customer => customer.Cpf == entityToUpdate.Cpf || customer.Email == entityToUpdate.Email).FirstOrDefault();
+            var index = _customersList.FindIndex(customer => customer.Cpf == entityToUpdate.Cpf && customer.Email == entityToUpdate.Email);
 
-            if (entity != null)
+            if (index == -1)
             {
-                entityToUpdate.Cpf = entityToUpdate.Cpf.Trim().Replace(".", "").Replace("-", "");
+                return false;
+            }          
 
-                entityToUpdate.Id = entity.Id;
+            entityToUpdate.Id = _customersList[index].Id;
 
-                var index = _customersList.IndexOf(entity);
+            _customersList[index] = entityToUpdate;
 
-                _customersList[index] = entityToUpdate;
-
-                return "200";
-            }
-
-            return "404";
+            return true;
         }
     }
-}
+

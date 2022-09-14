@@ -2,6 +2,35 @@
 {
     public class CustomerEntity : BaseEntity
     {
+        public CustomerEntity(string fullName,
+            string email,
+            string emailConfirmation,
+            string cpf,
+            string cellphone,
+            string country,
+            string city,
+            string address,
+            string postalCode,
+            int number,
+            bool emailSms,
+            bool whatsapp,
+            DateTime dateOfBirth)
+        {
+            FullName = fullName;
+            Email = email;
+            EmailConfirmation = emailConfirmation;
+            Cpf = CpfFormatter(cpf);
+            Cellphone = cellphone;
+            Country = country;
+            City = city;
+            Address = address;
+            PostalCode = postalCode;
+            Number = number;
+            EmailSms = emailSms;
+            Whatsapp = whatsapp;
+            DateOfBirth = dateOfBirth;
+        }
+
         public string FullName { get; set; }
         public string Email { get; set; }
         public string EmailConfirmation { get; set; }
@@ -15,5 +44,11 @@
         public bool EmailSms { get; set; }
         public bool Whatsapp { get; set; }
         public DateTime DateOfBirth { get; set; }
+
+        private string CpfFormatter(string cpf)
+        {
+            return cpf.Trim().Replace(".", "").Replace(",", "").Replace("-", "");
+        }
     }
+
 }
