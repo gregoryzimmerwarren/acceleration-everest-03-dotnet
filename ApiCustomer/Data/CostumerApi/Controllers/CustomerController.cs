@@ -44,7 +44,7 @@ namespace CostumerApi.Controllers
             var result = _repository.GetById(id);
 
             if (result == null)
-                return NotFound();
+                return NotFound($"Did not found customer for Id: {id}");
 
             return Ok(result);
         }
@@ -54,22 +54,15 @@ namespace CostumerApi.Controllers
         {
             var result = _repository.Create(entity);
 
-            if (result == "4091")
+            try
             {
-                return BadRequest("Cpf is already registered");
+                return Created("", entity.Id);    
             }
-            else if (result == "4092")
+            catch (Exception ex)
             {
-                return BadRequest("Email is already registered");
-            }
-            else if (result == "4093")
-            {
-                return BadRequest("Cpf and Email are already registered");
-            }
-            else
-            {                
-                return Created("", entity.Id);
-            }                            
+                 var message = ex.InnerException?.Message ?? ex.Message
+                 return BadRequest(message);
+            }       
         }
 
         [HttpPut]

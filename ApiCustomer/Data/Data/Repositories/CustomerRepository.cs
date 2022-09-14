@@ -9,11 +9,7 @@ namespace Data.Repositories
 
         public string Create(CustomerEntity entity)
         {
-
-            entity.Cpf = entity.Cpf.Trim().Replace(".", "").Replace("-", "");
-
-            var cpfExists = _customersList.Any(customer => customer.Cpf == entity.Cpf);
-            var emailpfExists = _customersList.Any(customer => customer.Email == entity.Email);
+            var customer = _customersList.Where(customer => customer.Cpf == entity.Cpf || customer.Email == entity.Email).FirstOrDefault();
 
             if (cpfExists == false && emailpfExists == true)
             {
@@ -55,10 +51,7 @@ namespace Data.Repositories
 
         public CustomerEntity GetById(long id)
         {
-            var entity = _customersList.Where(customer => customer.Id == id).FirstOrDefault();
-
-            if (entity == null)
-                return null;
+            var entity = _customersList.FirstOrDefault(customer => customer.Id == id);
 
             return entity;
         }
