@@ -1,6 +1,5 @@
-﻿using Data.Entities;
-using Data.Repositories;
-using Data.Validator;
+﻿using AppServices.Services;
+using DomainModels.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CostumerApi.Controllers
@@ -9,17 +8,17 @@ namespace CostumerApi.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _repository;
+        private readonly ICustomerAppService _customerAppService;
 
-        public CustomerController(ICustomerRepository repository)
+        public CustomerController(ICustomerAppService appService)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _customerAppService = appService ?? throw new ArgumentNullException(nameof(appService));
         }
 
         [HttpDelete]
         public IActionResult Delete(long id)
         {
-            var result = _repository.Delete(id);
+            var result = _customerAppService.Delete(id);
 
             if (!result)
                 return NotFound($"Did not found customer for Id: {id}");
@@ -30,7 +29,7 @@ namespace CostumerApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = _repository.GetAll();
+            var result = _customerAppService.GetAll();
 
             return Ok(result);
         }
@@ -38,7 +37,7 @@ namespace CostumerApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
-            var result = _repository.GetById(id);
+            var result = _customerAppService.GetById(id);
 
             if (result == null)
                 return NotFound($"Did not found customer for Id: {id}");
@@ -51,7 +50,7 @@ namespace CostumerApi.Controllers
         {
             try
             {
-                _repository.Create(customer);
+                _customerAppService.Create(customer);
                 return Created("", customer.Id);
             }
             catch (ArgumentException exception)
@@ -66,7 +65,7 @@ namespace CostumerApi.Controllers
         {
             try
             {
-                var result = _repository.Update(customerToUpdate);
+                var result = _customerAppService.Update(customerToUpdate);
 
                 if (!result)
                     return NotFound($"Did not found customer for Id: {customerToUpdate.Id}");

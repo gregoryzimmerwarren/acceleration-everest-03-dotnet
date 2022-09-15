@@ -1,8 +1,9 @@
-using Data.Repositories;
-using Data.Validator;
 using FluentValidation.AspNetCore;
 using FluentValidation;
-using Data.Entities;
+using AppServices.Services;
+using DomainService.Services;
+using DomainModels.Entities;
+using AppServices.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddSingleton<ICustomerService, CustomerService>();
+builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddScoped<IValidator<CustomerEntity>, CustomerValidator>();
 
 var app = builder.Build();

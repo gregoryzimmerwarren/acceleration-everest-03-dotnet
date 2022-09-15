@@ -1,8 +1,8 @@
-﻿using Data.Entities;
+﻿using DomainModels.Entities;
 
-namespace Data.Repositories
+namespace DomainService.Services
 {
-    public interface ICustomerRepository
+    public interface ICustomerService
     {
         void Create(CustomerEntity customerToCreate);
         bool Delete(long id);
