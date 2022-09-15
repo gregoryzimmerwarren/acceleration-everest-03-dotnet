@@ -5,7 +5,6 @@ namespace AppServices.Services
 {
     public class CustomerAppService : ICustomerAppService
     {
-
         private readonly ICustomerService _customerService;
 
         public CustomerAppService(ICustomerService customerService)
