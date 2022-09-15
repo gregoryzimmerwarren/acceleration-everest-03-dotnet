@@ -7,8 +7,6 @@ namespace Data.Repositories
     {
         private readonly List<CustomerEntity> _customersList = new();
 
-        private static int counter = 0;
-
         public void Create(CustomerEntity customerToCreate)
         {
             var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
@@ -23,11 +21,9 @@ namespace Data.Repositories
                 throw new ArgumentException("Cpf is already registered");
             }
 
-            customerToCreate.Id = counter + 1;
+            customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1; 
 
             _customersList.Add(customerToCreate);
-
-            counter++;
         }
 
         public bool Delete(long id)

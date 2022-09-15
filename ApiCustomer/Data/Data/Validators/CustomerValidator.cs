@@ -9,65 +9,47 @@ namespace Data.Validator
         {
             RuleFor(customer => customer.FullName)
                 .NotEmpty()
-                .WithMessage("Full name must not be empty.")
-                .MinimumLength(6)
-                .WithMessage("Full name must be at least 6 characters long.");
+                .MinimumLength(6);
 
             RuleFor(customer => customer.Email)
                 .NotEmpty()
-                .WithMessage("Email must not be empty.")
                 .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-                .WithMessage("Email must have a valid format.")
-                .Equal(costumer => costumer.EmailConfirmation)
-                .WithMessage("Email and EmailConfirmation must be the same.");
+                .WithMessage("Email must have a valid format 'email@email.com'.")
+                .Equal(costumer => costumer.EmailConfirmation);
                
             RuleFor(costumer => costumer.Cpf)
                 .NotEmpty()
-                .WithMessage("Cpf must not be empty.")
                 .MinimumLength(11)
                 .Must(BeValidCpf)
                 .WithMessage("Cpf must be valid.");
 
             RuleFor(costumer => costumer.Cellphone)
-                .NotEmpty()
-                .WithMessage("Cellphone must not be empty.");
+                .NotEmpty();
 
             RuleFor(costumer => costumer.Country)
                 .NotEmpty()
-                .WithMessage("Country must not be empty.")
-                .MinimumLength(4)
-                .WithMessage("Country must be at least 4 characters long.");
-            
+                .MinimumLength(4);
+
             RuleFor(costumer => costumer.City)
-                .NotEmpty()
-                .WithMessage("City must not be empty.");
-            
+                .NotEmpty();
+
             RuleFor(costumer => costumer.Address)
                 .NotEmpty()
-                .WithMessage("Address must not be empty.")
-                .MinimumLength(4)
-                .WithMessage("Address must be at least 4 characters long.");
-            
+                .MinimumLength(4);
+
             RuleFor(costumer => costumer.PostalCode)
-                .NotEmpty()
-                .WithMessage("Postal code must not be empty.");
+                .NotEmpty();
 
             RuleFor(costumer => costumer.Number)
-                .NotEmpty()
-                .WithMessage("Number code must not be empty.");
+                .NotEmpty();
 
             RuleFor(costumer => costumer.DateOfBirth)
                 .NotEmpty()
-                .WithMessage("Date of birth code must not be empty.")
-                .LessThan(DateTime.Now.Date)
-                .WithMessage("Birth date must be older than today.");            
+                .LessThan(DateTime.Now.Date);
         }
 
         public bool BeValidCpf(string cpf)
-        {           
-            if (cpf.Length != 11)
-                return false;
-
+        {
             if (cpf.All(character => character == cpf.First()))
                 return false;
 

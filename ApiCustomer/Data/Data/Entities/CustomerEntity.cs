@@ -19,7 +19,7 @@
             FullName = fullName;
             Email = email;
             EmailConfirmation = emailConfirmation;
-            Cpf = CpfFormatter(cpf);
+            Cpf = cpf.CpfFormatter();
             Cellphone = cellphone;
             Country = country;
             City = city;
@@ -45,9 +45,6 @@
         public bool Whatsapp { get; set; }
         public DateTime DateOfBirth { get; set; }
 
-        private string CpfFormatter(string cpf)
-        {
-            return cpf.Trim().Replace(".", "").Replace(",", "").Replace("-", "");
-        }
+        
     }
 }
