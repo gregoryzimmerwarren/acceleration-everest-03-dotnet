@@ -68,7 +68,7 @@ namespace CostumerApi.Controllers
             {
                 var result = _repository.Update(customerToUpdate);
 
-                if (result == false)
+                if (!result)
                     return NotFound($"Did not found customer for Id: {customerToUpdate.Id}");
 
                 return Ok();
