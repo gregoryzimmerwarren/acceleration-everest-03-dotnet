@@ -21,7 +21,7 @@ namespace CostumerApi.Controllers
         {
             var result = _repository.Delete(id);
 
-            if (result == false)
+            if (!result)
                 return NotFound($"Did not found customer for Id: {id}");
 
             return Ok();
