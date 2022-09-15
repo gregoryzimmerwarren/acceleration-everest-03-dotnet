@@ -68,6 +68,9 @@ namespace Data.Validator
             if (cpf.Length != 11)
                 return false;
 
+            if (cpf.All(character => character == cpf.First()))
+                return false;
+
             int[] multiplier1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplier2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string digit;

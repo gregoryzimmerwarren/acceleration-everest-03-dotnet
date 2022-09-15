@@ -1,10 +1,13 @@
 ﻿using Data.Entities;
+using System.Diagnostics.Metrics;
 
 namespace Data.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
         private readonly List<CustomerEntity> _customersList = new();
+
+        private static int counter = 0;
 
         public void Create(CustomerEntity customerToCreate)
         {
@@ -20,9 +23,11 @@ namespace Data.Repositories
                 throw new ArgumentException("Cpf is already registered");
             }
 
-            customerToCreate.Id = _customersList.Count + 1;
+            customerToCreate.Id = counter + 1;
 
             _customersList.Add(customerToCreate);
+
+            counter++;
         }
 
         public bool Delete(long id)
@@ -49,33 +54,33 @@ namespace Data.Repositories
             return customers;
         }
 
-        public bool Update(CustomerEntity entityToUpdate)
+        public bool Update(CustomerEntity customerToUpdate)
         {
-            var cpfExists = _customersList.Any(customer => customer.Cpf == entityToUpdate.Cpf);
-            var emailExists = _customersList.Any(customer => customer.Email == entityToUpdate.Email);
+            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToUpdate.Cpf && customer.Id != customerToUpdate.Id);
+            var emailExists = _customersList.Any(customer => customer.Email == customerToUpdate.Email && customer.Id != customerToUpdate.Id);
 
             if (cpfExists == false && emailExists == true)
             {
-                throw new ArgumentException($"Did not found customer for Cpf: {entityToUpdate.Cpf}");
+                throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
             }
 
             if (cpfExists == true && emailExists == false)
             {
-                throw new ArgumentException($"Did not found customer for Email: {entityToUpdate.Email}"); ;
+                throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}"); ;
             }
 
-            var customer = _customersList.Any(customer => customer.Id == entityToUpdate.Id);
+            var customer = _customersList.Any(customer => customer.Id == customerToUpdate.Id);
 
             if (customer == false)
             {
                 return false;
             }
 
-            var index = _customersList.FindIndex(customer => customer.Id == entityToUpdate.Id);
+            var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
 
-            entityToUpdate.Id = _customersList[index].Id;
+            customerToUpdate.Id = _customersList[index].Id;
 
-            _customersList[index] = entityToUpdate;
+            _customersList[index] = customerToUpdate;
 
             return true;
         }
