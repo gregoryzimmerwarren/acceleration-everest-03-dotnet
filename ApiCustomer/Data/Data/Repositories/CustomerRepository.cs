@@ -65,14 +65,8 @@ namespace Data.Repositories
                 throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}"); ;
             }
 
-            var customer = _customersList.Any(customer => customer.Id == customerToUpdate.Id);
-
-            if (customer == false)
-            {
-                return false;
-            }
-
             var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
+            if(index == -1) return false;
 
             customerToUpdate.Id = _customersList[index].Id;
 
