@@ -52,18 +52,17 @@ namespace Data.Repositories
 
         public bool Update(CustomerEntity customerToUpdate)
         {
-            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToUpdate.Cpf && customer.Id != customerToUpdate.Id);
             var emailExists = _customersList.Any(customer => customer.Email == customerToUpdate.Email && customer.Id != customerToUpdate.Id);
+            if (emailExists)
+            {
+                throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}");
+            }
 
-            if (cpfExists == false && emailExists == true)
+            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToUpdate.Cpf && customer.Id != customerToUpdate.Id);
+            if (cpfExists)
             {
                 throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
-            }
-
-            if (cpfExists == true && emailExists == false)
-            {
-                throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}"); ;
-            }
+            }           
 
             var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
             if(index == -1) return false;
