@@ -1,12 +1,12 @@
-﻿using DomainModels.Extensions;
-using DomainModels.Models;
+﻿using AppModels.DTOs;
+using DomainModels.Extensions;
 using FluentValidation;
 
 namespace AppServices.Validators
 {
-    public class CustomerValidator : AbstractValidator<CustomerModel>
+    public class PostCustomerDtoValidator : AbstractValidator<PostCustomerDto>
     {
-        public CustomerValidator()
+        public PostCustomerDtoValidator()
         {
             RuleFor(customer => customer.FullName)
                 .NotEmpty()
