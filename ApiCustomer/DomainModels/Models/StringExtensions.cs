@@ -1,4 +1,4 @@
-﻿namespace DomainModels.Entities
+﻿namespace DomainModels.Models
 {
     public static class StringExtensions
     {

@@ -1,8 +1,9 @@
-﻿namespace DomainModels.Entities
+﻿namespace DomainModels.Models
 {
-    public class CustomerEntity : BaseEntity
+    public class CustomerModel : BaseModel
     {
-        public CustomerEntity(string fullName,
+        public CustomerModel(
+            string fullName,
             string email,
             string emailConfirmation,
             string cpf,
@@ -43,8 +44,6 @@
         public int Number { get; set; }
         public bool EmailSms { get; set; }
         public bool Whatsapp { get; set; }
-        public DateTime DateOfBirth { get; set; }
-
-        
+        public DateTime DateOfBirth { get; set; }        
     }
 }

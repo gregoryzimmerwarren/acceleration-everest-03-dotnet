@@ -1,9 +1,9 @@
-﻿using DomainModels.Entities;
+﻿using DomainModels.Models;
 using FluentValidation;
 
 namespace AppServices.Validator
 {
-    public class CustomerValidator : AbstractValidator<CustomerEntity>
+    public class CustomerValidator : AbstractValidator<CustomerModel>
     {
         public CustomerValidator()
         {

@@ -2,8 +2,10 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using AppServices.Services;
 using DomainService.Services;
-using DomainModels.Entities;
+using DomainModels.Models;
 using AppServices.Validator;
+using AppServices.Interfaces;
+using DomainService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddScoped<IValidator<CustomerEntity>, CustomerValidator>();
+builder.Services.AddScoped<IValidator<CustomerModel>, CustomerValidator>();
 
 var app = builder.Build();
 
