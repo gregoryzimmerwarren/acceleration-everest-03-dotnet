@@ -1,9 +1,9 @@
-using FluentValidation.AspNetCore;
-using FluentValidation;
 using AppServices.Services;
-using DomainService.Services;
+using AppServices.Validators;
 using DomainModels.Entities;
-using AppServices.Validator;
+using DomainService.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
