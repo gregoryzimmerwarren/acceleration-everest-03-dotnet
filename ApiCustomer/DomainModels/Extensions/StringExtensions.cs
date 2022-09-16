@@ -1,4 +1,4 @@
-﻿namespace DomainModels.Models
+﻿namespace DomainModels.Extensions
 {
     public static class StringExtensions
     {
@@ -6,5 +6,5 @@
         {
             return cpf.Trim().Replace(".", "").Replace(",", "").Replace("-", "");
         }
-    }   
+    }
 }

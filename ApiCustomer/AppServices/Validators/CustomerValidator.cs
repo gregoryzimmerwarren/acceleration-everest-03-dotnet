@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using DomainModels.Extensions;
+using DomainModels.Models;
 using FluentValidation;
 
 namespace AppServices.Validators

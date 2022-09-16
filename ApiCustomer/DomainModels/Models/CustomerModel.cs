@@ -1,4 +1,6 @@
-﻿namespace DomainModels.Models
+﻿using DomainModels.Extensions;
+
+namespace DomainModels.Models
 {
     public class CustomerModel : BaseModel
     {
