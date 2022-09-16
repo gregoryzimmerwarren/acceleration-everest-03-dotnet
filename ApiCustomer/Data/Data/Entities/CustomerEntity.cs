@@ -1,4 +1,4 @@
-﻿namespace Data.Entities
+﻿namespace DomainModels.Entities
 {
     public class CustomerEntity : BaseEntity
     {

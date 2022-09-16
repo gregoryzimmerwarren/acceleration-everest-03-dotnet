@@ -1,7 +1,7 @@
-﻿using Data.Entities;
+﻿using DomainModels.Entities;
 using FluentValidation;
 
-namespace Data.Validator
+namespace AppServices.Validator
 {
     public class CustomerValidator : AbstractValidator<CustomerEntity>
     {
@@ -50,6 +50,11 @@ namespace Data.Validator
 
         public bool BeValidCpf(string cpf)
         {
+            cpf = cpf.CpfFormatter();
+
+            if (cpf.Length != 11)
+                return false;
+
             if (cpf.All(character => character == cpf.First()))
                 return false;
 

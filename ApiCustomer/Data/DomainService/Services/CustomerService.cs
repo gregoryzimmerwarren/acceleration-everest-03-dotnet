@@ -1,9 +1,8 @@
-﻿using Data.Entities;
-using System.Diagnostics.Metrics;
+﻿using DomainModels.Entities;
 
-namespace Data.Repositories
+namespace DomainService.Services
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerService : ICustomerService
     {
         private readonly List<CustomerEntity> _customersList = new();
 
