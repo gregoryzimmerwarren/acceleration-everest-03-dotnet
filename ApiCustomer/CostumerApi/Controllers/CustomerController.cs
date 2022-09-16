@@ -1,5 +1,5 @@
-﻿using AppServices.Services;
-using DomainModels.Entities;
+﻿using AppServices.Interfaces;
+using DomainModels.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CostumerApi.Controllers
@@ -46,7 +46,7 @@ namespace CostumerApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(CustomerEntity customer)
+        public IActionResult Post(CustomerModel customer)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace CostumerApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(CustomerEntity customerToUpdate)
+        public IActionResult Update(CustomerModel customerToUpdate)
         {
             try
             {

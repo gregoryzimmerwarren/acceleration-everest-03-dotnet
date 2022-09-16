@@ -1,5 +1,6 @@
-﻿using DomainModels.Entities;
-using DomainService.Services;
+﻿using AppServices.Interfaces;
+using DomainModels.Models;
+using DomainService.Interfaces;
 
 namespace AppServices.Services
 {
@@ -12,7 +13,7 @@ namespace AppServices.Services
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         }
 
-        public void Create(CustomerEntity customerToCreate)
+        public void Create(CustomerModel customerToCreate)
         {
             _customerService.Create(customerToCreate);
         }
@@ -22,17 +23,17 @@ namespace AppServices.Services
             return _customerService.Delete(id);
         }
 
-        public List<CustomerEntity> GetAll()
+        public List<CustomerModel> GetAll()
         {
             return _customerService.GetAll();
         }
 
-        public CustomerEntity GetById(long id)
+        public CustomerModel GetById(long id)
         {
             return _customerService.GetById(id);
         }
 
-        public bool Update(CustomerEntity customerToUpdate)
+        public bool Update(CustomerModel customerToUpdate)
         {
             return _customerService.Update(customerToUpdate);
         }

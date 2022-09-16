@@ -1,12 +1,13 @@
-﻿using DomainModels.Entities;
+﻿using DomainModels.Models;
+using DomainServices.Interfaces;
 
-namespace DomainService.Services
+namespace DomainServices.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly List<CustomerEntity> _customersList = new();
+        private readonly List<CustomerModel> _customersList = new();
 
-        public void Create(CustomerEntity customerToCreate)
+        public void Create(CustomerModel customerToCreate)
         {
             var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
             if (emailExists)
@@ -37,19 +38,19 @@ namespace DomainService.Services
             return true;
         }
 
-        public List<CustomerEntity> GetAll()
+        public List<CustomerModel> GetAll()
         {
             return _customersList;
         }
 
-        public CustomerEntity GetById(long id)
+        public CustomerModel GetById(long id)
         {
             var customers = _customersList.FirstOrDefault(customer => customer.Id == id);
 
             return customers;
         }
 
-        public bool Update(CustomerEntity customerToUpdate)
+        public bool Update(CustomerModel customerToUpdate)
         {
             var emailExists = _customersList.Any(customer => customer.Email == customerToUpdate.Email && customer.Id != customerToUpdate.Id);
             if (emailExists)
