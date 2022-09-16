@@ -1,7 +1,7 @@
 ﻿using DomainModels.Models;
 using FluentValidation;
 
-namespace AppServices.Validator
+namespace AppServices.Validators
 {
     public class CustomerValidator : AbstractValidator<CustomerModel>
     {
@@ -16,7 +16,7 @@ namespace AppServices.Validator
                 .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
                 .WithMessage("Email must have a valid format 'email@email.com'.")
                 .Equal(costumer => costumer.EmailConfirmation);
-               
+
             RuleFor(costumer => costumer.Cpf)
                 .NotEmpty()
                 .MinimumLength(11)

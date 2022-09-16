@@ -3,9 +3,9 @@ using FluentValidation;
 using AppServices.Services;
 using DomainService.Services;
 using DomainModels.Models;
-using AppServices.Validator;
 using AppServices.Interfaces;
 using DomainService.Interfaces;
+using AppServices.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
