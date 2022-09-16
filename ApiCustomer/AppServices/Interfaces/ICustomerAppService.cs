@@ -1,13 +1,13 @@
-﻿using DomainModels.Models;
+﻿using AppModels.DTOs;
 
 namespace AppServices.Interfaces
 {
     public interface ICustomerAppService
     {
-        void Create(CustomerModel customerToCreate);
+        void Create(PostCustomerDto postCustomerDto);
         bool Delete(long id);
-        List<CustomerModel> GetAll();
-        CustomerModel GetById(long id);
-        bool Update(CustomerModel customerToUpdate);
+        List<GetCustomerDto> GetAll();
+        GetCustomerDto GetById(long id);
+        bool Update(PutCustomerDto putCustomerDto);
     }
 }

@@ -1,6 +1,8 @@
-﻿using AppServices.Interfaces;
+﻿using AppModels.DTOs;
+using AppServices.Interfaces;
+using AutoMapper;
 using DomainModels.Models;
-using DomainService.Interfaces;
+using DomainServices.Interfaces;
 
 namespace AppServices.Services
 {
@@ -8,14 +10,20 @@ namespace AppServices.Services
     {
         private readonly ICustomerService _customerService;
 
-        public CustomerAppService(ICustomerService customerService)
+        private readonly IMapper _mapper;
+
+        public CustomerAppService(ICustomerService customerService, IMapper mapper)
         {
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
+            
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public void Create(CustomerModel customerToCreate)
+        public void Create(PostCustomerDto postCustomerDto)
         {
-            _customerService.Create(customerToCreate);
+            var customerMapeado = _mapper.Map<CustomerModel>(postCustomerDto);
+            
+            _customerService.Create(customerMapeado);
         }
 
         public bool Delete(long id)
@@ -23,19 +31,25 @@ namespace AppServices.Services
             return _customerService.Delete(id);
         }
 
-        public List<CustomerModel> GetAll()
+        public List<GetCustomerDto> GetAll()
         {
-            return _customerService.GetAll();
+            var customers = _customerService.GetAll();
+
+            return _mapper.Map<List<GetCustomerDto>>(customers);
         }
 
-        public CustomerModel GetById(long id)
+        public GetCustomerDto GetById(long id)
         {
-            return _customerService.GetById(id);
+            var customer = _customerService.GetById(id);
+
+            return _mapper.Map<GetCustomerDto>(customer);
         }
 
-        public bool Update(CustomerModel customerToUpdate)
+        public bool Update(PutCustomerDto putCustomerDto)
         {
-            return _customerService.Update(customerToUpdate);
+            var customerMapeado = _mapper.Map<CustomerModel>(putCustomerDto);
+
+            return _customerService.Update(customerMapeado);
         }
     }
 }
