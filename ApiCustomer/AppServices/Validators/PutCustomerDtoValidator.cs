@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AppServices.Validators
 {
-    internal class PutCustomerDtoValidator : AbstractValidator<PostCustomerDto>
+    public class PutCustomerDtoValidator : AbstractValidator<PutCustomerDto>
     {
         public PutCustomerDtoValidator()
         {
