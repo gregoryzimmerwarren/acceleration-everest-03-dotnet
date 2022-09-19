@@ -15,7 +15,6 @@ namespace AppServices.Services
         public CustomerAppService(ICustomerService customerService, IMapper mapper)
         {
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
-            
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
