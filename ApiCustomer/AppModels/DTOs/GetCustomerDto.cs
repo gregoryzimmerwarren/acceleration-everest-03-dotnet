@@ -2,6 +2,10 @@
 {
     public class GetCustomerDto
     {
+        public GetCustomerDto()
+        {
+        }
+
         public GetCustomerDto(
             long id,
             string fullName,

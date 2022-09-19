@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppModels\AppModels.csproj" />
     <ProjectReference Include="..\AppServices\AppServices.csproj" />
   </ItemGroup>
 

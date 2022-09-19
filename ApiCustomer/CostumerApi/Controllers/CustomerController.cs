@@ -1,5 +1,5 @@
-﻿using AppServices.Interfaces;
-using DomainModels.Models;
+﻿using AppModels.DTOs;
+using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerApi.Controllers
@@ -46,12 +46,12 @@ namespace CustomerApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(CustomerModel customer)
+        public IActionResult Post(PostCustomerDto customer)
         {
             try
             {
-                _customerAppService.Create(customer);
-                return Created("", customer.Id);
+                var id = _customerAppService.Create(customer);
+                return Created("", id);
             }
             catch (ArgumentException exception)
             {
@@ -61,14 +61,14 @@ namespace CustomerApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(CustomerModel customerToUpdate)
+        public IActionResult Update(long id, PutCustomerDto customerToUpdate)
         {
             try
             {
-                var result = _customerAppService.Update(customerToUpdate);
+                var result = _customerAppService.Update(id, customerToUpdate);
 
                 if (!result)
-                    return NotFound($"Did not found customer for Id: {customerToUpdate.Id}");
+                    return NotFound($"Did not found customer for Id: {id}");
 
                 return Ok();
             }

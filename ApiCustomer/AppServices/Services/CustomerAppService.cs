@@ -19,11 +19,11 @@ namespace AppServices.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public void Create(PostCustomerDto postCustomerDto)
+        public long Create(PostCustomerDto postCustomerDto)
         {
             var customerMapeado = _mapper.Map<CustomerModel>(postCustomerDto);
             
-            _customerService.Create(customerMapeado);
+            return _customerService.Create(customerMapeado);
         }
 
         public bool Delete(long id)
@@ -45,9 +45,11 @@ namespace AppServices.Services
             return _mapper.Map<GetCustomerDto>(customer);
         }
 
-        public bool Update(PutCustomerDto putCustomerDto)
+        public bool Update(long id, PutCustomerDto putCustomerDto)
         {
             var customerMapeado = _mapper.Map<CustomerModel>(putCustomerDto);
+
+            customerMapeado.Id = id;
 
             return _customerService.Update(customerMapeado);
         }

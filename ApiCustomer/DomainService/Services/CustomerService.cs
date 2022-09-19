@@ -7,7 +7,7 @@ namespace DomainServices.Services
     {
         private readonly List<CustomerModel> _customersList = new();
 
-        public void Create(CustomerModel customerToCreate)
+        public long Create(CustomerModel customerToCreate)
         {
             var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
             if (emailExists)
@@ -24,6 +24,8 @@ namespace DomainServices.Services
             customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1; 
 
             _customersList.Add(customerToCreate);
+
+            return customerToCreate.Id;
         }
 
         public bool Delete(long id)
@@ -52,6 +54,9 @@ namespace DomainServices.Services
 
         public bool Update(CustomerModel customerToUpdate)
         {
+            var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
+            if(index == -1) return false;
+
             var emailExists = _customersList.Any(customer => customer.Email == customerToUpdate.Email && customer.Id != customerToUpdate.Id);
             if (emailExists)
             {
@@ -63,9 +68,6 @@ namespace DomainServices.Services
             {
                 throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
             }           
-
-            var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
-            if(index == -1) return false;
 
             customerToUpdate.Id = _customersList[index].Id;
 

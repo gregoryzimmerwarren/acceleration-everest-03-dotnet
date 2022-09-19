@@ -4,10 +4,10 @@ namespace AppServices.Interfaces
 {
     public interface ICustomerAppService
     {
-        void Create(PostCustomerDto postCustomerDto);
+        long Create(PostCustomerDto postCustomerDto);
         bool Delete(long id);
         List<GetCustomerDto> GetAll();
         GetCustomerDto GetById(long id);
-        bool Update(PutCustomerDto putCustomerDto);
+        bool Update(long id, PutCustomerDto putCustomerDto);
     }
 }
