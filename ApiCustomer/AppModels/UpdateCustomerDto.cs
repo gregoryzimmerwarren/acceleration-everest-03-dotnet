@@ -1,11 +1,10 @@
-﻿using DomainModels.Extensions;
-using System;
+﻿using System;
 
-namespace DomainModels.Models;
+namespace AppModels;
 
-public class CustomerModel : BaseModel
+public class UpdateCustomerDto
 {
-    public CustomerModel(
+    public UpdateCustomerDto(
         string fullName,
         string email,
         string emailConfirmation,
@@ -23,7 +22,7 @@ public class CustomerModel : BaseModel
         FullName = fullName;
         Email = email;
         EmailConfirmation = emailConfirmation;
-        Cpf = cpf.CpfFormatter();
+        Cpf = cpf;
         Cellphone = cellphone;
         Country = country;
         City = city;
@@ -47,5 +46,5 @@ public class CustomerModel : BaseModel
     public int Number { get; set; }
     public bool EmailSms { get; set; }
     public bool Whatsapp { get; set; }
-    public DateTime DateOfBirth { get; set; }        
+    public DateTime DateOfBirth { get; set; }
 }

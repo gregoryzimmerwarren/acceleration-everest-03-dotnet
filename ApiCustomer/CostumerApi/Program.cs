@@ -1,4 +1,4 @@
-using AppModels.DTOs;
+using AppModels;
 using AppServices.Interfaces;
 using AppServices.Services;
 using AppServices.Validators;
@@ -23,8 +23,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddScoped<IValidator<PutCustomerDto>, PutCustomerDtoValidator>();
-builder.Services.AddScoped<IValidator<PostCustomerDto>, PostCustomerDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateCustomerDto>, PutCustomerDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateCustomerDto>, PostCustomerDtoValidator>();
 builder.Services.AddAutoMapper(Assembly.Load("AppServices"));
 
 

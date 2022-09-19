@@ -1,12 +1,12 @@
-﻿namespace AppModels.DTOs;
+﻿namespace AppModels;
 
-public class GetCustomerDto
+public class ResultCustomerDto
 {
-    public GetCustomerDto()
+    public ResultCustomerDto()
     {
     }
 
-    public GetCustomerDto(
+    public ResultCustomerDto(
         long id,
         string fullName,
         string email,

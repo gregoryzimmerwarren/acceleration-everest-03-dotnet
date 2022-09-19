@@ -1,13 +1,13 @@
-﻿using DomainModels.Models;
+﻿using DomainModels;
 using System.Collections.Generic;
 
 namespace DomainServices.Interfaces;
 
 public interface ICustomerService
 {
-    long Create(CustomerModel customerToCreate);
+    long Create(Customer customerToCreate);
     bool Delete(long id);
-    List<CustomerModel> GetAll();
-    CustomerModel GetById(long id);
-    bool Update(CustomerModel customerToUpdate);
+    IEnumerable<Customer> GetAll();
+    Customer GetById(long id);
+    bool Update(Customer customerToUpdate);
 }

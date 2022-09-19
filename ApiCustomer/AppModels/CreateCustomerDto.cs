@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace AppModels.DTOs;
+namespace AppModels;
 
-public class PutCustomerDto
+public class CreateCustomerDto
 {
-    public PutCustomerDto(
+    public CreateCustomerDto(
         string fullName,
         string email,
         string emailConfirmation,

@@ -1,4 +1,4 @@
-﻿using DomainModels.Models;
+﻿using DomainModels;
 using DomainServices.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,9 +8,9 @@ namespace DomainServices.Services;
 
 public class CustomerService : ICustomerService
 {
-    private readonly List<CustomerModel> _customersList = new();
+    private readonly List<Customer> _customersList = new();
 
-    public long Create(CustomerModel customerToCreate)
+    public long Create(Customer customerToCreate)
     {
         var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
         if (emailExists)
@@ -43,19 +43,19 @@ public class CustomerService : ICustomerService
         return true;
     }
 
-    public List<CustomerModel> GetAll()
+    public IEnumerable<Customer> GetAll()
     {
         return _customersList;
     }
 
-    public CustomerModel GetById(long id)
+    public Customer GetById(long id)
     {
         var customers = _customersList.FirstOrDefault(customer => customer.Id == id);
 
         return customers;
     }
 
-    public bool Update(CustomerModel customerToUpdate)
+    public bool Update(Customer customerToUpdate)
     {
         var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
         if(index == -1) return false;

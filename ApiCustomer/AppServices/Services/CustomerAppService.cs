@@ -1,7 +1,7 @@
-﻿using AppModels.DTOs;
+﻿using AppModels;
 using AppServices.Interfaces;
 using AutoMapper;
-using DomainModels.Models;
+using DomainModels;
 using DomainServices.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,9 +21,9 @@ public class CustomerAppService : ICustomerAppService
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(PostCustomerDto postCustomerDto)
+    public long Create(CreateCustomerDto postCustomerDto)
     {
-        var customerMapeado = _mapper.Map<CustomerModel>(postCustomerDto);
+        var customerMapeado = _mapper.Map<Customer>(postCustomerDto);
         
         return _customerService.Create(customerMapeado);
     }
@@ -33,23 +33,23 @@ public class CustomerAppService : ICustomerAppService
         return _customerService.Delete(id);
     }
 
-    public List<GetCustomerDto> GetAll()
+    public IEnumerable<ResultCustomerDto> GetAll()
     {
         var customers = _customerService.GetAll();
 
-        return _mapper.Map<List<GetCustomerDto>>(customers);
+        return _mapper.Map<IEnumerable<ResultCustomerDto>>(customers);
     }
 
-    public GetCustomerDto GetById(long id)
+    public ResultCustomerDto GetById(long id)
     {
         var customer = _customerService.GetById(id);
 
-        return _mapper.Map<GetCustomerDto>(customer);
+        return _mapper.Map<ResultCustomerDto>(customer);
     }
 
-    public bool Update(long id, PutCustomerDto putCustomerDto)
+    public bool Update(long id, UpdateCustomerDto putCustomerDto)
     {
-        var customerMapeado = _mapper.Map<CustomerModel>(putCustomerDto);
+        var customerMapeado = _mapper.Map<Customer>(putCustomerDto);
 
         customerMapeado.Id = id;
 

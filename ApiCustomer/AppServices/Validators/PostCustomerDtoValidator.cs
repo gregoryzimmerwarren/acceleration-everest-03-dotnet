@@ -1,10 +1,10 @@
-﻿using AppModels.DTOs;
+﻿using AppModels;
 using DomainModels.Extensions;
 using FluentValidation;
 
 namespace AppServices.Validators;
 
-public class PostCustomerDtoValidator : AbstractValidator<PostCustomerDto>
+public class PostCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 {
     public PostCustomerDtoValidator()
     {

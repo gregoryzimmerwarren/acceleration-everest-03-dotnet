@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DomainModels.Extensions;
+using System;
 
-namespace AppModels.DTOs;
+namespace DomainModels;
 
-public class PostCustomerDto
+public class Customer : IEntity
 {
-    public PostCustomerDto(
+    public Customer(
         string fullName,
         string email,
         string emailConfirmation,
@@ -22,7 +23,7 @@ public class PostCustomerDto
         FullName = fullName;
         Email = email;
         EmailConfirmation = emailConfirmation;
-        Cpf = cpf;
+        Cpf = cpf.CpfFormatter();
         Cellphone = cellphone;
         Country = country;
         City = city;
@@ -47,4 +48,5 @@ public class PostCustomerDto
     public bool EmailSms { get; set; }
     public bool Whatsapp { get; set; }
     public DateTime DateOfBirth { get; set; }
+    public long Id { get; set; }
 }

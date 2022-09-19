@@ -1,9 +1,9 @@
-﻿using AppModels.DTOs;
+﻿using AppModels;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace CustomerApi.Controllers;
+namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -47,7 +47,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post(PostCustomerDto customer)
+    public IActionResult Post(CreateCustomerDto customer)
     {
         try
         {
@@ -62,7 +62,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(long id, PutCustomerDto customerToUpdate)
+    public IActionResult Update(long id, UpdateCustomerDto customerToUpdate)
     {
         try
         {
