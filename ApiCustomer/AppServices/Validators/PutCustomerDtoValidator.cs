@@ -1,12 +1,13 @@
 ﻿using AppModels.DTOs;
+using DomainModels.Extensions;
 using FluentValidation;
 
-namespace AppServices.Validators
+namespace AppServices.Validators;
+
+public class PutCustomerDtoValidator : AbstractValidator<PutCustomerDto>
 {
-    public class PutCustomerDtoValidator : AbstractValidator<PutCustomerDto>
+    public PutCustomerDtoValidator()
     {
-        public PutCustomerDtoValidator()
-        {
             RuleFor(customer => customer.FullName)
                 .NotEmpty()
                 .MinimumLength(6);
@@ -15,27 +16,37 @@ namespace AppServices.Validators
                 .NotEmpty()
                 .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
                 .WithMessage("Email must have a valid format 'email@email.com'.")
-                .Equal(costumer => costumer.EmailConfirmation);            
+                .Equal(customer => customer.EmailConfirmation);
 
-            RuleFor(costumer => costumer.Cellphone)
+            RuleFor(customer => customer.Cpf)
+                .NotEmpty()
+                .MinimumLength(11)
+                .Must(customer => customer.BeValidCpf())
+                .WithMessage("Cpf must be valid.");
+
+            RuleFor(customer => customer.Cellphone)
                 .NotEmpty();
 
-            RuleFor(costumer => costumer.Country)
+            RuleFor(customer => customer.Country)
                 .NotEmpty()
                 .MinimumLength(4);
 
-            RuleFor(costumer => costumer.City)
+            RuleFor(customer => customer.City)
                 .NotEmpty();
 
-            RuleFor(costumer => costumer.Address)
+            RuleFor(customer => customer.Address)
                 .NotEmpty()
                 .MinimumLength(4);
 
-            RuleFor(costumer => costumer.PostalCode)
+            RuleFor(customer => customer.PostalCode)
                 .NotEmpty();
 
-            RuleFor(costumer => costumer.Number)
+            RuleFor(customer => customer.Number)
                 .NotEmpty();
-        }
+
+            RuleFor(customer => customer.DateOfBirth)
+                .NotEmpty()
+                .Must(customer => customer.BeOver18())
+                .WithMessage("Customer must be over 18 years old.");
     }
 }

@@ -3,55 +3,56 @@ using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
+using System;
+using System.Collections.Generic;
 
-namespace AppServices.Services
+namespace AppServices.Services;
+
+public class CustomerAppService : ICustomerAppService
 {
-    public class CustomerAppService : ICustomerAppService
+    private readonly ICustomerService _customerService;
+
+    private readonly IMapper _mapper;
+
+    public CustomerAppService(ICustomerService customerService, IMapper mapper)
     {
-        private readonly ICustomerService _customerService;
+        _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
+        
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+    }
 
-        private readonly IMapper _mapper;
+    public long Create(PostCustomerDto postCustomerDto)
+    {
+        var customerMapeado = _mapper.Map<CustomerModel>(postCustomerDto);
+        
+        return _customerService.Create(customerMapeado);
+    }
 
-        public CustomerAppService(ICustomerService customerService, IMapper mapper)
-        {
-            _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
-            
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        }
+    public bool Delete(long id)
+    {
+        return _customerService.Delete(id);
+    }
 
-        public long Create(PostCustomerDto postCustomerDto)
-        {
-            var customerMapeado = _mapper.Map<CustomerModel>(postCustomerDto);
-            
-            return _customerService.Create(customerMapeado);
-        }
+    public List<GetCustomerDto> GetAll()
+    {
+        var customers = _customerService.GetAll();
 
-        public bool Delete(long id)
-        {
-            return _customerService.Delete(id);
-        }
+        return _mapper.Map<List<GetCustomerDto>>(customers);
+    }
 
-        public List<GetCustomerDto> GetAll()
-        {
-            var customers = _customerService.GetAll();
+    public GetCustomerDto GetById(long id)
+    {
+        var customer = _customerService.GetById(id);
 
-            return _mapper.Map<List<GetCustomerDto>>(customers);
-        }
+        return _mapper.Map<GetCustomerDto>(customer);
+    }
 
-        public GetCustomerDto GetById(long id)
-        {
-            var customer = _customerService.GetById(id);
+    public bool Update(long id, PutCustomerDto putCustomerDto)
+    {
+        var customerMapeado = _mapper.Map<CustomerModel>(putCustomerDto);
 
-            return _mapper.Map<GetCustomerDto>(customer);
-        }
+        customerMapeado.Id = id;
 
-        public bool Update(long id, PutCustomerDto putCustomerDto)
-        {
-            var customerMapeado = _mapper.Map<CustomerModel>(putCustomerDto);
-
-            customerMapeado.Id = id;
-
-            return _customerService.Update(customerMapeado);
-        }
+        return _customerService.Update(customerMapeado);
     }
 }
