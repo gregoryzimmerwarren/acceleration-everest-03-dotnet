@@ -14,12 +14,11 @@ public class CustomerAppService : ICustomerAppService
 
     private readonly IMapper _mapper;
 
-    public CustomerAppService(ICustomerService customerService, IMapper mapper)
-    {
-        _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
-        
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-    }
+        public CustomerAppService(ICustomerService customerService, IMapper mapper)
+        {
+            _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
 
     public long Create(CreateCustomerDto postCustomerDto)
     {
