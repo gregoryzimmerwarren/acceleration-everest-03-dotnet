@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "CostumerApi": {
+    "CustomerApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

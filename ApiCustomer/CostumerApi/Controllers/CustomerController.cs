@@ -2,7 +2,7 @@
 using DomainModels.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CostumerApi.Controllers
+namespace CustomerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
