@@ -11,20 +11,18 @@ public class CustomerService : ICustomerService
     private readonly List<Customer> _customersList = new();
 
     public long Create(Customer customerToCreate)
-    {
-        var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
-        if (emailExists)
+    {        
+        if (EmailAlreadyExists(customerToCreate) == true)
         {
             throw new ArgumentException("Email is already registered");
         }
-        
-        var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCreate.Cpf);
-        if (cpfExists)
+
+        if (CpfAlreadyExists(customerToCreate) == true)
         {
             throw new ArgumentException("Cpf is already registered");
         }
 
-        customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1; 
+        customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1;
 
         _customersList.Add(customerToCreate);
 
@@ -58,25 +56,48 @@ public class CustomerService : ICustomerService
     public bool Update(Customer customerToUpdate)
     {
         var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
-        if(index == -1) return false;
+        if (index == -1) return false;
 
-        var emailExists = _customersList.Any(customer => customer.Email == customerToUpdate.Email && customer.Id != customerToUpdate.Id);
-        if (emailExists)
+        if (_customersList.Any(customer => customer.Id != customerToUpdate.Id))
         {
-            throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}");
+            if (EmailAlreadyExists(customerToUpdate) == false)
+            {
+                throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}");
+            }
+
+            if (CpfAlreadyExists(customerToUpdate) == false)
+            {
+                throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
+            }
         }
-
-        var cpfExists = _customersList.Any(customer => customer.Cpf == customerToUpdate.Cpf && customer.Id != customerToUpdate.Id);
-        if (cpfExists)
-        {
-            throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
-        }           
 
         customerToUpdate.Id = _customersList[index].Id;
 
         _customersList[index] = customerToUpdate;
 
         return true;
+    }
+
+    private bool EmailAlreadyExists(Customer customerToCheck)
+    {
+        var emailExists = _customersList.Any(customer => customer.Email == customerToCheck.Email);
+        if (emailExists)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CpfAlreadyExists(Customer customerToCheck)
+    {
+        var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCheck.Cpf);
+        if (cpfExists)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
 

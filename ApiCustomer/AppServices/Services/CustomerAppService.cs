@@ -11,7 +11,6 @@ namespace AppServices.Services;
 public class CustomerAppService : ICustomerAppService
 {
     private readonly ICustomerService _customerService;
-
     private readonly IMapper _mapper;
 
         public CustomerAppService(ICustomerService customerService, IMapper mapper)

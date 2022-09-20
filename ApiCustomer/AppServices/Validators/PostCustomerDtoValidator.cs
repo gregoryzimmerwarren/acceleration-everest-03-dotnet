@@ -1,6 +1,7 @@
 ﻿using AppModels;
 using DomainModels.Extensions;
 using FluentValidation;
+using FluentValidation.Validators;
 
 namespace AppServices.Validators;
 
@@ -14,7 +15,7 @@ public class PostCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         RuleFor(customer => customer.Email)
             .NotEmpty()
-            .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+            .EmailAddress(EmailValidationMode.Net4xRegex)
             .WithMessage("Email must have a valid format 'email@email.com'.")
             .Equal(customer => customer.EmailConfirmation);
 
