@@ -12,10 +12,11 @@ public class PutCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
             .NotEmpty()
             .MinimumLength(6);
 
-        RuleFor(customer => customer.Email)
-            .NotEmpty()
-            .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-            .Equal(customer => customer.EmailConfirmation);
+            RuleFor(customer => customer.Email)
+                .NotEmpty()
+                .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+                .WithMessage("Email must have a valid format 'email@email.com'.")
+                .Equal(customer => customer.EmailConfirmation);
 
         RuleFor(customer => customer)
             .Must(customer => customer.EmailConfirmation == customer.Email);
