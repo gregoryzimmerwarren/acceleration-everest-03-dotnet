@@ -14,7 +14,7 @@ public class PutCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
 
             RuleFor(customer => customer.Email)
                 .NotEmpty()
-                .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+                .EmailAddress(EmailValidationMode.Net4xRegex);
                 .WithMessage("Email must have a valid format 'email@email.com'.")
                 .Equal(customer => customer.EmailConfirmation);
 
