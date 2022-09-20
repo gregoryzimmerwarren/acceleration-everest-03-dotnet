@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 
 namespace AppServices.Services;
-
 public class CustomerAppService : ICustomerAppService
 {
     private readonly ICustomerService _customerService;
