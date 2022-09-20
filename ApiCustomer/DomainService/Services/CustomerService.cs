@@ -72,7 +72,7 @@ public class CustomerService : ICustomerService
 
     private bool EmailAlreadyExists(Customer customerToCheck)
     {
-        var emailExists = _customersList.Any(customer => customer.Email == customerToCheck.Email);
+        return _customersList.Any(customer => customer.Email == customerToCheck.Email);
         if (emailExists)
         {
             return true;
