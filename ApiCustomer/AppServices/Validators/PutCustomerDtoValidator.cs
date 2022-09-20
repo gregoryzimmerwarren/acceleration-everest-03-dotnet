@@ -1,6 +1,7 @@
 ﻿using AppModels;
 using AppServices.Extensions;
 using FluentValidation;
+using FluentValidation.Validators;
 
 namespace AppServices.Validators;
 
@@ -12,11 +13,10 @@ public class PutCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
             .NotEmpty()
             .MinimumLength(6);
 
-            RuleFor(customer => customer.Email)
-                .NotEmpty()
-                .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-                .WithMessage("Email must have a valid format 'email@email.com'.")
-                .Equal(customer => customer.EmailConfirmation);
+        RuleFor(customer => customer.Email)
+            .NotEmpty()
+            .EmailAddress(EmailValidationMode.Net4xRegex)
+            .WithMessage("Email must have a valid format 'email@email.com'.");
 
         RuleFor(customer => customer)
             .Must(customer => customer.EmailConfirmation == customer.Email);

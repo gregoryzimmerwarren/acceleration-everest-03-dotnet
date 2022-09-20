@@ -1,7 +1,5 @@
-using AppModels;
 using AppServices.Interfaces;
 using AppServices.Services;
-using AppServices.Validators;
 using DomainServices.Interfaces;
 using DomainServices.Services;
 using FluentValidation;
@@ -24,8 +22,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddValidatorsFromAssembly(Assembly.Load(nameof(AppServices)));
-builder.Services.AddAutoMapper(Assembly.Load("AppServices"));
-
+builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 
 var app = builder.Build();
 
