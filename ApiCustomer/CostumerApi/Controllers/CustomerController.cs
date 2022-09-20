@@ -1,5 +1,6 @@
 ﻿using AppModels;
 using AppServices.Interfaces;
+using DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -19,12 +20,16 @@ public class CustomerController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(long id)
     {
-        var result = _customerAppService.Delete(id);
-
-        if (!result)
-            return NotFound($"Did not found customer for Id: {id}");
-
-        return NoContent();
+        try
+        {
+            _customerAppService.Delete(id);
+            return NoContent();
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            return NotFound(message);
+        }
     }
 
     [HttpGet]
@@ -38,12 +43,16 @@ public class CustomerController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(long id)
     {
-        var result = _customerAppService.GetById(id);
-
-        if (result == null)
-            return NotFound($"Did not found customer for Id: {id}");
-
-        return Ok(result);
+        try
+        {
+            var result = _customerAppService.GetById(id);
+            return Ok(result);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            return NotFound(message);
+        }
     }
 
     [HttpPost]
@@ -66,11 +75,7 @@ public class CustomerController : ControllerBase
     {
         try
         {
-            var result = _customerAppService.Update(id, customerToUpdate);
-
-            if (!result)
-                return NotFound($"Did not found customer for Id: {id}");
-
+            _customerAppService.Update(id, customerToUpdate);
             return Ok();
         }
         catch (ArgumentException exception)

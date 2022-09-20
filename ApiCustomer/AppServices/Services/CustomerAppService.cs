@@ -27,9 +27,9 @@ public class CustomerAppService : ICustomerAppService
         return _customerService.Create(customerMapeado);
     }
 
-    public bool Delete(long id)
+    public void Delete(long id)
     {
-        return _customerService.Delete(id);
+        _customerService.Delete(id);
     }
 
     public IEnumerable<ResultCustomerDto> GetAll()
@@ -46,11 +46,11 @@ public class CustomerAppService : ICustomerAppService
         return _mapper.Map<ResultCustomerDto>(customer);
     }
 
-    public bool Update(long id, UpdateCustomerDto putCustomerDto)
+    public void Update(long id, UpdateCustomerDto putCustomerDto)
     {
         var customerMapeado = _mapper.Map<Customer>(putCustomerDto);
         customerMapeado.Id = id;
 
-        return _customerService.Update(customerMapeado);
+        _customerService.Update(id, customerMapeado);
     }
 }

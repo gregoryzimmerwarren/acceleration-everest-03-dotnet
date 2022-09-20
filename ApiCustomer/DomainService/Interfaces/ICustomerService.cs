@@ -6,8 +6,8 @@ namespace DomainServices.Interfaces;
 public interface ICustomerService
 {
     long Create(Customer customerToCreate);
-    bool Delete(long id);
+    void Delete(long id);
     IEnumerable<Customer> GetAll();
     Customer GetById(long id);
-    bool Update(Customer customerToUpdate);
+    void Update(long id, Customer customerToUpdate);
 }
