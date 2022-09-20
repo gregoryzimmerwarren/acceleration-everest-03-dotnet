@@ -51,13 +51,13 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         RuleFor(customer => customer.DateOfBirth)
             .NotEmpty()
-            .Must(customer => customer.BeOver18())
+            .Must(customer => customer.IsOver18())
             .WithMessage("Customer must be over 18 years old.");
     }
 
     private bool IsValidCpf(string cpf)
     {
-        cpf = cpf.CpfFormatter();
+        cpf = cpf.FormatCpf();
 
         if (cpf.Length != 11)
             return false;

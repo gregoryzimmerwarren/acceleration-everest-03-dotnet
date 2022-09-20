@@ -4,8 +4,11 @@ namespace AppServices.Extensions;
 
 public static class DateTimeExtensions
 {
-    public static bool BeOver18(this DateTime dataNascimento)
+    public static bool IsOver18(this DateTime dataNascimento)
     {
-        return DateTime.Now.Year - dataNascimento.Year >= 18;
+        if(DateTime.Now.Year - dataNascimento.Year >= 18)
+            if (DateTime.Now.DayOfYear - dataNascimento.DayOfYear >= 0)
+                return true;
+        return false;
     }
 }

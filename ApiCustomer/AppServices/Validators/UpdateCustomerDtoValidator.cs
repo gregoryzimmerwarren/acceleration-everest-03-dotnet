@@ -57,7 +57,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
 
     private bool IsValidCpf(string cpf)
     {
-        cpf = cpf.CpfFormatter();
+        cpf = cpf.FormatCpf();
 
         if (cpf.Length != 11)
             return false;

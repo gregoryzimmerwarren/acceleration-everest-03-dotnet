@@ -21,7 +21,7 @@ public class CustomerAppService : ICustomerAppService
 
     public long Create(CreateCustomerDto postCustomerDto)
     {
-        postCustomerDto.Cpf = postCustomerDto.Cpf.CpfFormatter();
+        postCustomerDto.Cpf = postCustomerDto.Cpf.FormatCpf();
         var customerMapeado = _mapper.Map<Customer>(postCustomerDto);
         
         return _customerService.Create(customerMapeado);

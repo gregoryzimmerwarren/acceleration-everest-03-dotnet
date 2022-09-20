@@ -72,23 +72,11 @@ public class CustomerService : ICustomerService
 
     private bool EmailAlreadyExists(Customer customerToCheck)
     {
-        return _customersList.Any(customer => customer.Email == customerToCheck.Email);
-        if (emailExists)
-        {
-            return true;
-        }
-
-        return false;
+        return _customersList.Any(customer => customer.Email == customerToCheck.Email);        
     }
 
     private bool CpfAlreadyExists(Customer customerToCheck)
     {
-        return _customersList.Any(customer => customer.Cpf == customerToCheck.Cpf);
-        if (cpfExists)
-        {
-            return true;
-        }
-
-        return false;
+        return _customersList.Any(customer => customer.Cpf == customerToCheck.Cpf);        
     }
 }

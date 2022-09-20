@@ -6,7 +6,7 @@ namespace AppServices.Profiles;
 
 public class CustomerProfile : Profile
 {
-    public CustomerProfiles()
+    public CustomerProfile()
     {
         CreateMap<Customer, ResultCustomerDto>();
         CreateMap<CreateCustomerDto, Customer>();
