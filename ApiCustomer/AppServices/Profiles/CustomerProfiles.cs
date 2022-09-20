@@ -4,7 +4,7 @@ using DomainModels;
 
 namespace AppServices.Profiles;
 
-public class CustomerProfiles : Profile
+public class CustomerProfile : Profile
 {
     public CustomerProfiles()
     {

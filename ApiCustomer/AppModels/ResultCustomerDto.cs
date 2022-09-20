@@ -2,9 +2,7 @@
 
 public class ResultCustomerDto
 {
-    public ResultCustomerDto()
-    {
-    }
+    protected ResultCustomerDto() {}
 
     public ResultCustomerDto(
         long id,
@@ -31,5 +29,4 @@ public class ResultCustomerDto
     public string Cellphone { get; set; }
     public string City { get; set; }
     public string PostalCode { get; set; }
-
 }
