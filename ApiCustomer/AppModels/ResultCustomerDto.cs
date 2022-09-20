@@ -2,9 +2,7 @@
 
 public class ResultCustomerDto
 {
-    public ResultCustomerDto()
-    {
-    }
+    protected ResultCustomerDto() {}
 
     public ResultCustomerDto(
         long id,
