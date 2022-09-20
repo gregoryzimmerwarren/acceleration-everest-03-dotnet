@@ -1,5 +1,4 @@
-﻿using DomainModels.Extensions;
-using System;
+﻿using System;
 
 namespace DomainModels;
 
@@ -23,7 +22,7 @@ public class Customer : IEntity
         FullName = fullName;
         Email = email;
         EmailConfirmation = emailConfirmation;
-        Cpf = cpf.CpfFormatter();
+        Cpf = cpf;
         Cellphone = cellphone;
         Country = country;
         City = city;

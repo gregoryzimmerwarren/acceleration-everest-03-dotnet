@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DomainModels.Extensions;
+namespace AppServices.Extensions;
 
 public static class DateTimeExtensions
 {

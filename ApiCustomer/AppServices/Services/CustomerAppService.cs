@@ -1,4 +1,5 @@
 ﻿using AppModels;
+using AppServices.Extensions;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels;
@@ -21,6 +22,7 @@ public class CustomerAppService : ICustomerAppService
 
     public long Create(CreateCustomerDto postCustomerDto)
     {
+        postCustomerDto.Cpf = postCustomerDto.Cpf.CpfFormatter();
         var customerMapeado = _mapper.Map<Customer>(postCustomerDto);
         
         return _customerService.Create(customerMapeado);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace DomainModels.Extensions;
+namespace AppServices.Extensions;
 
 public static class StringExtensions
 {

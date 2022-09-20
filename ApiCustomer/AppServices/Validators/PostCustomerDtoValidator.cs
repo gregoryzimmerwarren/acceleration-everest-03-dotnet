@@ -1,5 +1,5 @@
 ﻿using AppModels;
-using DomainModels.Extensions;
+using AppServices.Extensions;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -49,5 +49,5 @@ public class PostCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
             .NotEmpty()
             .Must(customer => customer.BeOver18())
             .WithMessage("Customer must be over 18 years old.");
-    }        
+    }
 }
