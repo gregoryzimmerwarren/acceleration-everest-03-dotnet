@@ -12,12 +12,12 @@ public class CustomerService : ICustomerService
 
     public long Create(Customer customerToCreate)
     {        
-        if (EmailAlreadyExists(customerToCreate) == true)
+        if (EmailAlreadyExists(customerToCreate))
         {
             throw new ArgumentException("Email is already registered");
         }
 
-        if (CpfAlreadyExists(customerToCreate) == true)
+        if (CpfAlreadyExists(customerToCreate))
         {
             throw new ArgumentException("Cpf is already registered");
         }
@@ -60,12 +60,12 @@ public class CustomerService : ICustomerService
 
         if (_customersList.Any(customer => customer.Id != customerToUpdate.Id))
         {
-            if (EmailAlreadyExists(customerToUpdate) == false)
+            if (!EmailAlreadyExists(customerToUpdate))
             {
                 throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}");
             }
 
-            if (CpfAlreadyExists(customerToUpdate) == false)
+            if (!CpfAlreadyExists(customerToUpdate))
             {
                 throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
             }

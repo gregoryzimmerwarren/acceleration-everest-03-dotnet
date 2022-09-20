@@ -25,7 +25,7 @@ builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddScoped<IValidator<UpdateCustomerDto>, PutCustomerDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateCustomerDto>, PostCustomerDtoValidator>();
-builder.Services.AddAutoMapper(Assembly.Load("AppServices"));
+builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 
 
 var app = builder.Build();
