@@ -49,7 +49,7 @@ public class PutCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
 
         RuleFor(customer => customer.DateOfBirth)
             .NotEmpty()
-            .Must(customer => customer.BeOver18())
+            .Must(customer => customer.IsOver18())
             .WithMessage("Customer must be over 18 years old.");
     }
 }
