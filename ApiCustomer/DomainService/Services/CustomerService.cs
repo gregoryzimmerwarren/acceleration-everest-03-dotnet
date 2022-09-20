@@ -83,7 +83,7 @@ public class CustomerService : ICustomerService
 
     private bool CpfAlreadyExists(Customer customerToCheck)
     {
-        var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCheck.Cpf);
+        return _customersList.Any(customer => customer.Cpf == customerToCheck.Cpf);
         if (cpfExists)
         {
             return true;
