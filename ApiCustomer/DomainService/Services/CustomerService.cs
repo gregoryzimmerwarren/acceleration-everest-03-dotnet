@@ -13,10 +13,10 @@ public class CustomerService : ICustomerService
     public long Create(Customer customerToCreate)
     {        
         if (EmailAlreadyExists(customerToCreate))
-            throw new ArgumentException("Email is already registered");
+            throw new ArgumentException($"Email is already registered for Id: {customerToCreate.Id}");
 
         if (CpfAlreadyExists(customerToCreate))
-            throw new ArgumentException("Cpf is already registered");
+            throw new ArgumentException($"Cpf is already registered for Id: {customerToCreate.Id}");
 
         customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1;
 
