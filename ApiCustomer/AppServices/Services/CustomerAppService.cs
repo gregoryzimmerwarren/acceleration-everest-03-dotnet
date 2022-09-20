@@ -50,7 +50,6 @@ public class CustomerAppService : ICustomerAppService
     public bool Update(long id, UpdateCustomerDto putCustomerDto)
     {
         var customerMapeado = _mapper.Map<Customer>(putCustomerDto);
-
         customerMapeado.Id = id;
 
         return _customerService.Update(customerMapeado);
