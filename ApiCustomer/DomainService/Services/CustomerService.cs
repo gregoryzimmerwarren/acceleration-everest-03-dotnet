@@ -1,77 +1,82 @@
-﻿using DomainModels.Entities;
+﻿using DomainModels;
+using DomainServices.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DomainService.Services
+namespace DomainServices.Services;
+
+public class CustomerService : ICustomerService
 {
-    public class CustomerService : ICustomerService
+    private readonly List<Customer> _customersList = new();
+
+    public long Create(Customer customerToCreate)
+    {        
+        if (EmailAlreadyExists(customerToCreate))
+            throw new ArgumentException($"Email is already registered for Id: {customerToCreate.Id}");
+
+        if (CpfAlreadyExists(customerToCreate))
+            throw new ArgumentException($"Cpf is already registered for Id: {customerToCreate.Id}");
+
+        customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1;
+
+        _customersList.Add(customerToCreate);
+
+        return customerToCreate.Id;
+    }
+
+    public void Delete(long id)
     {
-        private readonly List<CustomerEntity> _customersList = new();
+        var customer = GetById(id);
 
-        public void Create(CustomerEntity customerToCreate)
+        if (customer == null)
+            throw new ArgumentException($"Did not found customer for Id: {id}");
+
+        _customersList.Remove(customer);
+    }
+
+    public IEnumerable<Customer> GetAll()
+    {
+        return _customersList;
+    }
+
+    public Customer GetById(long id)
+    {
+        var customer = _customersList.FirstOrDefault(customer => customer.Id == id);
+
+        if (customer == null)
+            throw new ArgumentException($"Did not found customer for Id: {id}");
+
+        return customer;
+    }
+
+    public void Update(long id, Customer customerToUpdate)
+    {
+        var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
+        if (index == -1)
+            throw new ArgumentException($"Did not found customer for Id: {id}");
+
+        if (_customersList.Any(customer => customer.Id != customerToUpdate.Id))
         {
-            var emailExists = _customersList.Any(customer => customer.Email == customerToCreate.Email);
-            if (emailExists)
-            {
-                throw new ArgumentException("Email is already registered");
-            }
-            
-            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToCreate.Cpf);
-            if (cpfExists)
-            {
-                throw new ArgumentException("Cpf is already registered");
-            }
-
-            customerToCreate.Id = _customersList.LastOrDefault()?.Id + 1 ?? 1; 
-
-            _customersList.Add(customerToCreate);
-        }
-
-        public bool Delete(long id)
-        {
-            var customer = GetById(id);
-
-            if (customer == null)
-                return false;
-
-            _customersList.Remove(customer);
-
-            return true;
-        }
-
-        public List<CustomerEntity> GetAll()
-        {
-            return _customersList;
-        }
-
-        public CustomerEntity GetById(long id)
-        {
-            var customers = _customersList.FirstOrDefault(customer => customer.Id == id);
-
-            return customers;
-        }
-
-        public bool Update(CustomerEntity customerToUpdate)
-        {
-            var emailExists = _customersList.Any(customer => customer.Email == customerToUpdate.Email && customer.Id != customerToUpdate.Id);
-            if (emailExists)
-            {
+            if (!EmailAlreadyExists(customerToUpdate))
                 throw new ArgumentException($"Did not found customer for Email: {customerToUpdate.Email}");
-            }
 
-            var cpfExists = _customersList.Any(customer => customer.Cpf == customerToUpdate.Cpf && customer.Id != customerToUpdate.Id);
-            if (cpfExists)
-            {
+            if (!CpfAlreadyExists(customerToUpdate))
                 throw new ArgumentException($"Did not found customer for Cpf: {customerToUpdate.Cpf}");
-            }           
-
-            var index = _customersList.FindIndex(customer => customer.Id == customerToUpdate.Id);
-            if(index == -1) return false;
-
-            customerToUpdate.Id = _customersList[index].Id;
-
-            _customersList[index] = customerToUpdate;
-
-            return true;
         }
+
+        customerToUpdate.Id = _customersList[index].Id;
+
+        _customersList[index] = customerToUpdate;
+    }
+
+    private bool EmailAlreadyExists(Customer customerToCheck)
+    {
+        return _customersList.Any(customer => customer.Email == customerToCheck.Email);        
+    }
+
+    private bool CpfAlreadyExists(Customer customerToCheck)
+    {
+        return _customersList.Any(customer => customer.Cpf == customerToCheck.Cpf);        
     }
 }
-

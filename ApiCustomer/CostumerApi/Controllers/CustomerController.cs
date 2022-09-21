@@ -1,82 +1,87 @@
-﻿using AppServices.Services;
-using DomainModels.Entities;
+﻿using AppModels;
+using AppServices.Interfaces;
+using DomainModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
-namespace CostumerApi.Controllers
+namespace Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CustomerController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CustomerController : ControllerBase
+    private readonly ICustomerAppService _customerAppService;
+
+    public CustomerController(ICustomerAppService appService)
     {
-        private readonly ICustomerAppService _customerAppService;
+        _customerAppService = appService ?? throw new ArgumentNullException(nameof(appService));
+    }
 
-        public CustomerController(ICustomerAppService appService)
+    [HttpDelete]
+    public IActionResult Delete(long id)
+    {
+        try
         {
-            _customerAppService = appService ?? throw new ArgumentNullException(nameof(appService));
+            _customerAppService.Delete(id);
+            return NoContent();
         }
-
-        [HttpDelete]
-        public IActionResult Delete(long id)
+        catch (ArgumentException exception)
         {
-            var result = _customerAppService.Delete(id);
-
-            if (!result)
-                return NotFound($"Did not found customer for Id: {id}");
-
-            return Ok();
+            var message = exception.InnerException?.Message ?? exception.Message;
+            return NotFound(message);
         }
+    }
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var result = _customerAppService.GetAll();
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var result = _customerAppService.GetAll();
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(long id)
+    [HttpGet("{id}")]
+    public IActionResult GetById(long id)
+    {
+        try
         {
             var result = _customerAppService.GetById(id);
-
-            if (result == null)
-                return NotFound($"Did not found customer for Id: {id}");
-
             return Ok(result);
         }
-
-        [HttpPost]
-        public IActionResult Post(CustomerEntity customer)
+        catch (ArgumentException exception)
         {
-            try
-            {
-                _customerAppService.Create(customer);
-                return Created("", customer.Id);
-            }
-            catch (ArgumentException exception)
-            {
-                var message = exception.InnerException?.Message ?? exception.Message;
-                return BadRequest(message);
-            }
+            var message = exception.InnerException?.Message ?? exception.Message;
+            return NotFound(message);
         }
+    }
 
-        [HttpPut]
-        public IActionResult Update(CustomerEntity customerToUpdate)
+    [HttpPost]
+    public IActionResult Post(CreateCustomerDto customer)
+    {
+        try
         {
-            try
-            {
-                var result = _customerAppService.Update(customerToUpdate);
+            var id = _customerAppService.Create(customer);
+            return Created("", id);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            return BadRequest(message);
+        }
+    }
 
-                if (!result)
-                    return NotFound($"Did not found customer for Id: {customerToUpdate.Id}");
-
-                return Ok();
-            }
-            catch (ArgumentException exception)
-            {
-                var message = exception.InnerException?.Message ?? exception.Message;
-                return NotFound(message);
-            }
+    [HttpPut]
+    public IActionResult Update(long id, UpdateCustomerDto customerToUpdate)
+    {
+        try
+        {
+            _customerAppService.Update(id, customerToUpdate);
+            return Ok();
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            return NotFound(message);
         }
     }
 }

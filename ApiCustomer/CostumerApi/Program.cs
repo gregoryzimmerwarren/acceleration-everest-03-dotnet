@@ -1,9 +1,13 @@
+using AppServices.Interfaces;
 using AppServices.Services;
-using AppServices.Validators;
-using DomainModels.Entities;
-using DomainService.Services;
+using DomainServices.Interfaces;
+using DomainServices.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddScoped<IValidator<CustomerEntity>, CustomerValidator>();
+builder.Services.AddValidatorsFromAssembly(Assembly.Load(nameof(AppServices)));
+builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 
 var app = builder.Build();
 
