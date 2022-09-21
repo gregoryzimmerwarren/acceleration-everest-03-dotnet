@@ -1,6 +1,6 @@
 ﻿namespace AppModels;
 
-public class ResultCustomerDto
+public class CustomerResult
 {
     protected ResultCustomerDto() {}
 
