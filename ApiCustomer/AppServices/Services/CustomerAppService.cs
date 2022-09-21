@@ -32,18 +32,18 @@ public class CustomerAppService : ICustomerAppService
         _customerService.Delete(id);
     }
 
-    public IEnumerable<ResultCustomerDto> GetAll()
+    public IEnumerable<CustomerResult> GetAll()
     {
         var customers = _customerService.GetAll();
 
-        return _mapper.Map<IEnumerable<ResultCustomerDto>>(customers);
+        return _mapper.Map<IEnumerable<CustomerResult>>(customers);
     }
 
-    public ResultCustomerDto GetById(long id)
+    public CustomerResult GetById(long id)
     {
         var customer = _customerService.GetById(id);
 
-        return _mapper.Map<ResultCustomerDto>(customer);
+        return _mapper.Map<CustomerResult>(customer);
     }
 
     public void Update(long id, UpdateCustomerDto putCustomerDto)

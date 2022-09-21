@@ -2,9 +2,9 @@
 
 public class CustomerResult
 {
-    protected ResultCustomerDto() {}
+    protected CustomerResult() {}
 
-    public ResultCustomerDto(
+    public CustomerResult(
         long id,
         string fullName,
         string email,
