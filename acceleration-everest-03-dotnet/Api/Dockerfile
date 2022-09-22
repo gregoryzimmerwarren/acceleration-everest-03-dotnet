@@ -8,10 +8,10 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Api/Api.csproj", "Api/"]
-COPY ["Api/AppModels.csproj", "AppModels/"]
-COPY ["Api/AppServices.csproj", "AppServices/"]
-COPY ["Api/DomainModels.csproj", "DomainModels/"]
-COPY ["Api/DomainServices.csproj", "DomainService/"]
+COPY ["AppModels/AppModels.csproj", "AppModels/"]
+COPY ["AppServices/AppServices.csproj", "AppServices/"]
+COPY ["DomainModels/DomainModels.csproj", "DomainModels/"]
+COPY ["DomainService/DomainServices.csproj", "DomainService/"]
 RUN dotnet restore "Api/Api.csproj"
 COPY . .
 WORKDIR "/src/Api"
