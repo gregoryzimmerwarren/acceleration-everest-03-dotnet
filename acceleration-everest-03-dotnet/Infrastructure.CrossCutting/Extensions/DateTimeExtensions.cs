@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppServices.Extensions;
+namespace Infrastructure.CrossCutting.Extensions;
 
 public static class DateTimeExtensions
 {

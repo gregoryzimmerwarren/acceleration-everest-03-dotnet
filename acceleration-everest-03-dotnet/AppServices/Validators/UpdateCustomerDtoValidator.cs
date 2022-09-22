@@ -1,7 +1,7 @@
 ﻿using AppModels;
-using AppServices.Extensions;
 using FluentValidation;
 using FluentValidation.Validators;
+using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Linq;
 

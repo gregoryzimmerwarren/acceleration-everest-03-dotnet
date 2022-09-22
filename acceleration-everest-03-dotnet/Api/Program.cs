@@ -4,18 +4,24 @@ using DomainServices.Interfaces;
 using DomainServices.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = ServerVersion.AutoDetect(connectionString);
 
+builder.Services.AddDbContext<WarrenEverestDotnetDbContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(connectionString, serverVersion));
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
@@ -26,7 +32,6 @@ builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
