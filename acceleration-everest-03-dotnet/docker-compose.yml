@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5125:5125"
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: WarrenEverestDotnetDb
+      MYSQL_USER: gregoryzimmerwarren
+      MYSQL_PASSWORD: warren123
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - '3306:3306'
