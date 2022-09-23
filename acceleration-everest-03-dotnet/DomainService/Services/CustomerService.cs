@@ -1,7 +1,6 @@
 ﻿using DomainModels;
 using DomainServices.Interfaces;
 using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +13,14 @@ public class CustomerService : ICustomerService
 
     public CustomerService(WarrenEverestDotnetDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public long Create(Customer customerToCreate)
-    {        
+    {
         if (EmailAlreadyExists(customerToCreate))
             throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {customerToCreate.Id}");
-        
+
         if (CpfAlreadyExists(customerToCreate))
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {customerToCreate.Id}");
 
@@ -59,31 +58,32 @@ public class CustomerService : ICustomerService
 
     public void Update(long id, Customer customerToUpdate)
     {
-        var customer = _context.Set<Customer>().Any(customer => customer.Id == customerToUpdate.Id);
-        
-        if (!customer)
-            throw new ArgumentException($"Did not found customer for Id: {id}");
+        //var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Id == customerToUpdate.Id);
 
-        if (_context.Set<Customer>().Any(customer => customer.Id != customerToUpdate.Id))
-        {
-            if (EmailAlreadyExists(customerToUpdate))
-                throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered in another id than the Id: {customerToUpdate.Id}");
-            
-            if (CpfAlreadyExists(customerToUpdate))
-                throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered in another id than the Id: {customerToUpdate.Id}");
-        }
+        //if (customer == null)
+        //    throw new ArgumentException($"Did not found customer for Id: {id}");
 
-        _context.Set<Customer>().Update(customerToUpdate);
-        _context.SaveChanges();
+
+        //if (EmailAlreadyExists(customerToUpdate))
+        //    if (customer.Id != customerToUpdate.Id)
+        //        throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered in another id than the Id: {customerToUpdate.Id}");
+
+        //if (CpfAlreadyExists(customerToUpdate))
+        //    if (customer.Id != customerToUpdate.Id)
+        //        throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered in another id than the Id: {customerToUpdate.Id}");
+
+
+        //_context.Entry(customerToUpdate).State = EntityState.Modified;
+        //_context.SaveChanges();
     }
 
     private bool EmailAlreadyExists(Customer customerToCheck)
     {
-        return _context.Set<Customer>().Any(customer => customer.Email == customerToCheck.Email);        
+        return _context.Set<Customer>().Any(customer => customer.Email == customerToCheck.Email);
     }
 
     private bool CpfAlreadyExists(Customer customerToCheck)
     {
-        return _context.Set<Customer>().Any(customer => customer.Cpf == customerToCheck.Cpf);        
+        return _context.Set<Customer>().Any(customer => customer.Cpf == customerToCheck.Cpf);
     }
 }
