@@ -11,6 +11,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppServices", "AppServices\AppServices.csproj", "{2F8FC81A-B726-48FD-9B9A-88D8CCBB5132}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1F68087E-B499-4B50-B30F-D40314AFCC76} = {1F68087E-B499-4B50-B30F-D40314AFCC76}
+		{B330B5D1-824A-44F2-B67F-AFE474068111} = {B330B5D1-824A-44F2-B67F-AFE474068111}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModels", "DomainModels\DomainModels.csproj", "{057EFDB3-6EAC-466D-9496-130ED88476F8}"
@@ -24,12 +25,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Data", "Infrastructure.Data\Infrastructure.Data.csproj", "{B330B5D1-824A-44F2-B67F-AFE474068111}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Data", "Infrastructure.Data\Infrastructure.Data.csproj", "{B330B5D1-824A-44F2-B67F-AFE474068111}"
 	ProjectSection(ProjectDependencies) = postProject
 		{057EFDB3-6EAC-466D-9496-130ED88476F8} = {057EFDB3-6EAC-466D-9496-130ED88476F8}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.CrossCutting", "Infrastructure.CrossCutting\Infrastructure.CrossCutting.csproj", "{1F68087E-B499-4B50-B30F-D40314AFCC76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.CrossCutting", "Infrastructure.CrossCutting\Infrastructure.CrossCutting.csproj", "{1F68087E-B499-4B50-B30F-D40314AFCC76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
