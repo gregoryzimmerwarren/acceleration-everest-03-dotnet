@@ -19,10 +19,16 @@ public class CustomerService : ICustomerService
     public long Create(Customer customerToCreate)
     {
         if (EmailAlreadyExists(customerToCreate))
-            throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {customerToCreate.Id}");
+        {
+            var id = GetIdByEmail(customerToCreate.Email);
+            throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {id}");
+        }
 
         if (CpfAlreadyExists(customerToCreate))
-            throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {customerToCreate.Id}");
+        {
+            var id = GetIdByEmail(customerToCreate.Cpf);
+            throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
+        }
 
         _context.Set<Customer>().Add(customerToCreate);
         _context.SaveChanges();
@@ -58,23 +64,23 @@ public class CustomerService : ICustomerService
 
     public void Update(long id, Customer customerToUpdate)
     {
-        //var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Id == customerToUpdate.Id);
+        if (!_context.Set<Customer>().Any(customer => customer.Id == customerToUpdate.Id))
+            throw new ArgumentException($"Did not found customer for Id: {id}");
 
-        //if (customer == null)
-        //    throw new ArgumentException($"Did not found customer for Id: {id}");
+        if (EmailAlreadyExistsInAnotherCustomer(customerToUpdate))
+        {
+            var existingId = GetIdByEmail(customerToUpdate.Email);
+            throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered for Id: {existingId}");
+        }
 
+        if (CpfAlreadyExistsInAnotherCustomer(customerToUpdate))
+        {
+            var existingId = GetIdByCpf(customerToUpdate.Cpf);
+            throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered for Id: {existingId}");
+        }
 
-        //if (EmailAlreadyExists(customerToUpdate))
-        //    if (customer.Id != customerToUpdate.Id)
-        //        throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered in another id than the Id: {customerToUpdate.Id}");
-
-        //if (CpfAlreadyExists(customerToUpdate))
-        //    if (customer.Id != customerToUpdate.Id)
-        //        throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered in another id than the Id: {customerToUpdate.Id}");
-
-
-        //_context.Entry(customerToUpdate).State = EntityState.Modified;
-        //_context.SaveChanges();
+        _context.Set<Customer>().Update(customerToUpdate);
+        _context.SaveChanges();
     }
 
     private bool EmailAlreadyExists(Customer customerToCheck)
@@ -85,5 +91,35 @@ public class CustomerService : ICustomerService
     private bool CpfAlreadyExists(Customer customerToCheck)
     {
         return _context.Set<Customer>().Any(customer => customer.Cpf == customerToCheck.Cpf);
+    }
+
+    private bool EmailAlreadyExistsInAnotherCustomer(Customer customerToCheck)
+    {
+        return _context.Set<Customer>().Any(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id);
+    }
+
+    private bool CpfAlreadyExistsInAnotherCustomer(Customer customerToCheck)
+    {
+        return _context.Set<Customer>().Any(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id);
+    }
+
+    private long GetIdByCpf(string cpf)
+    {
+        var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Cpf == cpf);
+
+        if (customer == null)
+            throw new ArgumentException($"Did not found customer for Cpf: {cpf}");
+
+        return customer.Id;
+    }
+
+    private long GetIdByEmail(string email)
+    {
+        var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Email == email);
+
+        if (customer == null)
+            throw new ArgumentException($"Did not found customer for Email: {email}");
+
+        return customer.Id;
     }
 }
