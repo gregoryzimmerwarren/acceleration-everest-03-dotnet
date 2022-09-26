@@ -26,7 +26,7 @@ public class CustomerService : ICustomerService
 
         if (CpfAlreadyExists(customerToCreate))
         {
-            var id = GetIdByEmail(customerToCreate.Cpf);
+            var id = GetIdByCpf(customerToCreate.Cpf);
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
         }
 
