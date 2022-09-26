@@ -2,6 +2,7 @@ using AppServices.Interfaces;
 using AppServices.Services;
 using DomainServices.Interfaces;
 using DomainServices.Services;
+using EntityFrameworkCore.UnitOfWork.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
@@ -26,8 +27,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddValidatorsFromAssembly(Assembly.Load(nameof(AppServices)));
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
+builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
 
 var app = builder.Build();
 
