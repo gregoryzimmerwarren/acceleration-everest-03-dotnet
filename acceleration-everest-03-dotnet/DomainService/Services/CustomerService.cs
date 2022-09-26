@@ -62,10 +62,10 @@ public class CustomerService : ICustomerService
         return customer;
     }
 
-    public void Update(long id, Customer customerToUpdate)
+    public void Update(Customer customerToUpdate)
     {
         if (!_context.Set<Customer>().Any(customer => customer.Id == customerToUpdate.Id))
-            throw new ArgumentException($"Did not found customer for Id: {id}");
+            throw new ArgumentException($"Did not found customer for Id: {customerToUpdate.Id}");
 
         if (EmailAlreadyExistsInAnotherCustomer(customerToUpdate))
         {

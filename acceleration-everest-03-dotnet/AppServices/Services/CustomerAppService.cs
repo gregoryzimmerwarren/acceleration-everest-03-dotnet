@@ -56,6 +56,6 @@ public class CustomerAppService : ICustomerAppService
         var customerMapeado = _mapper.Map<Customer>(updateCustomerDto);
         customerMapeado.Id = id;
 
-        _customerService.Update(id, customerMapeado);
+        _customerService.Update(customerMapeado);
     }
 }
