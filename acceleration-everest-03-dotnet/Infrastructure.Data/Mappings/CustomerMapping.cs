@@ -13,7 +13,7 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
         builder.HasKey(customer => customer.Id);
 
         builder.Property(customer => customer.FullName)
-            .HasColumnType("VARCHAR(50)")
+            .HasColumnType("VARCHAR(250)")
             .IsRequired()
             .HasColumnName("full_name");
         
