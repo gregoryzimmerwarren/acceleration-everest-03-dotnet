@@ -108,7 +108,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
         return cpf.EndsWith(digit);
     }
 
-    private bool isValidCellphone(string cellphone)
+    private bool IsValidCellphone(string cellphone)
     {
         cellphone = cellphone.FormatCellphone();
 
