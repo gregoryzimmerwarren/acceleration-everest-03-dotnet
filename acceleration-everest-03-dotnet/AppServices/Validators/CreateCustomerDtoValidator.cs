@@ -112,11 +112,14 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
     {
         cellphone = cellphone.FormatCellphone();
 
-        if (cellphone.Length != 11)
+        if (cellphone.Length < 10 && cellphone.Length > 11)
             return false;
 
-        if (cellphone[2].ToString() != "9")
+        if (cellphone.Length == 11 && cellphone[2].ToString() != "9")
             return false;
+
+        if (cellphone.Length == 10)
+            cellphone = cellphone.Substring(0, 2) + "9" + cellphone.Substring(2, 8);
 
         for (int i = 0; i < 11; i++)
         {
