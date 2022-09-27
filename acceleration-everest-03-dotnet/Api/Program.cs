@@ -15,11 +15,9 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var serverVersion = ServerVersion.AutoDetect(connectionString);
-
 builder.Services.AddDbContext<WarrenEverestDotnetDbContext>(
     dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, serverVersion));
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
