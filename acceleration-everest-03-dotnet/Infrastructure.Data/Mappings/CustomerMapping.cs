@@ -15,61 +15,61 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
         builder.Property(customer => customer.FullName)
             .HasColumnType("VARCHAR(250)")
             .IsRequired()
-            .HasColumnName("full_name");
+            .HasColumnName("FullName");
         
         builder.Property(customer => customer.Email)
             .HasColumnType("VARCHAR(50)")
             .IsRequired()
-            .HasColumnName("email");
+            .HasColumnName("Email");
 
         builder.Property(customer => customer.Cpf)
             .HasColumnType("VARCHAR(11)")
             .IsRequired()
-            .HasColumnName("cpf");
+            .HasColumnName("Cpf");
 
         builder.Property(customer => customer.Cellphone)
             .HasColumnType("VARCHAR(11)")
             .IsRequired()
-            .HasColumnName("cellphone");
+            .HasColumnName("Cellphone");
 
         builder.Property(customer => customer.Country)
             .HasColumnType("VARCHAR(50)")
             .IsRequired()
-            .HasColumnName("country");
+            .HasColumnName("Country");
 
         builder.Property(customer => customer.City)
             .HasColumnType("VARCHAR(50)")
             .IsRequired()
-            .HasColumnName("city");
+            .HasColumnName("City");
 
         builder.Property(customer => customer.Address)
             .HasColumnType("VARCHAR(100)")
             .IsRequired()
-            .HasColumnName("address");
+            .HasColumnName("Address");
 
         builder.Property(customer => customer.PostalCode)
             .HasColumnType("VARCHAR(8)")
             .IsRequired()
-            .HasColumnName("postal_code");
+            .HasColumnName("PostalCode");
 
         builder.Property(customer => customer.Number)
             .HasColumnType("INT")
             .IsRequired()
-            .HasColumnName("number");
+            .HasColumnName("Number");
 
         builder.Property(customer => customer.EmailSms)
             .HasColumnType("BIT")
             .IsRequired()
-            .HasColumnName("email_sms");
+            .HasColumnName("EmailSms");
 
         builder.Property(customer => customer.Whatsapp)
             .HasColumnType("BIT")
             .IsRequired()
-            .HasColumnName("whatsapp");
+            .HasColumnName("Whatsapp");
 
         builder.Property(customer => customer.DateOfBirth)
             .HasColumnType("DATE")
             .IsRequired()
-            .HasColumnName("date_of_birth");
+            .HasColumnName("DateOfBirth");
     }
 }

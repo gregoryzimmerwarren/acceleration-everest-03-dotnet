@@ -32,7 +32,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         RuleFor(customer => customer.Cellphone)
             .NotEmpty()
             .MaximumLength(14)
-            .Must(isValidCellphone)
+            .Must(IsValidCellphone)
             .WithMessage("Cellphone must have a valid format '(XX)9XXXX-XXXX'.");
 
         RuleFor(customer => customer.Country)
@@ -49,7 +49,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         RuleFor(customer => customer.PostalCode)
             .NotEmpty()
             .MaximumLength(9)
-            .Must(isValidPostalCode)
+            .Must(IsValidPostalCode)
             .WithMessage("Postal Code must have a valid format 'XXXXX-XXX'.");
 
         RuleFor(customer => customer.Number)
