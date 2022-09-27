@@ -21,13 +21,15 @@ var serverVersion = ServerVersion.AutoDetect(connectionString);
 builder.Services.AddDbContext<WarrenEverestDotnetDbContext>(
     dbContextOptions => dbContextOptions
         .UseMySql(connectionString, serverVersion));
-builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
+builder.Services.AddScoped<DbContext, WarrenEverestDotnetDbContext>();
+builder.Services.AddUnitOfWork();
 builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
 
 var app = builder.Build();
