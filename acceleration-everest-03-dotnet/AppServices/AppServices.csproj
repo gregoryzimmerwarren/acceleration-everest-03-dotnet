@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AppModels\AppModels.csproj" />
     <ProjectReference Include="..\DomainService\DomainServices.csproj" />
-    <ProjectReference Include="..\Infrastructure.CrossCutting\Infrastructure.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,5 +13,4 @@ public class WarrenEverestDotnetDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("Infrastructure.Data"));
     }
-
 }
