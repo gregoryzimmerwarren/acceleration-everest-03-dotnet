@@ -129,7 +129,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
         return true;
     }
 
-    private bool isValidPostalCode(string postalCode)
+    private bool IsValidPostalCode(string postalCode)
     {
         postalCode = postalCode.FormatPostalCode();
 
