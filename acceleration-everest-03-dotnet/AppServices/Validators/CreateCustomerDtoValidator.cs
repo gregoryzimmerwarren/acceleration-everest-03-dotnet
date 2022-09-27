@@ -108,7 +108,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         return cpf.EndsWith(digit);
     }
 
-    private bool isValidCellphone(string cellphone)
+    private bool IsValidCellphone(string cellphone)
     {
         cellphone = cellphone.FormatCellphone();
 
@@ -129,7 +129,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         return true;
     }
 
-    private bool isValidPostalCode(string postalCode)
+    private bool IsValidPostalCode(string postalCode)
     {
         postalCode = postalCode.FormatPostalCode();
 
