@@ -9,5 +9,5 @@ public interface ICustomerService
     void Delete(long id);
     IEnumerable<Customer> GetAll();
     Customer GetById(long id);
-    void Update(long id, Customer customerToUpdate);
+    void Update(Customer customerToUpdate);
 }

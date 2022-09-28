@@ -1,6 +1,5 @@
 ﻿using AppModels;
 using AppServices.Interfaces;
-using DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -56,7 +55,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post(CreateCustomerDto customer)
+    public IActionResult Create(CreateCustomerDto customer)
     {
         try
         {

@@ -1,9 +1,9 @@
 ﻿using AppModels;
-using AppServices.Extensions;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels;
 using DomainServices.Interfaces;
+using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -19,10 +19,9 @@ public class CustomerAppService : ICustomerAppService
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-    public long Create(CreateCustomerDto postCustomerDto)
+    public long Create(CreateCustomerDto createCustomerDto)
     {
-        postCustomerDto.Cpf = postCustomerDto.Cpf.FormatCpf();
-        var customerMapeado = _mapper.Map<Customer>(postCustomerDto);
+        var customerMapeado = _mapper.Map<Customer>(createCustomerDto);
         
         return _customerService.Create(customerMapeado);
     }
@@ -46,11 +45,11 @@ public class CustomerAppService : ICustomerAppService
         return _mapper.Map<CustomerResult>(customer);
     }
 
-    public void Update(long id, UpdateCustomerDto putCustomerDto)
+    public void Update(long id, UpdateCustomerDto updateCustomerDto)
     {
-        var customerMapeado = _mapper.Map<Customer>(putCustomerDto);
+        var customerMapeado = _mapper.Map<Customer>(updateCustomerDto);
         customerMapeado.Id = id;
 
-        _customerService.Update(id, customerMapeado);
+        _customerService.Update(customerMapeado);
     }
 }

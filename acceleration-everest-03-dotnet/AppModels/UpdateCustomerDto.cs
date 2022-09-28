@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.CrossCutting.Extensions;
+using System;
 
 namespace AppModels;
 
@@ -22,12 +23,12 @@ public class UpdateCustomerDto
         FullName = fullName;
         Email = email;
         EmailConfirmation = emailConfirmation;
-        Cpf = cpf;
-        Cellphone = cellphone;
+        Cpf = cpf.FormatCpf();
+        Cellphone = cellphone.FormatCellphone();
         Country = country;
         City = city;
         Address = address;
-        PostalCode = postalCode;
+        PostalCode = postalCode.FormatPostalCode();
         Number = number;
         EmailSms = emailSms;
         Whatsapp = whatsapp;
