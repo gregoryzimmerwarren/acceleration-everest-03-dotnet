@@ -32,7 +32,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         RuleFor(customer => customer.Cellphone)
             .NotEmpty()
             .MaximumLength(14)
-            .Must(isValidCellphone)
+            .Must(IsValidCellphone)
             .WithMessage("Cellphone must have a valid format '(XX)9XXXX-XXXX'.");
 
         RuleFor(customer => customer.Country)
@@ -49,7 +49,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         RuleFor(customer => customer.PostalCode)
             .NotEmpty()
             .MaximumLength(9)
-            .Must(isValidPostalCode)
+            .Must(IsValidPostalCode)
             .WithMessage("Postal Code must have a valid format 'XXXXX-XXX'.");
 
         RuleFor(customer => customer.Number)
@@ -108,15 +108,18 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         return cpf.EndsWith(digit);
     }
 
-    private bool isValidCellphone(string cellphone)
+    private bool IsValidCellphone(string cellphone)
     {
         cellphone = cellphone.FormatCellphone();
 
-        if (cellphone.Length != 11)
+        if (cellphone.Length < 10 && cellphone.Length > 11)
             return false;
 
-        if (cellphone[2].ToString() != "9")
+        if (cellphone.Length == 11 && cellphone[2].ToString() != "9")
             return false;
+
+        if (cellphone.Length == 10)
+            cellphone = cellphone.Substring(0, 2) + "9" + cellphone.Substring(2, 8);
 
         for (int i = 0; i < 11; i++)
         {
@@ -129,7 +132,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
         return true;
     }
 
-    private bool isValidPostalCode(string postalCode)
+    private bool IsValidPostalCode(string postalCode)
     {
         postalCode = postalCode.FormatPostalCode();
 

@@ -21,9 +21,6 @@ public class CustomerAppService : ICustomerAppService
 
     public long Create(CreateCustomerDto createCustomerDto)
     {
-        createCustomerDto.Cpf = createCustomerDto.Cpf.FormatCpf();
-        createCustomerDto.Cellphone = createCustomerDto.Cellphone.FormatCellphone();
-        createCustomerDto.PostalCode = createCustomerDto.PostalCode.FormatPostalCode();
         var customerMapeado = _mapper.Map<Customer>(createCustomerDto);
         
         return _customerService.Create(customerMapeado);
@@ -50,9 +47,6 @@ public class CustomerAppService : ICustomerAppService
 
     public void Update(long id, UpdateCustomerDto updateCustomerDto)
     {
-        updateCustomerDto.Cpf = updateCustomerDto.Cpf.FormatCpf();
-        updateCustomerDto.Cellphone = updateCustomerDto.Cellphone.FormatCellphone();
-        updateCustomerDto.PostalCode = updateCustomerDto.PostalCode.FormatPostalCode();
         var customerMapeado = _mapper.Map<Customer>(updateCustomerDto);
         customerMapeado.Id = id;
 
