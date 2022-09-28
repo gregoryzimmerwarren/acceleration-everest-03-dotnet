@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(WarrenEverestDotnetDbContext))]
-    [Migration("20220922193530_CreateCustomerTable")]
+    [Migration("20220928184943_CreateCustomerTable")]
     partial class CreateCustomerTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,62 +30,62 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("VARCHAR(100)")
-                        .HasColumnName("address");
+                        .HasColumnName("Address");
 
                     b.Property<string>("Cellphone")
                         .IsRequired()
                         .HasColumnType("VARCHAR(11)")
-                        .HasColumnName("cellphone");
+                        .HasColumnName("Cellphone");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("VARCHAR(50)")
-                        .HasColumnName("city");
+                        .HasColumnName("City");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("VARCHAR(50)")
-                        .HasColumnName("country");
+                        .HasColumnName("Country");
 
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasColumnType("VARCHAR(11)")
-                        .HasColumnName("cpf");
+                        .HasColumnName("Cpf");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("DATE")
-                        .HasColumnName("date_of_birth");
+                        .HasColumnName("DateOfBirth");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("VARCHAR(50)")
-                        .HasColumnName("email");
+                        .HasColumnName("Email");
 
                     b.Property<ulong>("EmailSms")
                         .HasColumnType("BIT")
-                        .HasColumnName("email_sms");
+                        .HasColumnName("EmailSms");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(50)")
-                        .HasColumnName("full_name");
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("FullName");
 
                     b.Property<int>("Number")
                         .HasColumnType("INT")
-                        .HasColumnName("number");
+                        .HasColumnName("Number");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("VARCHAR(8)")
-                        .HasColumnName("postal_code");
+                        .HasColumnName("PostalCode");
 
                     b.Property<ulong>("Whatsapp")
                         .HasColumnType("BIT")
-                        .HasColumnName("whatsapp");
+                        .HasColumnName("Whatsapp");
 
                     b.HasKey("Id");
 
-                    b.ToTable("customers", (string)null);
+                    b.ToTable("Customers", (string)null);
                 });
 #pragma warning restore 612, 618
         }
