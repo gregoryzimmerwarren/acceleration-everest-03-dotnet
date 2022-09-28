@@ -31,7 +31,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         RuleFor(customer => customer.Cellphone)
             .NotEmpty()
-            .MaximumLength(14)
+            .Length(11)
             .Must(IsValidCellphone)
             .WithMessage("Cellphone must have a valid format '(XX)9XXXX-XXXX'.");
 
@@ -63,8 +63,6 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
     private bool IsValidCpf(string cpf)
     {
-        cpf = cpf.FormatCpf();
-
         if (cpf.Length != 11)
             return false;
 
