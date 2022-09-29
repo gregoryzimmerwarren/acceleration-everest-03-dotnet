@@ -22,13 +22,13 @@ public class CustomerService : ICustomerService
 
     public long Create(Customer customerToCreate)
     {
-        if (EmailAlreadyExists(customerToCreate))
+        if (EmailAlreadyExistsInAnotherCustomer(customerToCreate))
         {
             var id = GetIdByEmail(customerToCreate.Email);
             throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {id}");
         }
 
-        if (CpfAlreadyExists(customerToCreate))
+        if (CpfAlreadyExistsInAnotherCustomer(customerToCreate))
         {
             var id = GetIdByCpf(customerToCreate.Cpf);
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
@@ -50,7 +50,6 @@ public class CustomerService : ICustomerService
 
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
-        _unitOfWork.SaveChanges();
     }
 
     public IEnumerable<Customer> GetAll()
@@ -94,22 +93,6 @@ public class CustomerService : ICustomerService
         
         repository.Update(customerToUpdate);
         _unitOfWork.SaveChanges();
-    }
-
-    private bool EmailAlreadyExists(Customer customerToCheck)
-    {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.Any(customer => customer.Email == customerToCheck.Email);
-
-        return query;        
-    }
-
-    private bool CpfAlreadyExists(Customer customerToCheck)
-    {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.Any(customer => customer.Cpf == customerToCheck.Cpf);
-
-        return query;
     }
 
     private bool EmailAlreadyExistsInAnotherCustomer(Customer customerToCheck)
