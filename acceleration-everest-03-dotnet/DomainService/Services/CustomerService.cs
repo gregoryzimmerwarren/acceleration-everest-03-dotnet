@@ -41,7 +41,7 @@ public class CustomerService : ICustomerService
 
     public void Delete(long id)
     {
-        var customer =  GetById(id);
+        var customer = GetById(id);
 
         if (customer == null)
             throw new ArgumentException($"Did not found customer for Id: {id}");
