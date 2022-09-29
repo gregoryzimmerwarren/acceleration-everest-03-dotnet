@@ -27,8 +27,8 @@ builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 builder.Services.AddScoped<DbContext, WarrenEverestDotnetDbContext>();
-//builder.Services.AddUnitOfWork();
 builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
+
 
 var app = builder.Build();
 
