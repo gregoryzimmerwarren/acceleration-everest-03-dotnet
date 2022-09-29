@@ -22,13 +22,13 @@ public class CustomerService : ICustomerService
 
     public long Create(Customer customerToCreate)
     {
-        if (EmailAlreadyExistsInAnotherCustomer(customerToCreate))
+        if (EmailAlreadyExists(customerToCreate))
         {
             var id = GetIdByEmail(customerToCreate.Email);
             throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {id}");
         }
 
-        if (CpfAlreadyExistsInAnotherCustomer(customerToCreate))
+        if (CpfAlreadyExists(customerToCreate))
         {
             var id = GetIdByCpf(customerToCreate.Cpf);
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
@@ -79,13 +79,13 @@ public class CustomerService : ICustomerService
         if (!repository.Any(customer => customer.Id == customerToUpdate.Id))
             throw new ArgumentException($"Did not found customer for Id: {customerToUpdate.Id}");
 
-        if (EmailAlreadyExistsInAnotherCustomer(customerToUpdate))
+        if (EmailAlreadyExists(customerToUpdate))
         {
             var existingId = GetIdByEmail(customerToUpdate.Email);
             throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered for Id: {existingId}");
         }
 
-        if (CpfAlreadyExistsInAnotherCustomer(customerToUpdate))
+        if (CpfAlreadyExists(customerToUpdate))
         {
             var existingId = GetIdByCpf(customerToUpdate.Cpf);
             throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered for Id: {existingId}");
@@ -95,7 +95,7 @@ public class CustomerService : ICustomerService
         _unitOfWork.SaveChanges();
     }
 
-    private bool EmailAlreadyExistsInAnotherCustomer(Customer customerToCheck)
+    private bool EmailAlreadyExists(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.Any(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id);
@@ -103,7 +103,7 @@ public class CustomerService : ICustomerService
         return query;       
     }
 
-    private bool CpfAlreadyExistsInAnotherCustomer(Customer customerToCheck)
+    private bool CpfAlreadyExists(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.Any(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id);
