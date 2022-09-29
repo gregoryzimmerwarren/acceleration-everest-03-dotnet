@@ -3,7 +3,6 @@ using AppServices.Services;
 using DomainServices.Interfaces;
 using DomainServices.Services;
 using EntityFrameworkCore.UnitOfWork.Extensions;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +27,7 @@ builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 builder.Services.AddScoped<DbContext, WarrenEverestDotnetDbContext>();
+//builder.Services.AddUnitOfWork();
 builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
 
 var app = builder.Build();
