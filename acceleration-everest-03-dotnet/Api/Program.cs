@@ -26,7 +26,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
-builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
+builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>(ServiceLifetime.Transient);
 
 
 var app = builder.Build();
