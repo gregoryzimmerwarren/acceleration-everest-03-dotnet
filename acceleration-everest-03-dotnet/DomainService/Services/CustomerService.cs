@@ -35,8 +35,8 @@ public class CustomerService : ICustomerService
         }
 
         var repository = _unitOfWork.Repository<Customer>();
-         repository.Add(customerToCreate);
-         _unitOfWork.SaveChanges();
+        repository.Add(customerToCreate);
+        _unitOfWork.SaveChanges();
 
         return customerToCreate.Id;
     }
