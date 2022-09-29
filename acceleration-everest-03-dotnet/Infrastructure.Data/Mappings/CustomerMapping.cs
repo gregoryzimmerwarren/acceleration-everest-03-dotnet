@@ -1,4 +1,4 @@
-﻿using DomainModels;
+﻿using DomainModels.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,16 +22,10 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
             .IsRequired()
             .HasColumnName("Email");
 
-        builder.HasIndex(customer => customer.Email)
-            .IsUnique();
-
         builder.Property(customer => customer.Cpf)
             .HasColumnType("VARCHAR(11)")
             .IsRequired()
             .HasColumnName("Cpf");
-
-        builder.HasIndex(customer => customer.Cpf)
-            .IsUnique();
 
         builder.Property(customer => customer.Cellphone)
             .HasColumnType("VARCHAR(11)")

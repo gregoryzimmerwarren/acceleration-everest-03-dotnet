@@ -1,4 +1,4 @@
-﻿using DomainModels;
+﻿using DomainModels.Models;
 using System.Collections.Generic;
 
 namespace DomainServices.Interfaces;

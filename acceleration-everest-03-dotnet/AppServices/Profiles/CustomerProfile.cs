@@ -1,6 +1,6 @@
 ﻿using AppModels;
 using AutoMapper;
-using DomainModels;
+using DomainModels.Models;
 
 namespace AppServices.Profiles;
 

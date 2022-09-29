@@ -1,23 +1,19 @@
-﻿using DomainModels;
+﻿using DomainModels.Models;
 using DomainServices.Interfaces;
-using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DomainServices.Services;
 
 public class CustomerService : ICustomerService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IRepositoryFactory _repositoryFactory;
+    private readonly WarrenEverestDotnetDbContext _context;
 
-    public CustomerService(
-        IUnitOfWork<WarrenEverestDotnetDbContext> unitOfWork, 
-        IRepositoryFactory<WarrenEverestDotnetDbContext> repositoryFactory)
+    public CustomerService(WarrenEverestDotnetDbContext context)
     {
-        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public long Create(Customer customerToCreate)
@@ -34,9 +30,8 @@ public class CustomerService : ICustomerService
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
         }
 
-        var repository = _unitOfWork.Repository<Customer>();
-        repository.Add(customerToCreate);
-        _unitOfWork.SaveChanges();
+        _context.Set<Customer>().Add(customerToCreate);
+        _context.SaveChanges();
 
         return customerToCreate.Id;
     }
@@ -48,23 +43,18 @@ public class CustomerService : ICustomerService
         if (customer == null)
             throw new ArgumentException($"Did not found customer for Id: {id}");
 
-        var repository = _unitOfWork.Repository<Customer>();
-        repository.Remove(customer);
+        _context.Set<Customer>().Remove(customer);
+        _context.SaveChanges();
     }
 
     public IEnumerable<Customer> GetAll()
     {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.MultipleResultQuery();
-
-        return repository.Search(query);
+        return _context.Set<Customer>().ToList();
     }
 
     public Customer GetById(long id)
     {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id);
-        var customer =  repository.SingleOrDefault(query);
+        var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Id == id);
 
         if (customer == null)
             throw new ArgumentException($"Did not found customer for Id: {id}");
@@ -74,48 +64,48 @@ public class CustomerService : ICustomerService
 
     public void Update(Customer customerToUpdate)
     {
-        var repository = _unitOfWork.Repository<Customer>();
-
-        if (!repository.Any(customer => customer.Id == customerToUpdate.Id))
+        if (!_context.Set<Customer>().Any(customer => customer.Id == customerToUpdate.Id))
             throw new ArgumentException($"Did not found customer for Id: {customerToUpdate.Id}");
 
-        if (EmailAlreadyExists(customerToUpdate))
+        if (EmailAlreadyExistsInAnotherCustomer(customerToUpdate))
         {
             var existingId = GetIdByEmail(customerToUpdate.Email);
             throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered for Id: {existingId}");
         }
 
-        if (CpfAlreadyExists(customerToUpdate))
+        if (CpfAlreadyExistsInAnotherCustomer(customerToUpdate))
         {
             var existingId = GetIdByCpf(customerToUpdate.Cpf);
             throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered for Id: {existingId}");
         }
-        
-        repository.Update(customerToUpdate);
-        _unitOfWork.SaveChanges();
+
+        _context.Set<Customer>().Update(customerToUpdate);
+        _context.SaveChanges();
     }
 
     private bool EmailAlreadyExists(Customer customerToCheck)
     {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.Any(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id);
-
-        return query;       
+        return _context.Set<Customer>().Any(customer => customer.Email == customerToCheck.Email);
     }
 
     private bool CpfAlreadyExists(Customer customerToCheck)
     {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.Any(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id);
+        return _context.Set<Customer>().Any(customer => customer.Cpf == customerToCheck.Cpf);
+    }
 
-        return query;
+    private bool EmailAlreadyExistsInAnotherCustomer(Customer customerToCheck)
+    {
+        return _context.Set<Customer>().Any(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id);
+    }
+
+    private bool CpfAlreadyExistsInAnotherCustomer(Customer customerToCheck)
+    {
+        return _context.Set<Customer>().Any(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id);
     }
 
     private long GetIdByCpf(string cpf)
     {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.SingleResultQuery().AndFilter(customer => customer.Cpf == cpf);
-        var customer = repository.SingleOrDefault(query);
+        var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Cpf == cpf);
 
         if (customer == null)
             throw new ArgumentException($"Did not found customer for Cpf: {cpf}");
@@ -125,9 +115,7 @@ public class CustomerService : ICustomerService
 
     private long GetIdByEmail(string email)
     {
-        var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.SingleResultQuery().AndFilter(customer => customer.Email == email);
-        var customer = repository.SingleOrDefault(query);
+        var customer = _context.Set<Customer>().FirstOrDefault(customer => customer.Email == email);
 
         if (customer == null)
             throw new ArgumentException($"Did not found customer for Email: {email}");
