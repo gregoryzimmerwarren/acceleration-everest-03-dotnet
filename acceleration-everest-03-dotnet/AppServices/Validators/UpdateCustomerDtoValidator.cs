@@ -13,7 +13,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
     {
         RuleFor(customer => customer.FullName)
             .NotEmpty()
-            .MinimumLength(6);
+            .MinimumLength(5);
 
         RuleFor(customer => customer.Email)
             .NotEmpty()
@@ -24,20 +24,19 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
             .Must(customer => customer.EmailConfirmation == customer.Email);
 
         RuleFor(customer => customer.Cpf)
-                .NotEmpty()
-                .MinimumLength(11)
-                .Must(IsValidCpf)
-                .WithMessage("Cpf must be valid.");
+            .NotEmpty()
+            .Must(IsValidCpf)
+            .WithMessage("Cpf must be valid.");
 
         RuleFor(customer => customer.Cellphone)
-           .NotEmpty()
-           .MaximumLength(14)
-           .Must(IsValidCellphone)
-           .WithMessage("Cellphone must have a valid format '(XX)9XXXX-XXXX'.");
+            .NotEmpty()
+            .MaximumLength(13)
+            .Must(IsValidCellphone)
+            .WithMessage("Cellphone must have a valid format '(XX)9XXXX-XXXX'.");
 
         RuleFor(customer => customer.Country)
             .NotEmpty()
-            .MinimumLength(4);
+            .MinimumLength(3);
 
         RuleFor(customer => customer.City)
             .NotEmpty();
@@ -63,8 +62,6 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
 
     private bool IsValidCpf(string cpf)
     {
-        cpf = cpf.FormatCpf();
-
         if (cpf.Length != 11)
             return false;
 

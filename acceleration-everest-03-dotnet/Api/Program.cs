@@ -2,7 +2,7 @@ using AppServices.Interfaces;
 using AppServices.Services;
 using DomainServices.Interfaces;
 using DomainServices.Services;
-using FluentValidation;
+using EntityFrameworkCore.UnitOfWork.Extensions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -17,15 +17,17 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<WarrenEverestDotnetDbContext>(
     dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), ServiceLifetime.Transient);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
-builder.Services.AddValidatorsFromAssembly(Assembly.Load(nameof(AppServices)));
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
+builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>(ServiceLifetime.Transient);
+
 
 var app = builder.Build();
 
