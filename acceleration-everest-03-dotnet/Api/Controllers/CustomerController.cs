@@ -32,9 +32,9 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAllCustomers()
     {
-        var result = _customerAppService.GetAll();
+        var result = _customerAppService.GetAllCustomers();
 
         return Ok(result);
     }

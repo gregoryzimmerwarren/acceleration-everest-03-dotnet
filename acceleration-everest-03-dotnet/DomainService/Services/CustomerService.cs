@@ -47,7 +47,7 @@ public class CustomerService : ICustomerService
         _context.SaveChanges();
     }
 
-    public IEnumerable<Customer> GetAll()
+    public IEnumerable<Customer> GetAllCustomers()
     {
         return _context.Set<Customer>().ToList();
     }

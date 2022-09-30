@@ -31,9 +31,9 @@ public class CustomerAppService : ICustomerAppService
         _customerService.Delete(id);
     }
 
-    public IEnumerable<CustomerResult> GetAll()
+    public IEnumerable<CustomerResult> GetAllCustomers()
     {
-        var customers = _customerService.GetAll();
+        var customers = _customerService.GetAllCustomers();
 
         return _mapper.Map<IEnumerable<CustomerResult>>(customers);
     }

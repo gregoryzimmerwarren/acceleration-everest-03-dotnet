@@ -1,11 +1,15 @@
-﻿namespace DomainModels.Models
-{
-    public class CustomerBankInfo : IEntity
-    {
-        public long Id { get; set; }
-        public decimal AccountBalance { get; set; }
+﻿namespace DomainModels.Models;
 
-        public long CustomerId { get; set; }
-        public Customer Customer { get; set; }
+public class CustomerBankInfo : IEntity
+{
+    public CustomerBankInfo(long customerId)
+    {
+        CustomerId = customerId;
     }
+
+    public long Id { get; set; }
+    public decimal AccountBalance { get; set; }
+
+    public long CustomerId { get; set; }
+    public Customer Customer { get; set; }
 }

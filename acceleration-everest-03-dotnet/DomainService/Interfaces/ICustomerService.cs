@@ -7,7 +7,7 @@ public interface ICustomerService
 {
     long Create(Customer customerToCreate);
     void Delete(long id);
-    IEnumerable<Customer> GetAll();
+    IEnumerable<Customer> GetAllCustomers();
     Customer GetById(long id);
     void Update(Customer customerToUpdate);
 }

@@ -1,8 +1,7 @@
-﻿namespace DomainModels.Enums
+﻿namespace DomainModels.Enums;
+
+public enum OrderDirection
 {
-    public enum OrderDirection
-    {
-        Buy = 1,
-        Sell = 2
-    }
+    Buy = 1,
+    Sell = 2
 }
