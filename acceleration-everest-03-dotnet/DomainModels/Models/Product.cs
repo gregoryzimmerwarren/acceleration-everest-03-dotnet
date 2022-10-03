@@ -30,4 +30,5 @@ public class Product : IEntity
     public ProductType Type { get; set; }
     public ICollection<Portfolio> Portfolios { get; set; }
     public List<Order> Orders { get; set; }
+    public List<PortfolioProduct> PortfolioProducts { get; set; }
 }

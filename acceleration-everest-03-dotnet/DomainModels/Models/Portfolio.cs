@@ -28,4 +28,5 @@ public class Portfolio : IEntity
     public Customer Customer { get; set; }
     public ICollection<Product> Products { get; set; }
     public List<Order> Orders { get; set; }
+    public List<PortfolioProduct> PortfolioProducts { get; set; }
 }

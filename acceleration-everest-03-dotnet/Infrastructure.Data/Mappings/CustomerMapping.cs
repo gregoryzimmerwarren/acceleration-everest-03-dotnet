@@ -71,5 +71,9 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
             .HasColumnType("DATE")
             .IsRequired()
             .HasColumnName("DateOfBirth");
+
+        builder.HasOne(customer => customer.CustomerBankInfo)
+            .WithOne(customerBankInfo => customerBankInfo.Customer)
+            .HasForeignKey<CustomerBankInfo>(customerBankInfo => customerBankInfo.CustomerId);
     }
 }
