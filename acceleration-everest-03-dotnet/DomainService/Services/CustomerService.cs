@@ -47,7 +47,7 @@ public class CustomerService : ICustomerService
         var customer = GetById(id);
 
         if (customer == null)
-            throw new ArgumentException($"Did not found customer for Id: {id}");
+            throw new ArgumentException($"No customer found for Id: {id}");
 
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
@@ -57,8 +57,12 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.MultipleResultQuery();
+        var customers = repository.Search(query);
 
-        return repository.Search(query);
+        if (customers == null)
+            throw new ArgumentException($"No customer found");
+
+        return customers;
     }
 
     public Customer GetById(long id)
@@ -68,7 +72,7 @@ public class CustomerService : ICustomerService
         var customer = repository.SingleOrDefault(query);
 
         if (customer == null)
-            throw new ArgumentException($"Did not found customer for Id: {id}");
+            throw new ArgumentException($"No customer found for Id: {id}");
 
         return customer;
     }
@@ -78,7 +82,7 @@ public class CustomerService : ICustomerService
         var repository = _unitOfWork.Repository<Customer>();
 
         if (!repository.Any(customer => customer.Id == customerToUpdate.Id))
-            throw new ArgumentException($"Did not found customer for Id: {customerToUpdate.Id}");
+            throw new ArgumentException($"No customer found for Id: {customerToUpdate.Id}");
 
         if (EmailAlreadyExists(customerToUpdate))
         {
@@ -119,7 +123,7 @@ public class CustomerService : ICustomerService
         var customer = repository.SingleOrDefault(query);
 
         if (customer == null)
-            throw new ArgumentException($"Did not found customer for Cpf: {cpf}");
+            throw new ArgumentException($"No customer found for Cpf: {cpf}");
 
         return customer.Id;
     }
@@ -131,7 +135,7 @@ public class CustomerService : ICustomerService
         var customer = repository.SingleOrDefault(query);
 
         if (customer == null)
-            throw new ArgumentException($"Did not found customer for Email: {email}");
+            throw new ArgumentException($"No customer found for Email: {email}");
 
         return customer.Id;
     }
