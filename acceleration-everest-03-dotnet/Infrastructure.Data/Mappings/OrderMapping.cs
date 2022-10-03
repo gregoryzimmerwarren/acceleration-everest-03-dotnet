@@ -33,7 +33,7 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .HasColumnName("Direction");
 
         builder.Property(order => order.PortifolioId)
-            .HasColumnType("INT")
+            .HasColumnType("BIGINT")
             .IsRequired()
             .HasColumnName("PortifolioId");
 
@@ -42,7 +42,7 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .HasForeignKey(order => order.PortifolioId);
 
         builder.Property(order => order.ProductId)
-            .HasColumnType("INT")
+            .HasColumnType("BIGINT")
             .IsRequired()
             .HasColumnName("ProductId");
 

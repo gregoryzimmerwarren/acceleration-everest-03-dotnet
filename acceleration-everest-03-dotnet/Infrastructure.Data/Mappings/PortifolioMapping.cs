@@ -33,7 +33,7 @@ public class PortifolioMapping : IEntityTypeConfiguration<Portfolio>
             .HasColumnName("AccounBalance");
 
         builder.Property(portfolio => portfolio.CustomerId)
-            .HasColumnType("INT")
+            .HasColumnType("BIGINT")
             .IsRequired()
             .HasColumnName("CustomerId");
 
