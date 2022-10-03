@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(WarrenEverestDotnetDbContext))]
-    [Migration("20221003174314_CreateTables")]
+    [Migration("20221003185442_CreateTables")]
     partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,12 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("Whatsapp");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Cpf")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Customers", (string)null);
                 });

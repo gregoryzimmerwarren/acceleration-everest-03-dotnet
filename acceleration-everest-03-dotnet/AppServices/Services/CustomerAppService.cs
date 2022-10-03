@@ -3,7 +3,6 @@ using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
-using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Collections.Generic;
 

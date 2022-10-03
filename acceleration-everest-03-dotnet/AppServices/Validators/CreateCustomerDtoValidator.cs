@@ -25,7 +25,6 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         RuleFor(customer => customer.Cpf)
             .NotEmpty()
-            .Length(11)
             .Must(IsValidCpf)
             .WithMessage("Cpf must be valid.");
 
