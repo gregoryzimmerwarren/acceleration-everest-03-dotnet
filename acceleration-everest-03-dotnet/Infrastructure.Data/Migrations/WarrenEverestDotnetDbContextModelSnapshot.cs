@@ -159,9 +159,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("AccounBalance")
+                    b.Property<decimal>("AccountBalance")
                         .HasColumnType("DECIMAL(14,2)")
-                        .HasColumnName("AccounBalance");
+                        .HasColumnName("AccountBalance");
 
                     b.Property<long>("CustomerId")
                         .HasColumnType("BIGINT")

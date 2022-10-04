@@ -1,8 +1,8 @@
 ﻿using DomainModels.Models;
-using EntityFrameworkCore.UnitOfWork.Interfaces;
-using System.Collections.Generic;
-using System;
 using DomainServices.Interfaces;
+using EntityFrameworkCore.UnitOfWork.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace DomainServices.Services
 {

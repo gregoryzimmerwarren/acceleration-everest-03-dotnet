@@ -1,5 +1,4 @@
-﻿using DomainModels;
-using DomainModels.Models;
+﻿using DomainModels.Models;
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;

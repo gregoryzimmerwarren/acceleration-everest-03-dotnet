@@ -27,10 +27,10 @@ public class PortifolioMapping : IEntityTypeConfiguration<Portfolio>
             .IsRequired()
             .HasColumnName("TotalBalance");
 
-        builder.Property(portfolio => portfolio.AccounBalance)
+        builder.Property(portfolio => portfolio.AccountBalance)
             .HasColumnType("DECIMAL(14,2)")
             .IsRequired()
-            .HasColumnName("AccounBalance");
+            .HasColumnName("AccountBalance");
 
         builder.Property(portfolio => portfolio.CustomerId)
             .HasColumnType("BIGINT")

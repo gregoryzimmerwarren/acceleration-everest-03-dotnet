@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(WarrenEverestDotnetDbContext))]
-    [Migration("20221003185442_CreateTables")]
+    [Migration("20221004200033_CreateTables")]
     partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,9 +161,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("AccounBalance")
+                    b.Property<decimal>("AccountBalance")
                         .HasColumnType("DECIMAL(14,2)")
-                        .HasColumnName("AccounBalance");
+                        .HasColumnName("AccountBalance");
 
                     b.Property<long>("CustomerId")
                         .HasColumnType("BIGINT")

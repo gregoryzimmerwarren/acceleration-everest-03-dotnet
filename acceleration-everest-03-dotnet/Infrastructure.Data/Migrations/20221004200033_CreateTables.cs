@@ -98,7 +98,7 @@ namespace Infrastructure.Data.Migrations
                     Description = table.Column<string>(type: "VARCHAR(250)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TotalBalance = table.Column<decimal>(type: "DECIMAL(14,2)", nullable: false),
-                    AccounBalance = table.Column<decimal>(type: "DECIMAL(14,2)", nullable: false),
+                    AccountBalance = table.Column<decimal>(type: "DECIMAL(14,2)", nullable: false),
                     CustomerId = table.Column<long>(type: "BIGINT", nullable: false)
                 },
                 constraints: table =>
