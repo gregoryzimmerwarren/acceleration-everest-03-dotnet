@@ -45,10 +45,6 @@ public class CustomerService : ICustomerService
     public void Delete(long id)
     {
         var customer = GetById(id);
-
-        if (customer == null)
-            throw new ArgumentException($"No customer found for Id: {id}");
-
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
     }

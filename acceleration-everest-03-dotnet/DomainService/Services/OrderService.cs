@@ -75,16 +75,5 @@ namespace DomainServices.Services
 
             return orders;
         }
-
-        public void Update(Order orderToUpdate)
-        {
-            var repository = _unitOfWork.Repository<Order>();
-
-            if (!repository.Any(order => order.Id == orderToUpdate.Id))
-                throw new ArgumentException($"No order found for Id: {orderToUpdate.Id}");
-
-            repository.Update(orderToUpdate);
-            _unitOfWork.SaveChanges();
-        }
     }
 }

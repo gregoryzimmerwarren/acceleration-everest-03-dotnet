@@ -6,11 +6,13 @@ namespace DomainServices.Interfaces
     public interface IPortifolioService
     {
         long Create(Portfolio portfolioToCreate);
-        void Delete(long id);
+        void Delete(long portfolioId);
+        void Deposit(long portfolioId, decimal amount);
         IEnumerable<Portfolio> GetAllPortifolios();
+        Portfolio GetPortifolioById(long portfolioId);
         IEnumerable<Portfolio> GetPortifoliosByCustomerId(long customerId);
-        Portfolio GetPortifoliosById(long id);
-        void Invest(long customerId, decimal amount);
-        void Withdraw(long customerId, decimal amount);
+        bool Invest(long portfolioId, decimal amount);
+        bool RedeemToPortfolio(long portfolioId, decimal amount);
+        bool WithdrawFromPortfolio(long portfolioId, decimal amount);
     }
 }

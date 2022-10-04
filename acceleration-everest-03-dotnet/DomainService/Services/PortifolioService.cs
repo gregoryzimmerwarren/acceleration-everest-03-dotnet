@@ -1,5 +1,6 @@
 ﻿using DomainModels.Models;
 using DomainServices.Interfaces;
+using EntityFrameworkCore.UnitOfWork.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -7,39 +8,146 @@ namespace DomainServices.Services
 {
     public class PortifolioService : IPortifolioService
     {
-        public long Create(Portfolio portfolioToCreate)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepositoryFactory _repositoryFactory;
+
+        public PortifolioService(
+            IUnitOfWork unitOfWork,
+            IRepositoryFactory repositoryFactory)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
         }
 
-        public void Delete(long id)
+        public long Create(Portfolio portfolioToCreate)
         {
-            throw new NotImplementedException();
+            var repository = _unitOfWork.Repository<Portfolio>();
+            repository.Add(portfolioToCreate);
+            _unitOfWork.SaveChanges();
+
+            return portfolioToCreate.Id;
+        }
+
+        public void Delete(long portfolioId)
+        {
+            var portfolio = GetPortifolioById(portfolioId);
+
+            if (portfolio.TotalBalance > 0 || portfolio.AccountBalance > 0)
+                throw new ArgumentException($@"It is not possible to delete the portfolio for Id: {portfolioId}.
+Value available for redeem: R${portfolio.TotalBalance}.
+Value available for withdraw: R${portfolio.AccountBalance}.");
+
+            var repository = _unitOfWork.Repository<Portfolio>();
+            repository.Remove(portfolio);
+        }
+
+        public void Deposit(long portfolioId, decimal amount)
+        {
+            var portfolio = GetPortifolioById(portfolioId);
+            var newAccountBalance = portfolio.AccountBalance + amount;
+            portfolio.AccountBalance = newAccountBalance;
+
+            var repository = _unitOfWork.Repository<Portfolio>();
+            repository.Update(portfolio);
+            _unitOfWork.SaveChanges();
         }
 
         public IEnumerable<Portfolio> GetAllPortifolios()
         {
-            throw new NotImplementedException();
+            var repository = _repositoryFactory.Repository<Portfolio>();
+            var query = repository.MultipleResultQuery();
+            var portfolios = repository.Search(query);
+
+            if (portfolios.Count == 0)
+                throw new ArgumentException("No portfolio found");
+
+            return portfolios;
+        }
+
+        public Portfolio GetPortifolioById(long portfolioId)
+        {
+            var repository = _repositoryFactory.Repository<Portfolio>();
+            var query = repository.SingleResultQuery().AndFilter(portfolio => portfolio.Id == portfolioId);
+            var portfolio = repository.SingleOrDefault(query);
+
+            if (portfolio == null)
+                throw new ArgumentException($"No portfolio found for Id: {portfolioId}");
+
+            return portfolio;
+
         }
 
         public IEnumerable<Portfolio> GetPortifoliosByCustomerId(long customerId)
         {
-            throw new NotImplementedException();
+            var repository = _repositoryFactory.Repository<Portfolio>();
+            var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId);
+            var portfolios = repository.Search(query);
+
+            if (portfolios.Count == 0)
+                throw new ArgumentException($"No portfolio found for customer Id: {customerId}");
+
+            return portfolios;
         }
 
-        public Portfolio GetPortifoliosById(long id)
+        public bool Invest(long portfolioId, decimal amount)
         {
-            throw new NotImplementedException();
+            var portfolio = GetPortifolioById(portfolioId);
+
+            if (portfolio.AccountBalance < amount)
+            {
+                throw new ArgumentException($"Portfolio does not have sufficient balance for this investment. Current balance: R${portfolio.AccountBalance}");
+            }           
+
+            var newAccountBalance = portfolio.AccountBalance - amount;
+            var newTotalBalance = portfolio.TotalBalance + amount;
+            portfolio.AccountBalance = newAccountBalance;
+            portfolio.TotalBalance = newTotalBalance;
+
+            var repository = _unitOfWork.Repository<Portfolio>();
+            repository.Update(portfolio);
+            _unitOfWork.SaveChanges();
+
+            return true;
         }
 
-        public void Invest(long customerId, decimal amount)
+        public bool RedeemToPortfolio(long portfolioId, decimal amount)
         {
-            throw new NotImplementedException();
+            var portfolio = GetPortifolioById(portfolioId);
+
+            if (portfolio.TotalBalance < amount)
+            {
+                throw new ArgumentException($"Portfolio does not have sufficient balance for this redeem. Current balance: R${portfolio.TotalBalance}");
+            }
+
+            var newTotalBalance = portfolio.TotalBalance - amount;
+            var newAccountBalance = portfolio.AccountBalance + amount;
+            portfolio.TotalBalance = newTotalBalance;
+            portfolio.AccountBalance = newAccountBalance;
+
+            var repository = _unitOfWork.Repository<Portfolio>();
+            repository.Update(portfolio);
+            _unitOfWork.SaveChanges();
+
+            return true;
         }
 
-        public void Withdraw(long customerId, decimal amount)
+        public bool WithdrawFromPortfolio(long portfolioId, decimal amount)
         {
-            throw new NotImplementedException();
+            var portfolio = GetPortifolioById(portfolioId);
+
+            if (portfolio.AccountBalance < amount)
+            {
+                throw new ArgumentException($"Portfolio does not have sufficient balance for this withdraw. Current balance: R${portfolio.AccountBalance}");
+            }
+
+            var newAccountBalance = portfolio.AccountBalance - amount;
+            portfolio.AccountBalance = newAccountBalance;
+
+            var repository = _unitOfWork.Repository<Portfolio>();
+            repository.Update(portfolio);
+            _unitOfWork.SaveChanges();
+
+            return true;
         }
     }
 }

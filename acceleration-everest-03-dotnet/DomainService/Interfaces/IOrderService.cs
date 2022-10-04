@@ -10,6 +10,5 @@ namespace DomainServices.Interfaces
         Order GetOrderById(long orderId);
         IEnumerable<Order> GetOrdersByPortifolioId(long portifolioId);
         IEnumerable<Order> GetOrdersByProductId(long productId);
-        void Update(Order orderToUpdate);
     }
 }

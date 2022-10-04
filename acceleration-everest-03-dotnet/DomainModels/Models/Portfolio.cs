@@ -8,13 +8,13 @@ public class Portfolio : IEntity
         string name, 
         string description, 
         decimal totalBalance, 
-        decimal accounBalance, 
+        decimal accountBalance, 
         long customerId)
     {
         Name = name;
         Description = description;
         TotalBalance = totalBalance;
-        AccounBalance = accounBalance;
+        AccountBalance = accountBalance;
         CustomerId = customerId;
     }
 
@@ -22,7 +22,7 @@ public class Portfolio : IEntity
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal TotalBalance { get; set; }
-    public decimal AccounBalance { get; set; }
+    public decimal AccountBalance { get; set; }
 
     public long CustomerId { get; set; }
     public Customer Customer { get; set; }
