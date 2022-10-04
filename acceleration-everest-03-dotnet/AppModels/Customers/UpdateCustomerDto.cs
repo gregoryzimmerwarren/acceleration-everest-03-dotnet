@@ -1,11 +1,11 @@
 ﻿using Infrastructure.CrossCutting.Extensions;
 using System;
 
-namespace AppModels;
+namespace AppModels.Customers;
 
-public class CreateCustomerDto
+public class UpdateCustomerDto
 {
-    public CreateCustomerDto(
+    public UpdateCustomerDto(
         string fullName,
         string email,
         string emailConfirmation,

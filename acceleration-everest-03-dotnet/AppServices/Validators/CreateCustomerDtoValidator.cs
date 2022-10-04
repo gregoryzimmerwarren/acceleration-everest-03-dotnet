@@ -1,4 +1,4 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using FluentValidation;
 using FluentValidation.Validators;
 using Infrastructure.CrossCutting.Extensions;

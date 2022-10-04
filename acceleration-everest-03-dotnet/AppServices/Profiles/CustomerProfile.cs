@@ -1,4 +1,4 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using AutoMapper;
 using DomainModels.Models;
 
@@ -8,7 +8,7 @@ public class CustomerProfile : Profile
 {
     public CustomerProfile()
     {
-        CreateMap<Customer, CustomerResult>();
+        CreateMap<Customer, CustomerResultDto>();
         CreateMap<CreateCustomerDto, Customer>();
         CreateMap<UpdateCustomerDto, Customer>();
     }

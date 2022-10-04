@@ -1,4 +1,4 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;

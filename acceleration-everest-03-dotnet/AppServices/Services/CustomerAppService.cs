@@ -1,4 +1,4 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
@@ -30,18 +30,18 @@ public class CustomerAppService : ICustomerAppService
         _customerService.Delete(id);
     }
 
-    public IEnumerable<CustomerResult> GetAllCustomers()
+    public IEnumerable<CustomerResultDto> GetAllCustomers()
     {
         var customers = _customerService.GetAllCustomers();
 
-        return _mapper.Map<IEnumerable<CustomerResult>>(customers);
+        return _mapper.Map<IEnumerable<CustomerResultDto>>(customers);
     }
 
-    public CustomerResult GetById(long id)
+    public CustomerResultDto GetById(long id)
     {
         var customer = _customerService.GetById(id);
 
-        return _mapper.Map<CustomerResult>(customer);
+        return _mapper.Map<CustomerResultDto>(customer);
     }
 
     public void Update(long id, UpdateCustomerDto updateCustomerDto)
