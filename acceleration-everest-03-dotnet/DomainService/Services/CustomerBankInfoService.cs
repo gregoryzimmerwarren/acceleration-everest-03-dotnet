@@ -55,15 +55,21 @@ namespace DomainServices.Services
             return customerBankInfo.AccountBalance;
         }
 
-        public void Withdraw(long customerId, decimal amount)
+        public bool Withdraw(long customerId, decimal amount)
         {
             var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+
+            if (customerBankInfo.AccountBalance < amount)
+                throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");
+
             var newAccountBalance = customerBankInfo.AccountBalance - amount;
             customerBankInfo.AccountBalance = newAccountBalance;
 
             var repository = _unitOfWork.Repository<CustomerBankInfo>();
             repository.Update(customerBankInfo);
             _unitOfWork.SaveChanges();
+
+            return true;
         }
 
         private CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId)

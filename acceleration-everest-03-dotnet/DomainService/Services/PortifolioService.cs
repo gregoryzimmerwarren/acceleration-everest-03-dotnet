@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DomainServices.Services
 {
-    public class PortifolioService : IPortifolioService
+    public class PortifolioService : IPortfolioService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepositoryFactory _repositoryFactory;
@@ -94,9 +94,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
             var portfolio = GetPortifolioById(portfolioId);
 
             if (portfolio.AccountBalance < amount)
-            {
                 throw new ArgumentException($"Portfolio does not have sufficient balance for this investment. Current balance: R${portfolio.AccountBalance}");
-            }           
 
             var newAccountBalance = portfolio.AccountBalance - amount;
             var newTotalBalance = portfolio.TotalBalance + amount;
@@ -115,9 +113,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
             var portfolio = GetPortifolioById(portfolioId);
 
             if (portfolio.TotalBalance < amount)
-            {
                 throw new ArgumentException($"Portfolio does not have sufficient balance for this redeem. Current balance: R${portfolio.TotalBalance}");
-            }
 
             var newTotalBalance = portfolio.TotalBalance - amount;
             var newAccountBalance = portfolio.AccountBalance + amount;
@@ -136,9 +132,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
             var portfolio = GetPortifolioById(portfolioId);
 
             if (portfolio.AccountBalance < amount)
-            {
                 throw new ArgumentException($"Portfolio does not have sufficient balance for this withdraw. Current balance: R${portfolio.AccountBalance}");
-            }
 
             var newAccountBalance = portfolio.AccountBalance - amount;
             portfolio.AccountBalance = newAccountBalance;

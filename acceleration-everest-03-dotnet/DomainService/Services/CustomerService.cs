@@ -43,7 +43,7 @@ public class CustomerService : ICustomerService
 
     public void Delete(long id)
     {
-        var customer = GetById(id);
+        var customer = GetCustomerById(id);
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
     }
@@ -60,7 +60,7 @@ public class CustomerService : ICustomerService
         return customers;
     }
 
-    public Customer GetById(long id)
+    public Customer GetCustomerById(long id)
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id);

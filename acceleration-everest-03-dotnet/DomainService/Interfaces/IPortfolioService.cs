@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DomainServices.Interfaces;
 
-public interface IPortifolioService
+public interface IPortfolioService
 {
     long Create(Portfolio portfolioToCreate);
     void Delete(long portfolioId);

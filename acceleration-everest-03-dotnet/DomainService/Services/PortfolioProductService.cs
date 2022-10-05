@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace DomainServices.Services
 {
-    public class PortfolioProductServices : IPortfolioProductServices
+    public class PortfolioProductService : IPortfolioProductService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepositoryFactory _repositoryFactory;
 
-        public PortfolioProductServices(
+        public PortfolioProductService(
             IUnitOfWork unitOfWork,
             IRepositoryFactory repositoryFactory)
         {
