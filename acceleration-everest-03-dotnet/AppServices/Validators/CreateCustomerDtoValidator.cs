@@ -120,7 +120,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         for (int i = 0; i < 11; i++)
         {
-            if (!Char.IsDigit(cellphone[i]))
+            if (!char.IsDigit(cellphone[i]))
             {
                 return false;
             }
@@ -138,7 +138,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         for (int i = 0; i < 8; i++)
         {
-            if (!Char.IsDigit(postalCode[i]))
+            if (!char.IsDigit(postalCode[i]))
             {
                 return false;
             }

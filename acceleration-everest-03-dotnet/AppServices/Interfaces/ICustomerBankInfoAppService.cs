@@ -1,4 +1,4 @@
-﻿using AppModels.CustomerBankInfos;
+﻿using AppModels.CustomersBankInfo;
 using System.Collections.Generic;
 
 namespace AppServices.Interfaces;

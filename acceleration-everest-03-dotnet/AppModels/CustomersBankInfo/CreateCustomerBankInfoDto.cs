@@ -1,4 +1,4 @@
-﻿namespace AppModels.CustomerBankInfos;
+﻿namespace AppModels.CustomersBankInfo;
 
 public class CreateCustomerBankInfoDto
 {

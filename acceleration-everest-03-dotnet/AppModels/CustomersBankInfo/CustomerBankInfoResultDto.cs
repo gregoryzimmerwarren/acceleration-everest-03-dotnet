@@ -1,6 +1,6 @@
 ﻿using DomainModels.Models;
 
-namespace AppModels.CustomerBankInfos;
+namespace AppModels.CustomersBankInfo;
 
 public class CustomerBankInfoResultDto
 {
