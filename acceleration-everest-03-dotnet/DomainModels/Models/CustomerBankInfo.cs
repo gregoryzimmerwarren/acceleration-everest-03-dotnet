@@ -2,8 +2,11 @@
 
 public class CustomerBankInfo : IEntity
 {
-    public CustomerBankInfo(long customerId)
+    public CustomerBankInfo(
+        long customerId,
+        decimal accountBalance)
     {
+        AccountBalance = accountBalance;
         CustomerId = customerId;
     }
 
