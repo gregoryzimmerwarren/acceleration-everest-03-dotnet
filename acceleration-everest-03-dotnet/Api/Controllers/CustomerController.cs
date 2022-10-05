@@ -44,7 +44,7 @@ public class CustomerController : ControllerBase
     {
         try
         {
-            var result = _customerAppService.GetById(id);
+            var result = _customerAppService.GetCustomerById(id);
             return Ok(result);
         }
         catch (ArgumentException exception)
