@@ -1,7 +1,5 @@
-using AppServices.Interfaces;
-using AppServices.Services;
-using DomainServices.Interfaces;
-using DomainServices.Services;
+using AppServices.DependencyInjections;
+using DomainServices.DependencyInjections;
 using EntityFrameworkCore.UnitOfWork.Extensions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
@@ -23,11 +21,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddTransient<ICustomerService, CustomerService>();
-builder.Services.AddTransient<ICustomerAppService, CustomerAppService>();
+builder.Services.AddAppServicesDependecyInjections();
+builder.Services.AddDomainServicesDependecyInjections();
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>(ServiceLifetime.Transient);
-
 
 var app = builder.Build();
 

@@ -4,11 +4,11 @@ using System;
 
 namespace AppModels.Orders;
 
-public class ResultOrderDto
+public class OrderResultDto
 {
-    public ResultOrderDto() { }
+    public OrderResultDto() { }
 
-    public ResultOrderDto(
+    public OrderResultDto(
         long id, 
         int quotes, 
         decimal netValue, 

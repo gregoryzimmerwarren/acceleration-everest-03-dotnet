@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace AppModels.Products;
 
-public class ResultProductDto
+public class ProductResultDto
 {
-    protected ResultProductDto() { }
+    protected ProductResultDto() { }
 
-    public ResultProductDto(
+    public ProductResultDto(
         long id, 
         string symbol, 
         decimal unitPrice, 

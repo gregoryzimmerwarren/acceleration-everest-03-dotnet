@@ -2,11 +2,11 @@
 
 namespace AppModels.PortfoliosProducts;
 
-public class ResultPortfolioProductDto
+public class PortfolioProductResultDto
 {
-    public ResultPortfolioProductDto() { }
+    public PortfolioProductResultDto() { }
 
-    public ResultPortfolioProductDto(
+    public PortfolioProductResultDto(
         long id, 
         Portfolio portfolio, 
         Product product)

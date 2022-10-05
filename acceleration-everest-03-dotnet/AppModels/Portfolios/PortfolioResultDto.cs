@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace AppModels.Portfolios;
 
-public class ResultPortfolioDto
+public class PortfolioResultDto
 {
-    public ResultPortfolioDto() { }
+    public PortfolioResultDto() { }
 
-    public ResultPortfolioDto(
+    public PortfolioResultDto(
         long id, 
         string name, 
         string description, 

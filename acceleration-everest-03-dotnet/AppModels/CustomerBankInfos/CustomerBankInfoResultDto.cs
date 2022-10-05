@@ -2,11 +2,11 @@
 
 namespace AppModels.CustomerBankInfos;
 
-internal class ResultCustomerBankInfoDto
+public class CustomerBankInfoResultDto
 {
-    public ResultCustomerBankInfoDto() { }
+    public CustomerBankInfoResultDto() { }
 
-    public ResultCustomerBankInfoDto(
+    public CustomerBankInfoResultDto(
         long id, 
         decimal accountBalance, 
         Customer customer)
