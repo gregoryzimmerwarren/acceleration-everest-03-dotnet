@@ -1,4 +1,4 @@
-﻿using AppModels.Customers;
+﻿using AppModels.Orders;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -7,87 +7,96 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CustomerController : ControllerBase
+public class OrderController : ControllerBase
 {
-    private readonly ICustomerAppService _customerAppService;
+    private readonly IOrderAppService _orderAppService;
 
-    public CustomerController(ICustomerAppService appService)
+    public OrderController(IOrderAppService orderAppService)
     {
-        _customerAppService = appService ?? throw new ArgumentNullException(nameof(appService));
-    }
-
-    [HttpDelete]
-    public IActionResult Delete(long id)
-    {
-        try
-        {
-            _customerAppService.Delete(id);
-            return NoContent();
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-            return NotFound(message);
-        }
-    }
-
-    [HttpGet]
-    public IActionResult GetAllCustomers()
-    {
-        try
-        {
-            var result = _customerAppService.GetAllCustomers();
-
-            return Ok(result);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-            return NotFound(message);
-        }
-    }
-
-    [HttpGet("{id}")]
-    public IActionResult GetById(long id)
-    {
-        try
-        {
-            var result = _customerAppService.GetCustomerById(id);
-            return Ok(result);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-            return NotFound(message);
-        }
+        _orderAppService = orderAppService ?? throw new System.ArgumentNullException(nameof(orderAppService));
     }
 
     [HttpPost]
-    public IActionResult Create(CreateCustomerDto customer)
+    public IActionResult Create(CreateOrderDto createOrderDto)
     {
         try
         {
-            var id = _customerAppService.Create(customer);
+            var id = _orderAppService.Create(createOrderDto);
+
             return Created("", id);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+
             return BadRequest(message);
         }
     }
 
-    [HttpPut]
-    public IActionResult Update(long id, UpdateCustomerDto customerToUpdate)
+    [HttpGet]
+    public IActionResult GetAllOrders()
     {
         try
         {
-            _customerAppService.Update(id, customerToUpdate);
-            return Ok();
+            var result = _orderAppService.GetAllOrders();
+
+            return Ok(result);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetOrderById(long orderId)
+    {
+        try
+        {
+            var result = _orderAppService.GetOrderById(orderId);
+
+            return Ok(result);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
+        }
+    }
+
+    [HttpGet("/getOrdersByPortifolioId/{portifolioId}")]
+    public IActionResult GetOrdersByPortifolioId(long portifolioId)
+    {
+        try
+        {
+            var result = _orderAppService.GetOrdersByPortifolioId(portifolioId);
+
+            return Ok(result);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
+        }
+    }
+
+    [HttpGet("/getOrdersByProductId/{productId}")]
+    public IActionResult GetOrdersByProductId(long productId)
+    {
+        try
+        {
+            var result = _orderAppService.GetOrdersByProductId(productId);
+
+            return Ok(result);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
             return NotFound(message);
         }
     }

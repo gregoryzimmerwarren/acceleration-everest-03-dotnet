@@ -1,4 +1,4 @@
-﻿using AppModels.CustomerBankInfos;
+﻿using AppModels.CustomersBankInfo;
 using AutoMapper;
 using DomainModels.Models;
 
