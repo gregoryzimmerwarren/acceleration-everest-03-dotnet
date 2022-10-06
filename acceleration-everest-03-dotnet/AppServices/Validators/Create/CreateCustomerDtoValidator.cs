@@ -5,7 +5,7 @@ using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Linq;
 
-namespace AppServices.Validators;
+namespace AppServices.Validators.Create;
 
 public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 {

@@ -1,8 +1,7 @@
 ﻿using AppModels.CustomersBankInfo;
-using DomainModels.Models;
 using FluentValidation;
 
-namespace AppServices.Validators;
+namespace AppServices.Validators.Create;
 
 public class CreateCustomerBankInfoDtoValidator : AbstractValidator<CreateCustomerBankInfoDto>
 {

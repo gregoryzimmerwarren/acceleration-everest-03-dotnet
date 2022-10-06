@@ -9,11 +9,4 @@ public static class DateTimeExtensions
                 return true;
         return false;
     }
-
-    public static bool IsTodayOrLater(this DateTime data)
-    {
-        if (DateTime.Now <= data)
-            return true;
-        return false;
-    }
 }

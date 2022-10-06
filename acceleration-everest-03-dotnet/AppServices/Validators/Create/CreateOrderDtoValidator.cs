@@ -1,8 +1,8 @@
 ﻿using AppModels.Orders;
 using FluentValidation;
-using Infrastructure.CrossCutting.Extensions;
+using System;
 
-namespace AppServices.Validators;
+namespace AppServices.Validators.Create;
 
 public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
 {
@@ -19,12 +19,11 @@ public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
 
         RuleFor(order => order.LiquidatedAt)
             .NotEmpty()
-            .Must(order => order.IsTodayOrLater())
-            .WithMessage("Order must be liquidated today or later");
+            .GreaterThanOrEqualTo(DateTime.Now.Date);
 
-        //RuleFor(order => order.Direction)
-        //    .NotNull()
-        //    .InclusiveBetween(1, 2);
+        RuleFor(order => order.Direction)
+            .NotNull()
+            .IsInEnum();
 
         RuleFor(order => order.PortifolioId)
             .NotEmpty()
