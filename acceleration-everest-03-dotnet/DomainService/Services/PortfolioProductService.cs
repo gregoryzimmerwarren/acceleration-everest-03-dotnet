@@ -19,7 +19,7 @@ namespace DomainServices.Services
             _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
         }
 
-        public long Create(PortfolioProduct portfolioProductToCreate)
+        public long Create(CreatePortfolioProductDto portfolioProductToCreate)
         {
             var repository = _unitOfWork.Repository<PortfolioProduct>();
             repository.Add(portfolioProductToCreate);

@@ -22,11 +22,13 @@ public class CustomerController : ControllerBase
         try
         {
             _customerAppService.Delete(id);
+            
             return NoContent();
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return NotFound(message);
         }
     }
@@ -43,6 +45,7 @@ public class CustomerController : ControllerBase
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return NotFound(message);
         }
     }
@@ -53,11 +56,13 @@ public class CustomerController : ControllerBase
         try
         {
             var result = _customerAppService.GetCustomerById(id);
+            
             return Ok(result);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return NotFound(message);
         }
     }
@@ -68,11 +73,13 @@ public class CustomerController : ControllerBase
         try
         {
             var id = _customerAppService.Create(customer);
+            
             return Created("", id);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return BadRequest(message);
         }
     }
@@ -83,11 +90,13 @@ public class CustomerController : ControllerBase
         try
         {
             _customerAppService.Update(id, customerToUpdate);
+            
             return Ok();
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return NotFound(message);
         }
     }
