@@ -1,6 +1,4 @@
 ﻿using AppModels.Customers;
-using AppModels.CustomersBankInfo;
-using AppModels.Portfolios;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
@@ -11,20 +9,20 @@ using System.Collections.Generic;
 namespace AppServices.Services;
 public class CustomerAppService : ICustomerAppService
 {
-    private readonly ICustomerService _customerService;
     private readonly ICustomerBankInfoService _customerBankInfoService;
     private readonly IPortfolioService _portfolioService;
+    private readonly ICustomerService _customerService;
     private readonly IMapper _mapper;
 
     public CustomerAppService(
-        ICustomerService customerService,
         ICustomerBankInfoService customerBankInfoService,
         IPortfolioService portfolioService,
+        ICustomerService customerService,
         IMapper mapper)
     {
-        _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         _customerBankInfoService = customerBankInfoService ?? throw new ArgumentNullException(nameof(customerBankInfoService));
         _portfolioService = portfolioService ?? throw new ArgumentNullException(nameof(portfolioService));
+        _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
@@ -59,6 +57,12 @@ public class CustomerAppService : ICustomerAppService
     public CustomerResultDto GetCustomerById(long customerId)
     {
         var customer = _customerService.GetCustomerById(customerId);
+
+        var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customerId);
+        customer.CustomerBankInfo = _mapper.Map<CustomerBankInfo>(customerBankInfo);
+
+        var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
+        customer.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
 
         return _mapper.Map<CustomerResultDto>(customer);
     }

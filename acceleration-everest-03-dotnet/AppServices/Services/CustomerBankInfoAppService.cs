@@ -10,12 +10,17 @@ namespace AppServices.Services;
 public class CustomerBankInfoAppService : ICustomerBankInfoAppService
 {
     private readonly ICustomerBankInfoService _customerBankInfoService;
+    private readonly ICustomerService _customerService;
     private readonly IMapper _mapper;
 
-    public CustomerBankInfoAppService(ICustomerBankInfoService customerBankInfoService, IMapper mapper)
+    public CustomerBankInfoAppService(
+        ICustomerBankInfoService customerBankInfoService, 
+        ICustomerService customerService, 
+        IMapper mapper)
     {
-        _customerBankInfoService = customerBankInfoService;
-        _mapper = mapper;
+        _customerBankInfoService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
+        _customerService = customerService ?? throw new System.ArgumentNullException(nameof(customerService));
+        _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
     public long Create(CreateCustomerBankInfoDto createCustomerBankInfoDto)
@@ -33,6 +38,12 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
     public IEnumerable<CustomerBankInfoResultDto> GetAllCustomersBankInfo()
     {
         var customersBankInfo = _customerBankInfoService.GetAllCustomersBankInfo();
+
+        foreach(CustomerBankInfo customerBankInfo in customersBankInfo)
+        {
+            var customer = _customerService.GetCustomerById(customerBankInfo.CustomerId);
+            customerBankInfo.Customer = _mapper.Map<Customer>(customer);
+        }            
 
         return _mapper.Map<IEnumerable<CustomerBankInfoResultDto>>(customersBankInfo);
     }

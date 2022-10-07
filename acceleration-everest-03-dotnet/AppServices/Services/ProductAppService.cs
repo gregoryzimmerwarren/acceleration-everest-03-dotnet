@@ -9,13 +9,21 @@ namespace AppServices.Services;
 
 public class ProductAppService : IProductAppService
 {
+    private readonly IPortfolioProductService _portfolioProductService;
     private readonly IProductService _productService;
+    private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
-    public ProductAppService(IProductService productService, IMapper mapper)
+    public ProductAppService(
+        IPortfolioProductService portfolioProductService, 
+        IProductService productService, 
+        IOrderService orderService, 
+        IMapper mapper)
     {
-        _productService = productService;
-        _mapper = mapper;
+        _portfolioProductService = portfolioProductService ?? throw new System.ArgumentNullException(nameof(portfolioProductService));
+        _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
+        _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
+        _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
     public long Create(CreateProductDto createProductDto)
@@ -34,12 +42,27 @@ public class ProductAppService : IProductAppService
     {
         var products = _productService.GetAllProducts();
 
+        foreach (Product product in products)
+        {
+            var portfolios = _portfolioProductService.GetPortfoliosByProductId(product.Id);
+            product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
+
+            var orders = _orderService.GetOrdersByPortfolioId(product.Id);
+            product.Orders = _mapper.Map<List<Order>>(orders);
+        }
+
         return _mapper.Map<IEnumerable<ProductResultDto>>(products);
     }
 
     public ProductResultDto GetProductById(long productId)
     {
         var product = _productService.GetProductById(productId);
+
+        var portfolios = _portfolioProductService.GetPortfoliosByProductId(product.Id);
+        product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
+
+        var orders = _orderService.GetOrdersByPortfolioId(product.Id);
+        product.Orders = _mapper.Map<List<Order>>(orders);
 
         return _mapper.Map<ProductResultDto>(product);
     }

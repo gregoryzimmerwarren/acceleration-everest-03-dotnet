@@ -9,13 +9,24 @@ namespace AppServices.Services;
 
 public class PortfolioAppService : IPortfolioAppService
 {
+    private readonly IPortfolioProductService _portfolioProductService;
     private readonly IPortfolioService _portfolioService;
+    private readonly ICustomerService _customerService;
+    private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
-    public PortfolioAppService(IPortfolioService portfolioService, IMapper mapper)
+    public PortfolioAppService(
+        IPortfolioProductService portfolioProductService,
+        IPortfolioService portfolioService, 
+        ICustomerService customerService, 
+        IOrderService orderService, 
+        IMapper mapper)
     {
-        _portfolioService = portfolioService;
-        _mapper = mapper;
+        _portfolioProductService = portfolioProductService ?? throw new System.ArgumentNullException(nameof(portfolioProductService));
+        _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
+        _customerService = customerService ?? throw new System.ArgumentNullException(nameof(customerService));
+        _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
+        _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
     public long Create(CreatePortfolioDto createPortfolioDto)
@@ -39,6 +50,18 @@ public class PortfolioAppService : IPortfolioAppService
     {
         var portfolios = _portfolioService.GetAllPortfolios();
 
+        foreach (Portfolio portfolio in portfolios)
+        {
+            var customer = _customerService.GetCustomerById(portfolio.CustomerId);
+            portfolio.Customer = _mapper.Map<Customer>(customer);
+
+            var products = _portfolioProductService.GetProductsByPortfolioId(portfolio.Id);
+            portfolio.Products = _mapper.Map<List<Product>>(products);
+
+            var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
+            portfolio.Orders = _mapper.Map<List<Order>>(orders);
+        }
+
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
     }
 
@@ -46,12 +69,33 @@ public class PortfolioAppService : IPortfolioAppService
     {
         var portfolio = _portfolioService.GetPortfolioById(portfolioId);
 
+        var customer = _customerService.GetCustomerById(portfolio.CustomerId);
+        portfolio.Customer = _mapper.Map<Customer>(customer);
+
+        var products = _portfolioProductService.GetProductsByPortfolioId(portfolio.Id);
+        portfolio.Products = _mapper.Map<List<Product>>(products);
+
+        var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
+        portfolio.Orders = _mapper.Map<List<Order>>(orders);
+
         return _mapper.Map<PortfolioResultDto>(portfolio);
     }
 
     public IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId)
     {
         var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
+
+        foreach (Portfolio portfolio in portfolios)
+        {
+            var customer = _customerService.GetCustomerById(portfolio.CustomerId);
+            portfolio.Customer = _mapper.Map<Customer>(customer);
+
+            var products = _portfolioProductService.GetProductsByPortfolioId(portfolio.Id);
+            portfolio.Products = _mapper.Map<List<Product>>(products);
+
+            var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
+            portfolio.Orders = _mapper.Map<List<Order>>(orders);
+        }
 
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
     }

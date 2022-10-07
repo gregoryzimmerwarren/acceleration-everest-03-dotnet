@@ -9,13 +9,21 @@ namespace AppServices.Services;
 
 public class OrderAppService : IOrderAppService
 {
+    private readonly IPortfolioService _portfolioService;
+    private readonly IProductService _productService;
     private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
-    public OrderAppService(IOrderService orderService, IMapper mapper)
+    public OrderAppService(
+        IPortfolioService portfolioService, 
+        IProductService productService, 
+        IOrderService orderService, 
+        IMapper mapper)
     {
-        _orderService = orderService;
-        _mapper = mapper;
+        _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
+        _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
+        _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
+        _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
     public long Create(CreateOrderDto createOrderDto)
@@ -29,12 +37,27 @@ public class OrderAppService : IOrderAppService
     {
         var orders = _orderService.GetAllOrders();
 
+        foreach (Order order in orders)
+        {
+            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
+            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
+
+            var product = _productService.GetProductById(order.ProductId);
+            order.Product = _mapper.Map<Product>(product);
+        }
+
         return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
     }
 
     public OrderResultDto GetOrderById(long orderId)
     {
         var order = _orderService.GetOrderById(orderId);
+
+        var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
+        order.Portfolio = _mapper.Map<Portfolio>(portfolio);
+
+        var product = _productService.GetProductById(order.ProductId);
+        order.Product = _mapper.Map<Product>(product);
 
         return _mapper.Map<OrderResultDto>(order);
     }
@@ -43,12 +66,30 @@ public class OrderAppService : IOrderAppService
     {
         var orders = _orderService.GetOrdersByPortfolioId(portfolioId);
 
+        foreach (Order order in orders)
+        {
+            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
+            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
+
+            var product = _productService.GetProductById(order.ProductId);
+            order.Product = _mapper.Map<Product>(product);
+        }
+
         return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
     }
 
     public IEnumerable<OrderResultDto> GetOrdersByProductId(long productId)
     {
         var orders = _orderService.GetOrdersByProductId(productId);
+
+        foreach (Order order in orders)
+        {
+            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
+            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
+
+            var product = _productService.GetProductById(order.ProductId);
+            order.Product = _mapper.Map<Product>(product);
+        }
 
         return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
     }
