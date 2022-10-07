@@ -123,15 +123,15 @@ namespace Infrastructure.Data.Migrations
                     NetValue = table.Column<decimal>(type: "DECIMAL(14,2)", nullable: false),
                     LiquidatedAt = table.Column<DateTime>(type: "DATE", nullable: false),
                     Direction = table.Column<ulong>(type: "BIT", nullable: false),
-                    PortifolioId = table.Column<long>(type: "BIGINT", nullable: false),
+                    PortfolioId = table.Column<long>(type: "BIGINT", nullable: false),
                     ProductId = table.Column<long>(type: "BIGINT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Portfolios_PortifolioId",
-                        column: x => x.PortifolioId,
+                        name: "FK_Orders_Portfolios_PortfolioId",
+                        column: x => x.PortfolioId,
                         principalTable: "Portfolios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -190,9 +190,9 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_PortifolioId",
+                name: "IX_Orders_PortfolioId",
                 table: "Orders",
-                column: "PortifolioId");
+                column: "PortfolioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ProductId",

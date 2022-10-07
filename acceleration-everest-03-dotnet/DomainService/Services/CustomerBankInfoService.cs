@@ -5,83 +5,82 @@ using Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 
-namespace DomainServices.Services
+namespace DomainServices.Services;
+
+public class CustomerBankInfoService : ICustomerBankInfoService
 {
-    public class CustomerBankInfoService : ICustomerBankInfoService
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoryFactory _repositoryFactory;
+
+    public CustomerBankInfoService(
+        IUnitOfWork<WarrenEverestDotnetDbContext> unitOfWork, 
+        IRepositoryFactory<WarrenEverestDotnetDbContext> repositoryFactory)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepositoryFactory _repositoryFactory;
+        _unitOfWork = unitOfWork ?? throw new System.ArgumentNullException(nameof(unitOfWork));
+        _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
+    }
 
-        public CustomerBankInfoService(
-            IUnitOfWork<WarrenEverestDotnetDbContext> unitOfWork, 
-            IRepositoryFactory<WarrenEverestDotnetDbContext> repositoryFactory)
-        {
-            _unitOfWork = unitOfWork ?? throw new System.ArgumentNullException(nameof(unitOfWork));
-            _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
-        }
+    public long Create(CustomerBankInfo customerBankInfoToCreate)
+    {
+        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        repository.Add(customerBankInfoToCreate);
+        _unitOfWork.SaveChanges();
 
-        public long Create(CustomerBankInfo customerBankInfoToCreate)
-        {
-            var repository = _unitOfWork.Repository<CustomerBankInfo>();
-            repository.Add(customerBankInfoToCreate);
-            _unitOfWork.SaveChanges();
+        return customerBankInfoToCreate.CustomerId;
+    }
 
-            return customerBankInfoToCreate.CustomerId;
-        }
+    public void Deposit(long customerId, decimal amount)
+    {
+        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        var newAccountBalance = customerBankInfo.AccountBalance + amount;
+        customerBankInfo.AccountBalance = newAccountBalance;
 
-        public void Deposit(long customerId, decimal amount)
-        {
-            var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
-            var newAccountBalance = customerBankInfo.AccountBalance + amount;
-            customerBankInfo.AccountBalance = newAccountBalance;
+        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        repository.Update(customerBankInfo);
+        _unitOfWork.SaveChanges();
+    }
 
-            var repository = _unitOfWork.Repository<CustomerBankInfo>();
-            repository.Update(customerBankInfo);
-            _unitOfWork.SaveChanges();
-        }
+    public IEnumerable<CustomerBankInfo> GetAllCustomersBankInfo()
+    {
+        var repository = _repositoryFactory.Repository<CustomerBankInfo>();
+        var query = repository.MultipleResultQuery();
 
-        public IEnumerable<CustomerBankInfo> GetAllCustomersBankInfo()
-        {
-            var repository = _repositoryFactory.Repository<CustomerBankInfo>();
-            var query = repository.MultipleResultQuery();
+        return repository.Search(query);
+    }
 
-            return repository.Search(query);
-        }
+    public decimal GetTotalById(long customerId)
+    {
+        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
 
-        public decimal GetTotalById(long customerId)
-        {
-            var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        return customerBankInfo.AccountBalance;
+    }
 
-            return customerBankInfo.AccountBalance;
-        }
+    public bool Withdraw(long customerId, decimal amount)
+    {
+        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
 
-        public bool Withdraw(long customerId, decimal amount)
-        {
-            var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        if (customerBankInfo.AccountBalance < amount)
+            throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");
 
-            if (customerBankInfo.AccountBalance < amount)
-                throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");
+        var newAccountBalance = customerBankInfo.AccountBalance - amount;
+        customerBankInfo.AccountBalance = newAccountBalance;
 
-            var newAccountBalance = customerBankInfo.AccountBalance - amount;
-            customerBankInfo.AccountBalance = newAccountBalance;
+        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        repository.Update(customerBankInfo);
+        _unitOfWork.SaveChanges();
 
-            var repository = _unitOfWork.Repository<CustomerBankInfo>();
-            repository.Update(customerBankInfo);
-            _unitOfWork.SaveChanges();
+        return true;
+    }
 
-            return true;
-        }
+    private CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId)
+    {
+        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId);
+        var customerBankInfo = repository.SingleOrDefault(query);
 
-        private CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId)
-        {
-            var repository = _unitOfWork.Repository<CustomerBankInfo>();
-            var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId);
-            var customerBankInfo = repository.SingleOrDefault(query);
+        if (customerBankInfo == null)
+            throw new ArgumentException($"No bank information found for customer Id: {customerId}");
 
-            if (customerBankInfo == null)
-                throw new ArgumentException($"No bank information found for customer Id: {customerId}");
-
-            return customerBankInfo;
-        }
+        return customerBankInfo;
     }
 }

@@ -7,11 +7,11 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PortifolioController : ControllerBase
+public class PortfolioController : ControllerBase
 {
-    private readonly IPortifolioAppService _portifolioAppService;
+    private readonly IPortfolioAppService _portifolioAppService;
 
-    public PortifolioController(IPortifolioAppService portifolioAppService)
+    public PortfolioController(IPortfolioAppService portifolioAppService)
     {
         _portifolioAppService = portifolioAppService ?? throw new System.ArgumentNullException(nameof(portifolioAppService));
     }
@@ -50,7 +50,7 @@ public class PortifolioController : ControllerBase
         }
     }
 
-    [HttpPatch("/deposit/{customerId}")]
+    [HttpPatch("depositInPortfolio/{customerId}")]
     public IActionResult Deposit(long portfolioId, decimal amount)
     {
         try
@@ -68,11 +68,11 @@ public class PortifolioController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllPortifolios()
+    public IActionResult GetAllPortfolios()
     {
         try
         {
-            var result = _portifolioAppService.GetAllPortifolios();
+            var result = _portifolioAppService.GetAllPortfolios();
 
             return Ok(result);
         }
@@ -84,12 +84,12 @@ public class PortifolioController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetPortifolioById(long portfolioId)
+    [HttpGet("{portfolioId}")]
+    public IActionResult GetPortfolioById(long portfolioId)
     {
         try
         {
-            var result = _portifolioAppService.GetPortifolioById(portfolioId);
+            var result = _portifolioAppService.GetPortfolioById(portfolioId);
 
             return Ok(result);
         }
@@ -101,12 +101,12 @@ public class PortifolioController : ControllerBase
         }
     }
 
-    [HttpGet("/getPortifoliosByCustomerId/{id}")]
-    public IActionResult GetPortifoliosByCustomerId(long customerId)
+    [HttpGet("getPortfoliosByCustomerId/{id}")]
+    public IActionResult GetPortfoliosByCustomerId(long customerId)
     {
         try
         {
-            var result = _portifolioAppService.GetPortifoliosByCustomerId(customerId);
+            var result = _portifolioAppService.GetPortfoliosByCustomerId(customerId);
 
             return Ok(result);
         }
@@ -118,7 +118,7 @@ public class PortifolioController : ControllerBase
         }
     }
 
-    [HttpPatch("/invest/{customerId}")]
+    [HttpPatch("invest/{customerId}")]
     public IActionResult Invest(long portfolioId, decimal amount)
     {
         try
@@ -135,7 +135,7 @@ public class PortifolioController : ControllerBase
         }
     }
 
-    [HttpPatch("/redeemToPortfolio/{customerId}")]
+    [HttpPatch("redeemToPortfolio/{customerId}")]
     public IActionResult RedeemToPortfolio(long portfolioId, decimal amount)
     {
         try
@@ -152,7 +152,7 @@ public class PortifolioController : ControllerBase
         }
     }
 
-    [HttpPatch("/withdrawFromPortfolio/{customerId}")]
+    [HttpPatch("withdrawFromPortfolio/{customerId}")]
     public IActionResult WithdrawFromPortfolio(long portfolioId, decimal amount)
     {
         try

@@ -25,7 +25,7 @@ public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
             .NotNull()
             .IsInEnum();
 
-        RuleFor(order => order.PortifolioId)
+        RuleFor(order => order.PortfolioId)
             .NotEmpty()
             .GreaterThan(0);
 

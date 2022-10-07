@@ -50,7 +50,7 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{orderId}")]
     public IActionResult GetOrderById(long orderId)
     {
         try
@@ -67,12 +67,12 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpGet("/getOrdersByPortifolioId/{portifolioId}")]
-    public IActionResult GetOrdersByPortifolioId(long portifolioId)
+    [HttpGet("getOrdersByPortfolioId/{portfolioId}")]
+    public IActionResult GetOrdersByPortfolioId(long portfolioId)
     {
         try
         {
-            var result = _orderAppService.GetOrdersByPortifolioId(portifolioId);
+            var result = _orderAppService.GetOrdersByPortfolioId(portfolioId);
 
             return Ok(result);
         }
@@ -84,7 +84,7 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpGet("/getOrdersByProductId/{productId}")]
+    [HttpGet("getOrdersByProductId/{productId}")]
     public IActionResult GetOrdersByProductId(long productId)
     {
         try

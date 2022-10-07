@@ -68,7 +68,7 @@ public class CustomerController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{customerId}")]
     public IActionResult GetByCustomerId(long customerId)
     {
         try

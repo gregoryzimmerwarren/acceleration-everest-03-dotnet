@@ -39,9 +39,9 @@ public class OrderAppService : IOrderAppService
         return _mapper.Map<OrderResultDto>(order);
     }
 
-    public IEnumerable<OrderResultDto> GetOrdersByPortifolioId(long portifolioId)
+    public IEnumerable<OrderResultDto> GetOrdersByPortfolioId(long portfolioId)
     {
-        var orders = _orderService.GetOrdersByPortifolioId(portifolioId);
+        var orders = _orderService.GetOrdersByPortfolioId(portfolioId);
 
         return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
     }

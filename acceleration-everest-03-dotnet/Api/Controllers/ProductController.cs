@@ -68,7 +68,7 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{productId}")]
     public IActionResult GetProductById(long productId)
     {
         try

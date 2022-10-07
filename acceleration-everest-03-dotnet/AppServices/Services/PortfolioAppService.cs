@@ -7,12 +7,12 @@ using System.Collections.Generic;
 
 namespace AppServices.Services;
 
-public class PortifolioAppService : IPortifolioAppService
+public class PortfolioAppService : IPortfolioAppService
 {
     private readonly IPortfolioService _portfolioService;
     private readonly IMapper _mapper;
 
-    public PortifolioAppService(IPortfolioService portfolioService, IMapper mapper)
+    public PortfolioAppService(IPortfolioService portfolioService, IMapper mapper)
     {
         _portfolioService = portfolioService;
         _mapper = mapper;
@@ -35,23 +35,23 @@ public class PortifolioAppService : IPortifolioAppService
         _portfolioService.Deposit(portfolioId, amount);
     }
 
-    public IEnumerable<PortfolioResultDto> GetAllPortifolios()
+    public IEnumerable<PortfolioResultDto> GetAllPortfolios()
     {
-        var portfolios = _portfolioService.GetAllPortifolios();
+        var portfolios = _portfolioService.GetAllPortfolios();
 
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
     }
 
-    public PortfolioResultDto GetPortifolioById(long portfolioId)
+    public PortfolioResultDto GetPortfolioById(long portfolioId)
     {
-        var portfolio = _portfolioService.GetPortifolioById(portfolioId);
+        var portfolio = _portfolioService.GetPortfolioById(portfolioId);
 
         return _mapper.Map<PortfolioResultDto>(portfolio);
     }
 
-    public IEnumerable<PortfolioResultDto> GetPortifoliosByCustomerId(long customerId)
+    public IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId)
     {
-        var portfolios = _portfolioService.GetPortifoliosByCustomerId(customerId);
+        var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
 
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
     }

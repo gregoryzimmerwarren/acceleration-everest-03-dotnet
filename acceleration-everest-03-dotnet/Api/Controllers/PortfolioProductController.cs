@@ -67,7 +67,7 @@ public class PortfolioProductController : ControllerBase
         }
     }
 
-    [HttpGet("/getPortfolioProductById/{portfolioProductId}")]
+    [HttpGet("getPortfolioProductById/{portfolioProductId}")]
     public IActionResult GetPortfolioProductById(long portfolioProductId)
     {
         try
@@ -84,7 +84,7 @@ public class PortfolioProductController : ControllerBase
         }
     }
 
-    [HttpGet("/getPortfoliosByProductId/{productId}")]
+    [HttpGet("getPortfoliosByProductId/{productId}")]
     public IActionResult GetPortfoliosByProductId(long productId)
     {
         try
@@ -101,7 +101,7 @@ public class PortfolioProductController : ControllerBase
         }
     }
 
-    [HttpGet("/getProductsByPortfolioId/{portfolioId}")]
+    [HttpGet("getProductsByPortfolioId/{portfolioId}")]
     public IActionResult GetProductsByPortfolioId(long portfolioId)
     {
         try

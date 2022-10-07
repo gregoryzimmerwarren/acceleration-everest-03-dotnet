@@ -33,7 +33,7 @@ public class CustomerBankInfoController : ControllerBase
         }
     }
 
-    [HttpPatch("/deposit/{customerId}")]
+    [HttpPatch("depositInCustomerBankInfo/{customerId}")]
     public IActionResult Deposit(long customerId, decimal amount)
     {
         try
@@ -67,12 +67,12 @@ public class CustomerBankInfoController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetTotalById(long id)
+    [HttpGet("{customerBankInfoId}")]
+    public IActionResult GetTotalById(long customerBankInfoId)
     {
         try
         {
-            var total = _customerBankInfoAppService.GetTotalById(id);
+            var total = _customerBankInfoAppService.GetTotalById(customerBankInfoId);
             return Ok(total);
         }
         catch (ArgumentException exception)
@@ -83,7 +83,7 @@ public class CustomerBankInfoController : ControllerBase
         }
     }
 
-    [HttpPatch("/withdraw/{customerId}")]
+    [HttpPatch("withdraw/{customerId}")]
     public IActionResult Withdraw(long customerId, decimal amount)
     {
         try

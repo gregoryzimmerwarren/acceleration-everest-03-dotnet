@@ -8,6 +8,6 @@ public interface IOrderAppService
     long Create(CreateOrderDto createOrderDto);
     IEnumerable<OrderResultDto> GetAllOrders();
     OrderResultDto GetOrderById(long orderId);
-    IEnumerable<OrderResultDto> GetOrdersByPortifolioId(long portifolioId);
+    IEnumerable<OrderResultDto> GetOrdersByPortfolioId(long portfolioId);
     IEnumerable<OrderResultDto> GetOrdersByProductId(long productId);
 }

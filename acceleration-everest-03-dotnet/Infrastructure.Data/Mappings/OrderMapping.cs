@@ -32,14 +32,14 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .IsRequired()
             .HasColumnName("Direction");
 
-        builder.Property(order => order.PortifolioId)
+        builder.Property(order => order.PortfolioId)
             .HasColumnType("BIGINT")
             .IsRequired()
-            .HasColumnName("PortifolioId");
+            .HasColumnName("PortfolioId");
 
         builder.HasOne(order => order.Portfolio)
             .WithMany(order => order.Orders)
-            .HasForeignKey(order => order.PortifolioId);
+            .HasForeignKey(order => order.PortfolioId);
 
         builder.Property(order => order.ProductId)
             .HasColumnType("BIGINT")

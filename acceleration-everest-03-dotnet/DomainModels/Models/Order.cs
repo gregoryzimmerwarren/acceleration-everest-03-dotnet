@@ -9,13 +9,13 @@ public class Order : IEntity
         int quotes, 
         DateTime liquidatedAt, 
         OrderDirection direction, 
-        long portifolioId, 
+        long portfolioId, 
         long productId)
     {
         Quotes = quotes;
         LiquidatedAt = liquidatedAt;
         Direction = direction;
-        PortifolioId = portifolioId;
+        PortfolioId = portfolioId;
         ProductId = productId;
     }
 
@@ -25,7 +25,7 @@ public class Order : IEntity
     public DateTime LiquidatedAt { get; set; }
 
     public OrderDirection Direction { get; set; }
-    public long PortifolioId { get; set; }
+    public long PortfolioId { get; set; }
     public Portfolio Portfolio { get; set; }
     public long ProductId { get; set; }
     public Product Product { get; set; }

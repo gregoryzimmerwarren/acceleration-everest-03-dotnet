@@ -132,9 +132,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("DECIMAL(14,2)")
                         .HasColumnName("NetValue");
 
-                    b.Property<long>("PortifolioId")
+                    b.Property<long>("PortfolioId")
                         .HasColumnType("BIGINT")
-                        .HasColumnName("PortifolioId");
+                        .HasColumnName("PortfolioId");
 
                     b.Property<long>("ProductId")
                         .HasColumnType("BIGINT")
@@ -146,7 +146,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PortifolioId");
+                    b.HasIndex("PortfolioId");
 
                     b.HasIndex("ProductId");
 
@@ -260,7 +260,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("DomainModels.Models.Portfolio", "Portfolio")
                         .WithMany("Orders")
-                        .HasForeignKey("PortifolioId")
+                        .HasForeignKey("PortfolioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

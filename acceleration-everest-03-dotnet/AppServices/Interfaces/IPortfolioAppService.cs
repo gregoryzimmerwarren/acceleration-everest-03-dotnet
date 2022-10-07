@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace AppServices.Interfaces;
 
-public interface IPortifolioAppService
+public interface IPortfolioAppService
 {
     long Create(CreatePortfolioDto createPortfolioDto);
     void Delete(long portfolioId);
     void Deposit(long portfolioId, decimal amount);
-    IEnumerable<PortfolioResultDto> GetAllPortifolios();
-    PortfolioResultDto GetPortifolioById(long portfolioId);
-    IEnumerable<PortfolioResultDto> GetPortifoliosByCustomerId(long customerId);
+    IEnumerable<PortfolioResultDto> GetAllPortfolios();
+    PortfolioResultDto GetPortfolioById(long portfolioId);
+    IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId);
     bool Invest(long portfolioId, decimal amount);
     bool RedeemToPortfolio(long portfolioId, decimal amount);
     bool WithdrawFromPortfolio(long portfolioId, decimal amount);

@@ -8,12 +8,12 @@ public static class AppServicesExtensions
 {
     public static IServiceCollection AddAppServicesDependecyInjections(this IServiceCollection services)
     {
-        //services.AddTransient<ICustomerBankInfoAppService, CustomerBankInfoAppService>();
+        services.AddTransient<ICustomerBankInfoAppService, CustomerBankInfoAppService>();
         services.AddTransient<ICustomerAppService, CustomerAppService>();
-        //services.AddTransient<IOrderAppService, OrderAppService>();
-        //services.AddTransient<IPortfolioProductAppServices, PortfolioProductAppServices>();
-        //services.AddTransient<IPortifolioAppService, PortifolioAppService>();
-        //services.AddTransient<IProductAppService, ProductAppService>();
+        services.AddTransient<IOrderAppService, OrderAppService>();
+        services.AddTransient<IPortfolioProductAppServices, PortfolioProductAppServices>();
+        services.AddTransient<IPortfolioAppService, PortfolioAppService>();
+        services.AddTransient<IProductAppService, ProductAppService>();
 
         return services;
     }

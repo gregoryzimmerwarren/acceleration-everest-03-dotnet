@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Mappings;
 
-public class PortifolioMapping : IEntityTypeConfiguration<Portfolio>
+public class PortfolioMapping : IEntityTypeConfiguration<Portfolio>
 {
     public void Configure(EntityTypeBuilder<Portfolio> builder)
     {

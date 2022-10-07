@@ -1,69 +1,69 @@
 ﻿using DomainModels.Models;
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
+using Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 
-namespace DomainServices.Services
+namespace DomainServices.Services;
+
+public class ProductService : IProductService
 {
-    public class ProductService : IProductService
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoryFactory _repositoryFactory;
+
+    public ProductService(
+        IUnitOfWork<WarrenEverestDotnetDbContext> unitOfWork,
+        IRepositoryFactory<WarrenEverestDotnetDbContext> repositoryFactory)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepositoryFactory _repositoryFactory;
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
+    }
 
-        public ProductService(
-            IUnitOfWork unitOfWork,
-            IRepositoryFactory repositoryFactory)
-        {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
-        }
+    public long Create(Product productToCreate)
+    {
+        var repository = _unitOfWork.Repository<Product>();
+        repository.Add(productToCreate);
+        _unitOfWork.SaveChanges();
 
-        public long Create(Product productToCreate)
-        {
-            var repository = _unitOfWork.Repository<Product>();
-            repository.Add(productToCreate);
-            _unitOfWork.SaveChanges();
+        return productToCreate.Id;
+    }
 
-            return productToCreate.Id;
-        }
+    public void Delete(long id)
+    {
+        var product = GetProductById(id);
+        var repository = _unitOfWork.Repository<Product>();
+        repository.Remove(product);
+    }
 
-        public void Delete(long id)
-        {
-            var product = GetProductById(id);
-            var repository = _unitOfWork.Repository<Product>();
-            repository.Remove(product);
-        }
+    public IEnumerable<Product> GetAllProducts()
+    {
+        var repository = _repositoryFactory.Repository<Product>();
+        var query = repository.MultipleResultQuery();
+        var products = repository.Search(query);
 
-        public IEnumerable<Product> GetAllProducts()
-        {
-            var repository = _repositoryFactory.Repository<Product>();
-            var query = repository.MultipleResultQuery();
-            var products = repository.Search(query);
+        if (products == null)
+            throw new ArgumentException($"No product found");
 
-            if (products == null)
-                throw new ArgumentException($"No product found");
+        return products;
+    }
 
-            return products;
-        }
+    public Product GetProductById(long id)
+    {
+        var repository = _repositoryFactory.Repository<Product>();
+        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
+        var product = repository.SingleOrDefault(query);
 
-        public Product GetProductById(long id)
-        {
-            var repository = _repositoryFactory.Repository<Product>();
-            var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
-            var product = repository.SingleOrDefault(query);
+        if (product == null)
+            throw new ArgumentException($"No product found for Id: {id}");
 
-            if (product == null)
-                throw new ArgumentException($"No product found for Id: {id}");
+        return product;
+    }
 
-            return product;
-        }
-
-        public void Update(Product productToUpdate)
-        {
-            var repository = _unitOfWork.Repository<Product>();
-            repository.Update(productToUpdate);
-            _unitOfWork.SaveChanges();
-        }
+    public void Update(Product productToUpdate)
+    {
+        var repository = _unitOfWork.Repository<Product>();
+        repository.Update(productToUpdate);
+        _unitOfWork.SaveChanges();
     }
 }
