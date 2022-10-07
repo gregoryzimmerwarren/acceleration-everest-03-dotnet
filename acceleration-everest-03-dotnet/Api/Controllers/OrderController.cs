@@ -17,11 +17,11 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateOrderDto createOrderDto)
+    public IActionResult Create(CreateOrderDto orderToCreate)
     {
         try
         {
-            var id = _orderAppService.Create(createOrderDto);
+            var id = _orderAppService.Create(orderToCreate);
 
             return Created("", id);
         }

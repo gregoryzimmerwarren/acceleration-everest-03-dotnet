@@ -4,7 +4,6 @@ using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace AppServices.Services;
 

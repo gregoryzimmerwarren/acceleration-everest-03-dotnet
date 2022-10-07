@@ -1,5 +1,6 @@
 ﻿using AppModels.Customers;
 using AppServices.Interfaces;
+using DomainModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -16,12 +17,29 @@ public class CustomerController : ControllerBase
         _customerAppService = appService ?? throw new ArgumentNullException(nameof(appService));
     }
 
-    [HttpDelete]
-    public IActionResult Delete(long id)
+    [HttpPost]
+    public IActionResult Create(CreateCustomerDto customerToCreate)
     {
         try
         {
-            _customerAppService.Delete(id);
+            var id = _customerAppService.Create(customerToCreate);
+            
+            return Created("", id);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            
+            return BadRequest(message);
+        }
+    }
+
+    [HttpDelete]
+    public IActionResult Delete(long customerId)
+    {
+        try
+        {
+            _customerAppService.Delete(customerId);
             
             return NoContent();
         }
@@ -51,11 +69,11 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(long id)
+    public IActionResult GetByCustomerId(long customerId)
     {
         try
         {
-            var result = _customerAppService.GetCustomerById(id);
+            var result = _customerAppService.GetCustomerById(customerId);
             
             return Ok(result);
         }
@@ -67,29 +85,12 @@ public class CustomerController : ControllerBase
         }
     }
 
-    [HttpPost]
-    public IActionResult Create(CreateCustomerDto customer)
-    {
-        try
-        {
-            var id = _customerAppService.Create(customer);
-            
-            return Created("", id);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-            
-            return BadRequest(message);
-        }
-    }
-
     [HttpPut]
-    public IActionResult Update(long id, UpdateCustomerDto customerToUpdate)
+    public IActionResult Update(long customerId, UpdateCustomerDto customerToUpdate)
     {
         try
         {
-            _customerAppService.Update(id, customerToUpdate);
+            _customerAppService.Update(customerId, customerToUpdate);
             
             return Ok();
         }

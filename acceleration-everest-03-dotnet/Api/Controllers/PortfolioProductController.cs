@@ -17,11 +17,11 @@ public class PortfolioProductController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreatePortfolioProductDto portfolioProduct)
+    public IActionResult Create(CreatePortfolioProductDto portfolioProductToCreate)
     {
         try
         {
-            var id = _portfolioProductAppServices.Create(portfolioProduct);
+            var id = _portfolioProductAppServices.Create(portfolioProductToCreate);
 
             return Created("", id);
         }

@@ -1,5 +1,6 @@
-﻿using AppModels.CustomersBankInfo;
+﻿using AppModels.Products;
 using AppServices.Interfaces;
+using DomainModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -7,22 +8,22 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CustomerBankInfoController : ControllerBase
+public class ProductController : ControllerBase
 {
-    private readonly ICustomerBankInfoAppService _customerBankInfoAppService;
+    private readonly IProductAppService _productAppService;
 
-    public CustomerBankInfoController(ICustomerBankInfoAppService customerBankInfoAppService)
+    public ProductController(IProductAppService productAppService)
     {
-        _customerBankInfoAppService = customerBankInfoAppService ?? throw new System.ArgumentNullException(nameof(customerBankInfoAppService));
+        _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
     }
 
     [HttpPost]
-    public IActionResult Create(CreateCustomerBankInfoDto customerBankInfo)
+    public IActionResult Create(CreateProductDto productToCreate)
     {
         try
         {
-            var id = _customerBankInfoAppService.Create(customerBankInfo);
-            
+            var id = _productAppService.Create(productToCreate);
+
             return Created("", id);
         }
         catch (ArgumentException exception)
@@ -33,69 +34,70 @@ public class CustomerBankInfoController : ControllerBase
         }
     }
 
-    [HttpPatch("/deposit/{customerId}")]
-    public IActionResult Deposit(long customerId, decimal amount)
+    [HttpDelete]
+    public IActionResult Delete(long productId)
     {
         try
         {
-            _customerBankInfoAppService.Deposit(customerId, amount);
-            
-            return Ok();
-        }        
+            _productAppService.Delete(productId);
+
+            return NoContent();
+        }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
-            
+
             return NotFound(message);
         }
     }
 
     [HttpGet]
-    public IActionResult GetAllCustomersBankInfo()
+    public IActionResult GetAllProducts()
     {
         try
         {
-            var result = _customerBankInfoAppService.GetAllCustomersBankInfo();
+            var result = _productAppService.GetAllProducts();
 
             return Ok(result);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
-            
+
             return NotFound(message);
         }
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetTotalById(long id)
+    public IActionResult GetProductById(long productId)
     {
         try
         {
-            var total = _customerBankInfoAppService.GetTotalById(id);
-            return Ok(total);
+            var result = _productAppService.GetProductById(productId);
+
+            return Ok(result);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
-           
+
             return NotFound(message);
         }
     }
 
-    [HttpPatch("/withdraw/{customerId}")]
-    public IActionResult Withdraw(long customerId, decimal amount)
+    [HttpPut]
+    public IActionResult Update(long productId, UpdateProductDto productToUpdate)
     {
         try
         {
-            _customerBankInfoAppService.Withdraw(customerId, amount);
-            
+            _productAppService.Update(productId, productToUpdate);
+
             return Ok();
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
-            
+
             return NotFound(message);
         }
     }
