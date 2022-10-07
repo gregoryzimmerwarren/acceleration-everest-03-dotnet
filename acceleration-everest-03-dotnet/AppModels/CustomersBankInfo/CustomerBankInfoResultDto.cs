@@ -1,5 +1,4 @@
 ﻿using AppModels.Customers;
-using DomainModels.Models;
 
 namespace AppModels.CustomersBankInfo;
 

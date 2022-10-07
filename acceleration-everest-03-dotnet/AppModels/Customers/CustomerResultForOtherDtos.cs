@@ -1,8 +1,4 @@
-﻿using AppModels.CustomersBankInfo;
-using AppModels.Products;
-using System.Collections.Generic;
-
-namespace AppModels.Customers;
+﻿namespace AppModels.Customers;
 
 public class CustomerResultForOtherDtos
 {

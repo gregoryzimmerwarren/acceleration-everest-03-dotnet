@@ -1,7 +1,5 @@
 ﻿using AppModels.CustomersBankInfo;
 using AppModels.Portfolios;
-using AppModels.Products;
-using DomainModels.Models;
 using System.Collections.Generic;
 
 namespace AppModels.Customers;

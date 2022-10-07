@@ -1,6 +1,5 @@
 ﻿using AppModels.Products;
 using AppServices.Interfaces;
-using DomainModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

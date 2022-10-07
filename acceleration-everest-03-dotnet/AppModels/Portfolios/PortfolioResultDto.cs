@@ -1,7 +1,6 @@
 ﻿using AppModels.Customers;
 using AppModels.Orders;
 using AppModels.Products;
-using DomainModels.Models;
 using System.Collections.Generic;
 
 namespace AppModels.Portfolios;

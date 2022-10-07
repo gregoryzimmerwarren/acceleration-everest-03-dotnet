@@ -1,7 +1,6 @@
 ﻿using AppModels.Portfolios;
 using AppModels.Products;
 using DomainModels.Enums;
-using DomainModels.Models;
 using System;
 
 namespace AppModels.Orders;

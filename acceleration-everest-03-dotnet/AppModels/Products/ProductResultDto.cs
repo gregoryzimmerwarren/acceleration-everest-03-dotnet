@@ -1,7 +1,6 @@
 ﻿using AppModels.Orders;
 using AppModels.Portfolios;
 using DomainModels.Enums;
-using DomainModels.Models;
 using System;
 using System.Collections.Generic;
 
