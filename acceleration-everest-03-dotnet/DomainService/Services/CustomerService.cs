@@ -54,7 +54,7 @@ public class CustomerService : ICustomerService
         var query = repository.MultipleResultQuery();
         var customers = repository.Search(query);
 
-        if (customers == null)
+        if (customers.Count == 0)
             throw new ArgumentException($"No customer found");
 
         return customers;

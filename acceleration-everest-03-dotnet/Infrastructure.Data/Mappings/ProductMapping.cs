@@ -38,7 +38,7 @@ public class ProductMapping : IEntityTypeConfiguration<Product>
             .HasColumnName("ExpirationAt");
 
         builder.Property(product => product.Type)
-            .HasColumnType("BIT")
+            .HasColumnType("VARCHAR(11)")
             .IsRequired()
             .HasColumnName("Type");
 

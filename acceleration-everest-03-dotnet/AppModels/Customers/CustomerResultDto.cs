@@ -1,4 +1,7 @@
-﻿using DomainModels.Models;
+﻿using AppModels.CustomersBankInfo;
+using AppModels.Portfolios;
+using AppModels.Products;
+using DomainModels.Models;
 using System.Collections.Generic;
 
 namespace AppModels.Customers;
@@ -14,9 +17,9 @@ public class CustomerResultDto
         string cpf, 
         string cellphone, 
         string city, 
-        string postalCode, 
-        CustomerBankInfo customerBankInfo, 
-        List<Portfolio> portfolios)
+        string postalCode,
+        CustomerBankInfoResultForOthersDtos customerBankInfo, 
+        List<PortfolioResultForOthersDtos> portfolios)
     {
         Id = id;
         FullName = fullName;
@@ -36,6 +39,6 @@ public class CustomerResultDto
     public string Cellphone { get; set; }
     public string City { get; set; }
     public string PostalCode { get; set; }
-    public CustomerBankInfo CustomerBankInfo { get; set; }
-    public List<Portfolio> Portfolios { get; set; }
+    public CustomerBankInfoResultForOthersDtos CustomerBankInfo { get; set; }
+    public List<PortfolioResultForOthersDtos> Portfolios { get; set; }
 }

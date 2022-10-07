@@ -42,7 +42,7 @@ public class ProductService : IProductService
         var query = repository.MultipleResultQuery();
         var products = repository.Search(query);
 
-        if (products == null)
+        if (products.Count == 0)
             throw new ArgumentException($"No product found");
 
         return products;

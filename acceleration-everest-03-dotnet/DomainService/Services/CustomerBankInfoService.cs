@@ -44,13 +44,29 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     {
         var repository = _repositoryFactory.Repository<CustomerBankInfo>();
         var query = repository.MultipleResultQuery();
+        var customersBankInfos = repository.Search(query);
 
-        return repository.Search(query);
+        if (customersBankInfos.Count == 0)
+            throw new ArgumentException($"No customers bank infos found");
+
+        return customersBankInfos;
+    }
+
+    public CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId)
+    {
+        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId);
+        var customerBankInfo = repository.SingleOrDefault(query);
+
+        return customerBankInfo;
     }
 
     public decimal GetTotalById(long customerId)
     {
         var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+
+        if (customerBankInfo == null)
+            throw new ArgumentException($"No bank information found for customer Id: {customerId}");
 
         return customerBankInfo.AccountBalance;
     }
@@ -58,6 +74,9 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     public bool Withdraw(long customerId, decimal amount)
     {
         var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+
+        if (customerBankInfo == null)
+            throw new ArgumentException($"No bank information found for customer Id: {customerId}");
 
         if (customerBankInfo.AccountBalance < amount)
             throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");
@@ -70,17 +89,5 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         _unitOfWork.SaveChanges();
 
         return true;
-    }
-
-    private CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId)
-    {
-        var repository = _unitOfWork.Repository<CustomerBankInfo>();
-        var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId);
-        var customerBankInfo = repository.SingleOrDefault(query);
-
-        if (customerBankInfo == null)
-            throw new ArgumentException($"No bank information found for customer Id: {customerId}");
-
-        return customerBankInfo;
     }
 }

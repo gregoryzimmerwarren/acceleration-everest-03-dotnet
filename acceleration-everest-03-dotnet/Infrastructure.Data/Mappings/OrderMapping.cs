@@ -28,7 +28,7 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .HasColumnName("LiquidatedAt");
 
         builder.Property(order => order.Direction)
-            .HasColumnType("BIT")
+            .HasColumnType("VARCHAR(4)")
             .IsRequired()
             .HasColumnName("Direction");
 

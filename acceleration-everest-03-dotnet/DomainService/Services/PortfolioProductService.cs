@@ -42,7 +42,7 @@ public class PortfolioProductService : IPortfolioProductService
         var query = repository.MultipleResultQuery();
         var portfoliosProducts = repository.Search(query);
 
-        if (portfoliosProducts == null)
+        if (portfoliosProducts.Count == 0)
             throw new ArgumentException($"No relationship between portfolio and product found");
 
         return portfoliosProducts;

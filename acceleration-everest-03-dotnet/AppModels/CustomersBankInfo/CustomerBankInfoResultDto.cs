@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using AppModels.Customers;
+using DomainModels.Models;
 
 namespace AppModels.CustomersBankInfo;
 
@@ -8,8 +9,8 @@ public class CustomerBankInfoResultDto
 
     public CustomerBankInfoResultDto(
         long id, 
-        decimal accountBalance, 
-        Customer customer)
+        decimal accountBalance,
+        CustomerResultForOtherDtos customer)
     {
         Id = id;
         AccountBalance = accountBalance;
@@ -18,5 +19,5 @@ public class CustomerBankInfoResultDto
 
     public long Id { get; set; }
     public decimal AccountBalance { get; set; }
-    public Customer Customer { get; set; }
+    public CustomerResultForOtherDtos Customer { get; set; }
 }

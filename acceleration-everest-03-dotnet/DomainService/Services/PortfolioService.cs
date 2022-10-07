@@ -84,8 +84,8 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId);
         var portfolios = repository.Search(query);
 
-        if (portfolios.Count == 0)
-            throw new ArgumentException($"No portfolio found for customer Id: {customerId}");
+        //if (portfolios.Count == 0)
+        //    throw new ArgumentException($"No portfolio found for customer Id: {customerId}");
 
         return portfolios;
     }

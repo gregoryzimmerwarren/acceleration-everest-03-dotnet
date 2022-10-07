@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainModels.Enums;
+using System;
 
 namespace AppModels.Products;
 
@@ -8,13 +9,15 @@ public class CreateProductDto
         string symbol, 
         decimal unitPrice,
         DateTime issuanceAt, 
-        DateTime expirationAt)
+        DateTime expirationAt,
+        ProductType type)
     {
         Symbol = symbol;
         UnitPrice = unitPrice;
         DaysToExpire = (expirationAt.Subtract(issuanceAt)).Days;
         IssuanceAt = issuanceAt;
         ExpirationAt = expirationAt;
+        Type = type;
     }
 
     public string Symbol { get; set; }
@@ -22,4 +25,5 @@ public class CreateProductDto
     public int DaysToExpire { get; set; }
     public DateTime IssuanceAt { get; set; }
     public DateTime ExpirationAt { get; set; }
+    public ProductType Type { get; set; }
 }

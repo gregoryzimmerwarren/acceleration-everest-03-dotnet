@@ -1,24 +1,21 @@
 ﻿using AppModels.Orders;
-using AppModels.Portfolios;
 using DomainModels.Enums;
-using DomainModels.Models;
 using System;
 using System.Collections.Generic;
 
 namespace AppModels.Products;
 
-public class ProductResultDto
+public class ProductResultForOthersDtos
 {
-    protected ProductResultDto() { }
+    protected ProductResultForOthersDtos() { }
 
-    public ProductResultDto(
-        long id, 
-        string symbol, 
-        decimal unitPrice, 
-        int daysToExpire, 
-        DateTime expirationAt, 
-        ProductType type, 
-        ICollection<PortfolioResultForOthersDtos> portfolios, 
+    public ProductResultForOthersDtos(
+        long id,
+        string symbol,
+        decimal unitPrice,
+        int daysToExpire,
+        DateTime expirationAt,
+        ProductType type,
         List<OrderResultOtherDtos> orders)
     {
         Id = id;
@@ -27,7 +24,6 @@ public class ProductResultDto
         DaysToExpire = daysToExpire;
         ExpirationAt = expirationAt;
         Type = type;
-        Portfolios = portfolios;
         Orders = orders;
     }
 
@@ -37,6 +33,5 @@ public class ProductResultDto
     public int DaysToExpire { get; set; }
     public DateTime ExpirationAt { get; set; }
     public ProductType Type { get; set; }
-    public ICollection<PortfolioResultForOthersDtos> Portfolios { get; set; }
     public List<OrderResultOtherDtos> Orders { get; set; }
 }

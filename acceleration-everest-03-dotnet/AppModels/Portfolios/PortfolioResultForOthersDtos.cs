@@ -1,23 +1,20 @@
-﻿using AppModels.Customers;
-using AppModels.Orders;
+﻿using AppModels.Orders;
 using AppModels.Products;
-using DomainModels.Models;
 using System.Collections.Generic;
 
 namespace AppModels.Portfolios;
 
-public class PortfolioResultDto
+public class PortfolioResultForOthersDtos
 {
-    public PortfolioResultDto() { }
+    public PortfolioResultForOthersDtos() { }
 
-    public PortfolioResultDto(
-        long id, 
-        string name, 
-        string description, 
-        decimal totalBalance, 
+    public PortfolioResultForOthersDtos(
+        long id,
+        string name,
+        string description,
+        decimal totalBalance,
         decimal accountBalance,
-        CustomerResultForOtherDtos customer, 
-        ICollection<ProductResultForOthersDtos> products, 
+        ICollection<ProductResultForOthersDtos> products,
         List<OrderResultOtherDtos> orders)
     {
         Id = id;
@@ -25,7 +22,6 @@ public class PortfolioResultDto
         Description = description;
         TotalBalance = totalBalance;
         AccountBalance = accountBalance;
-        Customer = customer;
         Products = products;
         Orders = orders;
     }
@@ -35,7 +31,6 @@ public class PortfolioResultDto
     public string Description { get; set; }
     public decimal TotalBalance { get; set; }
     public decimal AccountBalance { get; set; }
-    public CustomerResultForOtherDtos Customer { get; set; }
     public ICollection<ProductResultForOthersDtos> Products { get; set; }
     public List<OrderResultOtherDtos> Orders { get; set; }
 }

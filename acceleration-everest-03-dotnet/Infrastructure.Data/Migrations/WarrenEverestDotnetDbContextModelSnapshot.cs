@@ -120,8 +120,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<ulong>("Direction")
-                        .HasColumnType("BIT")
+                    b.Property<string>("Direction")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(4)")
                         .HasColumnName("Direction");
 
                     b.Property<DateTime>("LiquidatedAt")
@@ -232,8 +233,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("VARCHAR(50)")
                         .HasColumnName("Symbol");
 
-                    b.Property<ulong>("Type")
-                        .HasColumnType("BIT")
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(11)")
                         .HasColumnName("Type");
 
                     b.Property<decimal>("UnitPrice")

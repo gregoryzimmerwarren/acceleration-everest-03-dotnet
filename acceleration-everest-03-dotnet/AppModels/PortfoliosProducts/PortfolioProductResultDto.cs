@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using AppModels.Portfolios;
+using AppModels.Products;
 
 namespace AppModels.PortfoliosProducts;
 
@@ -7,9 +8,9 @@ public class PortfolioProductResultDto
     public PortfolioProductResultDto() { }
 
     public PortfolioProductResultDto(
-        long id, 
-        Portfolio portfolio, 
-        Product product)
+        long id,
+        PortfolioResultForOthersDtos portfolio,
+        ProductResultForOthersDtos product)
     {
         Id = id;
         Portfolio = portfolio;
@@ -17,6 +18,6 @@ public class PortfolioProductResultDto
     }
 
     public long Id { get; set; }
-    public Portfolio Portfolio { get; set; }
-    public Product Product { get; set; }
+    public PortfolioResultForOthersDtos Portfolio { get; set; }
+    public ProductResultForOthersDtos Product { get; set; }
 }

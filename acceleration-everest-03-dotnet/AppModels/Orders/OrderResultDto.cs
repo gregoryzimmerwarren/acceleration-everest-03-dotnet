@@ -1,4 +1,6 @@
-﻿using DomainModels.Enums;
+﻿using AppModels.Portfolios;
+using AppModels.Products;
+using DomainModels.Enums;
 using DomainModels.Models;
 using System;
 
@@ -13,9 +15,9 @@ public class OrderResultDto
         int quotes, 
         decimal netValue, 
         DateTime liquidatedAt, 
-        OrderDirection direction, 
-        Portfolio portfolio, 
-        Product product)
+        OrderDirection direction,
+        PortfolioResultForOthersDtos portfolio,
+        ProductResultForOthersDtos product)
     {
         Id = id;
         Quotes = quotes;
@@ -31,6 +33,6 @@ public class OrderResultDto
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
     public OrderDirection Direction { get; set; }
-    public Portfolio Portfolio { get; set; }
-    public Product Product { get; set; }
+    public PortfolioResultForOthersDtos Portfolio { get; set; }
+    public ProductResultForOthersDtos Product { get; set; }
 }
