@@ -22,7 +22,7 @@ public class OrderResultDto
         Quotes = quotes;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
-        Direction = direction;
+        Direction = GetEnumName(direction);
         Portfolio = portfolio;
         Product = product;
     }
@@ -31,7 +31,15 @@ public class OrderResultDto
     public int Quotes { get; set; }
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
-    public OrderDirection Direction { get; set; }
+    public string Direction { get; set; }
     public PortfolioResultForOthersDtos Portfolio { get; set; }
     public ProductResultForOthersDtos Product { get; set; }
+
+    private static string GetEnumName(OrderDirection direction)
+    {
+        if (direction == OrderDirection.Buy)
+            return "Buy";
+
+        return "Sell";
+    }
 }

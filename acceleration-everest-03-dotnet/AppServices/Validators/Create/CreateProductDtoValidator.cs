@@ -24,6 +24,19 @@ namespace AppServices.Validators.Create
             RuleFor(product => product.ExpirationAt)
                 .NotEmpty()
                 .GreaterThanOrEqualTo(DateTime.Now.Date);
+
+            RuleFor(product => product.Type)
+            .NotNull()
+            .Must(EnunIsValid)
+            .IsInEnum();
+        }
+
+        private bool EnunIsValid(int direction)
+        {
+            if (direction < 1 || direction > 5)
+                return false;
+
+            return true;
         }
     }
 }

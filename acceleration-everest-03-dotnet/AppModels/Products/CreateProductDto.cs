@@ -10,11 +10,10 @@ public class CreateProductDto
         decimal unitPrice,
         DateTime issuanceAt, 
         DateTime expirationAt,
-        ProductType type)
+        int type)
     {
         Symbol = symbol;
         UnitPrice = unitPrice;
-        DaysToExpire = (expirationAt.Subtract(issuanceAt)).Days;
         IssuanceAt = issuanceAt;
         ExpirationAt = expirationAt;
         Type = type;
@@ -25,5 +24,5 @@ public class CreateProductDto
     public int DaysToExpire { get; set; }
     public DateTime IssuanceAt { get; set; }
     public DateTime ExpirationAt { get; set; }
-    public ProductType Type { get; set; }
+    public int Type { get; set; }
 }

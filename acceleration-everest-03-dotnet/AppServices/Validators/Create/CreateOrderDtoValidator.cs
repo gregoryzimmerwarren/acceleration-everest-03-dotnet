@@ -1,4 +1,5 @@
 ﻿using AppModels.Orders;
+using DomainModels.Enums;
 using FluentValidation;
 using System;
 
@@ -23,6 +24,7 @@ public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
 
         RuleFor(order => order.Direction)
             .NotNull()
+            .Must(EnunIsValid)
             .IsInEnum();
 
         RuleFor(order => order.PortfolioId)
@@ -32,5 +34,13 @@ public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
         RuleFor(order => order.ProductId)
             .NotEmpty()
             .GreaterThan(0);
+    }
+
+    private bool EnunIsValid(int direction)
+    {
+        if(direction != 1 || direction != 2)
+            return false;
+        
+        return true;
     }
 }

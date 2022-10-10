@@ -18,12 +18,20 @@ public class OrderResultOtherDtos
         Quotes = quotes;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
-        Direction = direction;
+        Direction = GetEnumName(direction);
     }
 
     public long Id { get; set; }
     public int Quotes { get; set; }
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
-    public OrderDirection Direction { get; set; }
+    public string Direction { get; set; }
+
+    private static string GetEnumName(OrderDirection direction)
+    {
+        if (direction == OrderDirection.Buy)
+            return "Buy";
+
+        return "Sell";
+    }
 }

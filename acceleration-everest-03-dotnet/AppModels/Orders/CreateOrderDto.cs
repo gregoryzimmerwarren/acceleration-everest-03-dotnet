@@ -9,7 +9,7 @@ public class CreateOrderDto
         int quotes, 
         decimal netValue, 
         DateTime liquidatedAt, 
-        OrderDirection direction, 
+        int direction, 
         long portfolioId, 
         long productId)
     {
@@ -20,11 +20,11 @@ public class CreateOrderDto
         PortfolioId = portfolioId;
         ProductId = productId;
     }
-
+    
     public int Quotes { get; set; }
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
-    public OrderDirection Direction { get; set; }
+    public int Direction { get; set; }
     public long PortfolioId { get; set; }
     public long ProductId { get; set; }
 }

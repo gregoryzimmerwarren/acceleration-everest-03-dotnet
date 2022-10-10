@@ -3,6 +3,7 @@ using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace AppServices.Services;
@@ -32,6 +33,7 @@ public class ProductAppService : IProductAppService
     public long Create(CreateProductDto createProductDto)
     {
         var productMapeado = _mapper.Map<Product>(createProductDto);
+        productMapeado.DaysToExpire = (productMapeado.ExpirationAt.Subtract(productMapeado.IssuanceAt)).Days;
 
         return _productService.Create(productMapeado);
     }
@@ -47,11 +49,44 @@ public class ProductAppService : IProductAppService
 
         foreach (Product product in products)
         {
-            var portfolios = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
-            product.Portfolios = _mapper.Map<ICollection<Portfolio>>(portfolios);
+            IEnumerable<PortfolioProduct> portfoliosproducts;
 
-            var orders = _orderService.GetOrdersByPortfolioId(product.Id);
-            product.Orders = _mapper.Map<List<Order>>(orders);
+            try
+            {
+                portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
+            }
+            catch (ArgumentException exception)
+            {
+                continue;
+            }            
+
+            List<Portfolio> portfolios = new();
+
+            foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
+            {
+                try
+                {
+                    var portfolio = _portfolioService.GetPortfolioById(portfolioproduct.PortfolioId);
+
+                    portfolios.Add(portfolio);
+                }
+                catch (ArgumentException exception)
+                {
+                    continue;
+                }
+            }
+
+            product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
+
+            try
+            {
+                var orders = _orderService.GetOrdersByPortfolioId(product.Id);
+                product.Orders = _mapper.Map<List<Order>>(orders);
+            }
+            catch (ArgumentException exception)
+            {
+                product.Orders = new List<Order>();
+            }
         }
 
         return _mapper.Map<IEnumerable<ProductResultDto>>(products);
@@ -61,12 +96,36 @@ public class ProductAppService : IProductAppService
     {
         var product = _productService.GetProductById(productId);
 
-        var portfolios = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
+        var portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
+
+        List<Portfolio> portfolios = new();
+
+        foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
+        {
+            try
+            {
+                var portfolio = _portfolioService.GetPortfolioById(portfolioproduct.PortfolioId);
+
+                portfolios.Add(portfolio);
+            }
+            catch(ArgumentException exception)
+            {
+                continue;
+            }            
+        }
+
         product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
 
-        var orders = _orderService.GetOrdersByPortfolioId(product.Id);
-        product.Orders = _mapper.Map<List<Order>>(orders);
-
+        try
+        {
+            var orders = _orderService.GetOrdersByPortfolioId(product.Id);
+            product.Orders = _mapper.Map<List<Order>>(orders);
+        }
+        catch (ArgumentException exception)
+        {
+            product.Orders = new List<Order>();
+        }
+        
         return _mapper.Map<ProductResultDto>(product);
     }
 

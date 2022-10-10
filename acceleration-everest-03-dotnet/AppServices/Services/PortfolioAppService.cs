@@ -3,6 +3,7 @@ using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace AppServices.Services;
@@ -58,21 +59,44 @@ public class PortfolioAppService : IPortfolioAppService
             var customer = _customerService.GetCustomerById(portfolio.CustomerId);
             portfolio.Customer = _mapper.Map<Customer>(customer);
 
-            var portfoliosproducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolio.Id);
+            IEnumerable<PortfolioProduct> portfoliosproducts;
+
+            try
+            {
+                portfoliosproducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolio.Id);
+            }
+            catch (ArgumentException exception)
+            {
+                continue;
+            }
 
             List<Product> products = new();
 
             foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
             {
-                var product = _productService.GetProductById(portfolioproduct.ProductId);
+                try
+                {
+                    var product = _productService.GetProductById(portfolioproduct.ProductId);
 
-                products.Add(product);
+                    products.Add(product);
+                }
+                catch (ArgumentException exception)
+                {
+                    continue;
+                }                
             }
 
             portfolio.Products = _mapper.Map<List<Product>>(products);
 
-            var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
-            portfolio.Orders = _mapper.Map<List<Order>>(orders);
+            try
+            {
+                var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
+                portfolio.Orders = _mapper.Map<List<Order>>(orders);
+            }
+            catch (ArgumentException exception)
+            {
+                portfolio.Orders = new List<Order>();
+            }
         }
 
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);

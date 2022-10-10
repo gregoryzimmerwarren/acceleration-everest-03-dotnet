@@ -22,7 +22,7 @@ public class ProductResultForOthersDtos
         UnitPrice = unitPrice;
         DaysToExpire = daysToExpire;
         ExpirationAt = expirationAt;
-        Type = type;
+        Type = GetEnumName(type);
     }
 
     public long Id { get; set; }
@@ -30,5 +30,22 @@ public class ProductResultForOthersDtos
     public decimal UnitPrice { get; set; }
     public int DaysToExpire { get; set; }
     public DateTime ExpirationAt { get; set; }
-    public ProductType Type { get; set; }
+    public string Type { get; set; }
+
+    private static string GetEnumName(ProductType direction)
+    {
+        if (direction == ProductType.FixedIncome)
+            return "FixedIncome";
+
+        if (direction == ProductType.Trade)
+            return "Trade";
+
+        if (direction == ProductType.Funds)
+            return "Funds";
+
+        if (direction == ProductType.Fii)
+            return "Fii";
+
+        return "Crypto";
+    }
 }
