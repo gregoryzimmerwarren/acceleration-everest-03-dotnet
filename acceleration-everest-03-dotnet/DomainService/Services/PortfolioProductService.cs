@@ -60,7 +60,7 @@ public class PortfolioProductService : IPortfolioProductService
         return portfolioProduct;
     }
 
-    public IEnumerable<PortfolioProduct> GetPortfoliosByProductId(long productId)
+    public IEnumerable<PortfolioProduct> GetPortfolioProductByProductId(long productId)
     {
         var repository = _repositoryFactory.Repository<PortfolioProduct>();
         var query = repository.MultipleResultQuery().AndFilter(portfolioProduct => portfolioProduct.ProductId == productId);
@@ -72,7 +72,7 @@ public class PortfolioProductService : IPortfolioProductService
         return portfoliosProducts;
     }
 
-    public IEnumerable<PortfolioProduct> GetProductsByPortfolioId(long portfolioId)
+    public IEnumerable<PortfolioProduct> GetPortfolioProductByPortfolioId(long portfolioId)
     {
         var repository = _repositoryFactory.Repository<PortfolioProduct>();
         var query = repository.MultipleResultQuery().AndFilter(portfolioProduct => portfolioProduct.PortfolioId == portfolioId);

@@ -17,7 +17,7 @@ public class ProductResultDto
         int daysToExpire, 
         DateTime expirationAt, 
         ProductType type, 
-        ICollection<PortfolioResultForOthersDtos> portfolios, 
+        List<PortfolioResultForOthersDtos> portfolios, 
         List<OrderResultOtherDtos> orders)
     {
         Id = id;
@@ -36,6 +36,6 @@ public class ProductResultDto
     public int DaysToExpire { get; set; }
     public DateTime ExpirationAt { get; set; }
     public ProductType Type { get; set; }
-    public ICollection<PortfolioResultForOthersDtos> Portfolios { get; set; }
+    public List<PortfolioResultForOthersDtos> Portfolios { get; set; }
     public List<OrderResultOtherDtos> Orders { get; set; }
 }

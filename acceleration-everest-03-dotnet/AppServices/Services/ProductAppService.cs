@@ -10,17 +10,20 @@ namespace AppServices.Services;
 public class ProductAppService : IProductAppService
 {
     private readonly IPortfolioProductService _portfolioProductService;
+    private readonly IPortfolioService _portfolioService;
     private readonly IProductService _productService;
     private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
     public ProductAppService(
-        IPortfolioProductService portfolioProductService, 
-        IProductService productService, 
-        IOrderService orderService, 
+        IPortfolioProductService portfolioProductService,
+        IPortfolioService portfolioService,
+        IProductService productService,
+        IOrderService orderService,
         IMapper mapper)
     {
         _portfolioProductService = portfolioProductService ?? throw new System.ArgumentNullException(nameof(portfolioProductService));
+        _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
         _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
         _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
@@ -44,8 +47,8 @@ public class ProductAppService : IProductAppService
 
         foreach (Product product in products)
         {
-            var portfolios = _portfolioProductService.GetPortfoliosByProductId(product.Id);
-            product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
+            var portfolios = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
+            product.Portfolios = _mapper.Map<ICollection<Portfolio>>(portfolios);
 
             var orders = _orderService.GetOrdersByPortfolioId(product.Id);
             product.Orders = _mapper.Map<List<Order>>(orders);
@@ -58,7 +61,7 @@ public class ProductAppService : IProductAppService
     {
         var product = _productService.GetProductById(productId);
 
-        var portfolios = _portfolioProductService.GetPortfoliosByProductId(product.Id);
+        var portfolios = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
         product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
 
         var orders = _orderService.GetOrdersByPortfolioId(product.Id);

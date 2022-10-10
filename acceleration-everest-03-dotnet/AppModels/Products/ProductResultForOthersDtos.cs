@@ -15,8 +15,7 @@ public class ProductResultForOthersDtos
         decimal unitPrice,
         int daysToExpire,
         DateTime expirationAt,
-        ProductType type,
-        List<OrderResultOtherDtos> orders)
+        ProductType type)
     {
         Id = id;
         Symbol = symbol;
@@ -24,7 +23,6 @@ public class ProductResultForOthersDtos
         DaysToExpire = daysToExpire;
         ExpirationAt = expirationAt;
         Type = type;
-        Orders = orders;
     }
 
     public long Id { get; set; }
@@ -33,5 +31,4 @@ public class ProductResultForOthersDtos
     public int DaysToExpire { get; set; }
     public DateTime ExpirationAt { get; set; }
     public ProductType Type { get; set; }
-    public List<OrderResultOtherDtos> Orders { get; set; }
 }

@@ -9,6 +9,6 @@ public interface IPortfolioProductService
     void Delete(long id);
     IEnumerable<PortfolioProduct> GetAllPortfolioProduct();
     PortfolioProduct GetPortfolioProductById(long id);
-    IEnumerable<PortfolioProduct> GetPortfoliosByProductId(long productId);
-    IEnumerable<PortfolioProduct> GetProductsByPortfolioId(long portfolioId);
+    IEnumerable<PortfolioProduct> GetPortfolioProductByProductId(long productId);
+    IEnumerable<PortfolioProduct> GetPortfolioProductByPortfolioId(long portfolioId);
 }

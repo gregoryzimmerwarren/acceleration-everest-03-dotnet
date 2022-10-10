@@ -16,7 +16,7 @@ public class PortfolioResultDto
         decimal totalBalance, 
         decimal accountBalance,
         CustomerResultForOtherDtos customer, 
-        ICollection<ProductResultForOthersDtos> products, 
+        List<ProductResultForOthersDtos> products, 
         List<OrderResultOtherDtos> orders)
     {
         Id = id;
@@ -35,6 +35,6 @@ public class PortfolioResultDto
     public decimal TotalBalance { get; set; }
     public decimal AccountBalance { get; set; }
     public CustomerResultForOtherDtos Customer { get; set; }
-    public ICollection<ProductResultForOthersDtos> Products { get; set; }
+    public List<ProductResultForOthersDtos> Products { get; set; }
     public List<OrderResultOtherDtos> Orders { get; set; }
 }
