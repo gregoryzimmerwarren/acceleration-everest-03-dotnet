@@ -23,11 +23,9 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateCustomerBankInfoDto createCustomerBankInfoDto)
+    public void Create(long customerId)
     {
-        var customerBankInfoMapeado = _mapper.Map<CustomerBankInfo>(createCustomerBankInfoDto);
-
-        return _customerBankInfoService.Create(customerBankInfoMapeado);
+        _customerBankInfoService.Create(customerId);
     }
 
     public void Deposit(long customerId, decimal amount)

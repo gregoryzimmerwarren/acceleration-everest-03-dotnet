@@ -2,6 +2,11 @@
 
 public class CustomerBankInfo : IEntity
 {
+    public CustomerBankInfo(long customerId)
+    {
+        CustomerId = customerId;
+    }
+
     public CustomerBankInfo(
         long customerId,
         decimal accountBalance)

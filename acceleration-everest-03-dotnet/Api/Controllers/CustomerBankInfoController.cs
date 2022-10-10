@@ -1,5 +1,4 @@
-﻿using AppModels.CustomersBankInfo;
-using AppServices.Interfaces;
+﻿using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -14,23 +13,6 @@ public class CustomerBankInfoController : ControllerBase
     public CustomerBankInfoController(ICustomerBankInfoAppService customerBankInfoAppService)
     {
         _customerBankInfoAppService = customerBankInfoAppService ?? throw new System.ArgumentNullException(nameof(customerBankInfoAppService));
-    }
-
-    [HttpPost]
-    public IActionResult Create(CreateCustomerBankInfoDto customerBankInfo)
-    {
-        try
-        {
-            var id = _customerBankInfoAppService.Create(customerBankInfo);
-            
-            return Created("", id);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return BadRequest(message);
-        }
     }
 
     [HttpPatch("depositInCustomerBankInfo/{customerId}")]

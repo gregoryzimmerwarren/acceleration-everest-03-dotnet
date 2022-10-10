@@ -29,8 +29,11 @@ public class CustomerAppService : ICustomerAppService
     public long Create(CreateCustomerDto createCustomerDto)
     {
         var customerMapeado = _mapper.Map<Customer>(createCustomerDto);
+        var newCustomerId = _customerService.Create(customerMapeado);
 
-        return _customerService.Create(customerMapeado);
+        _customerBankInfoService.Create(newCustomerId);
+
+        return newCustomerId;
     }
 
     public void Delete(long customerId)

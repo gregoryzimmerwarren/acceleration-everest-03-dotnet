@@ -10,6 +10,5 @@ public class CustomerBankInfoProfile : Profile
     {
         CreateMap<CustomerBankInfo, CustomerBankInfoResultDto>();
         CreateMap<CustomerBankInfo, CustomerBankInfoResultForOthersDtos>();
-        CreateMap<CreateCustomerBankInfoDto, CustomerBankInfo>();
     }
 }

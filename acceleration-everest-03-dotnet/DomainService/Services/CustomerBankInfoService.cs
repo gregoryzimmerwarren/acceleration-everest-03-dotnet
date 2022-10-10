@@ -20,13 +20,11 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
     }
 
-    public long Create(CustomerBankInfo customerBankInfoToCreate)
+    public void Create(long customerId)
     {
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
-        repository.Add(customerBankInfoToCreate);
+        repository.Add(new CustomerBankInfo(customerId));
         _unitOfWork.SaveChanges();
-
-        return customerBankInfoToCreate.CustomerId;
     }
 
     public void Deposit(long customerId, decimal amount)

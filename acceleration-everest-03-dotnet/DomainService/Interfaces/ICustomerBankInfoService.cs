@@ -5,7 +5,7 @@ namespace DomainServices.Interfaces;
 
 public interface ICustomerBankInfoService
 {
-    long Create(CustomerBankInfo customerBankInfoToCreate);
+    void Create(long customerId);
     void Deposit(long customerId, decimal amount);
     IEnumerable<CustomerBankInfo> GetAllCustomersBankInfo();
     CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId);

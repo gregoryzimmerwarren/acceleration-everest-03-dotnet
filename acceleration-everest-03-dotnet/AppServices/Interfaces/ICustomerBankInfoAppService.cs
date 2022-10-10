@@ -5,7 +5,7 @@ namespace AppServices.Interfaces;
 
 public interface ICustomerBankInfoAppService
 {
-    long Create(CreateCustomerBankInfoDto createCustomerBankInfoDto);
+    void Create(long customerId);
     void Deposit(long customerId, decimal amount);
     IEnumerable<CustomerBankInfoResultDto> GetAllCustomersBankInfo();
     decimal GetTotalById(long customerId);
