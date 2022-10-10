@@ -13,6 +13,6 @@ public interface IPortfolioAppService
     PortfolioResultDto GetPortfolioById(long portfolioId);
     IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId);
     bool Invest(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount);
-    bool RedeemToPortfolio(long portfolioId, decimal amount);
+    bool RedeemToPortfolio(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount);
     bool WithdrawFromPortfolio(long portfolioId, decimal amount);
 }

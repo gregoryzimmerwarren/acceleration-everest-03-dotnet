@@ -33,9 +33,9 @@ public class PortfolioProductAppService : IPortfolioProductAppService
         return _portfolioProductService.Create(portfolioProductMapeado);
     }
 
-    public void Delete(long portfolioProductId)
+    public void Delete(long portfolioId, long ProductId)
     {
-        _portfolioProductService.Delete(portfolioProductId);
+        _portfolioProductService.Delete(portfolioId, ProductId);
     }
 
     public IEnumerable<PortfolioProductResultDto> GetAllPortfolioProduct()
@@ -54,9 +54,9 @@ public class PortfolioProductAppService : IPortfolioProductAppService
         return _mapper.Map<IEnumerable<PortfolioProductResultDto>>(portfoliosProducts);
     }
 
-    public PortfolioProductResultDto GetPortfolioProductById(long portfolioProductId)
+    public PortfolioProductResultDto GetPortfolioProductByIds(long portfolioId, long ProductId)
     {
-        var portfolioProduct = _portfolioProductService.GetPortfolioProductById(portfolioProductId);
+        var portfolioProduct = _portfolioProductService.GetPortfolioProductByIds(portfolioId, ProductId);
 
         var portfolio = _portfolioService.GetPortfolioById(portfolioProduct.PortfolioId);
         portfolioProduct.Portfolio = _mapper.Map<Portfolio>(portfolio);

@@ -137,11 +137,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("redeemToPortfolio/{customerId}")]
-    public IActionResult RedeemToPortfolio(long portfolioId, decimal amount)
+    public IActionResult RedeemToPortfolio(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
     {
         try
         {
-            _portifolioAppService.RedeemToPortfolio(portfolioId, amount);
+            _portifolioAppService.RedeemToPortfolio(createOrderDto, portfolioId, productId, amount);
 
             return Ok();
         }

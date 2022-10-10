@@ -29,9 +29,9 @@ public class PortfolioProductService : IPortfolioProductService
         return portfolioProductToCreate.Id;
     }
 
-    public void Delete(long id)
+    public void Delete(long portfolioId, long productId)
     {
-        var portfolioProduct = GetPortfolioProductById(id);
+        var portfolioProduct = GetPortfolioProductByIds(portfolioId, productId);
         var repository = _unitOfWork.Repository<PortfolioProduct>();
         repository.Remove(portfolioProduct);
     }
@@ -48,14 +48,15 @@ public class PortfolioProductService : IPortfolioProductService
         return portfoliosProducts;
     }
 
-    public PortfolioProduct GetPortfolioProductById(long id)
+    public PortfolioProduct GetPortfolioProductByIds(long portfolioId, long productId)
     {
         var repository = _repositoryFactory.Repository<PortfolioProduct>();
-        var query = repository.SingleResultQuery().AndFilter(portfolioProduct => portfolioProduct.Id == id);
+        var query = repository.SingleResultQuery().AndFilter(portfolioProduct => portfolioProduct.PortfolioId == portfolioId
+        || portfolioProduct.ProductId == productId);
         var portfolioProduct = repository.SingleOrDefault(query);
 
         if (portfolioProduct == null)
-            throw new ArgumentException($"No relationship between portfolio and product found for Id: {id}");
+            throw new ArgumentException($"No relationship was found between portfolio Id: {portfolioId} and product Id: {productId}");
 
         return portfolioProduct;
     }

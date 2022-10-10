@@ -188,9 +188,14 @@ public class PortfolioAppService : IPortfolioAppService
         return result;
     }
 
-    public bool RedeemToPortfolio(long portfolioId, decimal amount)
+    public bool RedeemToPortfolio(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
     {
+        createOrderDto.Direction = OrderDirection.Sell;
+        _orderAppService.Create(createOrderDto);
+
         var result = _portfolioService.RedeemToPortfolio(portfolioId, amount);
+
+        _portfolioProductAppService.Delete(portfolioId, productId);
 
         return result;
     }
