@@ -8,6 +8,7 @@ public interface ICustomerBankInfoAppService
     void Create(long customerId);
     void Deposit(long customerId, decimal amount);
     IEnumerable<CustomerBankInfoResultDto> GetAllCustomersBankInfo();
+    CustomerBankInfoResultDto GetCustomerBankInfoByCustomerId(long customerId);
     decimal GetTotalById(long customerId);
     bool Withdraw(long customerId, decimal amount);
 }

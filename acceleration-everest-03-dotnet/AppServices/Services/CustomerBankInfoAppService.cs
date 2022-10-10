@@ -14,8 +14,8 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
     private readonly IMapper _mapper;
 
     public CustomerBankInfoAppService(
-        ICustomerBankInfoService customerBankInfoService, 
-        ICustomerService customerService, 
+        ICustomerBankInfoService customerBankInfoService,
+        ICustomerService customerService,
         IMapper mapper)
     {
         _customerBankInfoService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
@@ -37,13 +37,22 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
     {
         var customersBankInfo = _customerBankInfoService.GetAllCustomersBankInfo();
 
-        foreach(CustomerBankInfo customerBankInfo in customersBankInfo)
+        foreach (CustomerBankInfo customerBankInfo in customersBankInfo)
         {
             var customer = _customerService.GetCustomerById(customerBankInfo.CustomerId);
             customerBankInfo.Customer = _mapper.Map<Customer>(customer);
-        }            
+        }
 
         return _mapper.Map<IEnumerable<CustomerBankInfoResultDto>>(customersBankInfo);
+    }
+
+    public CustomerBankInfoResultDto GetCustomerBankInfoByCustomerId(long customerId)
+    {
+        var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customerId);
+        var customer = _customerService.GetCustomerById(customerId);
+        customerBankInfo.Customer = _mapper.Map<Customer>(customer);
+
+        return _mapper.Map<CustomerBankInfoResultDto>(customerBankInfo);
     }
 
     public decimal GetTotalById(long customerId)

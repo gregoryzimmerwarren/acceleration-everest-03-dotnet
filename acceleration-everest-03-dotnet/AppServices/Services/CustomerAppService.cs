@@ -9,18 +9,18 @@ using System.Collections.Generic;
 namespace AppServices.Services;
 public class CustomerAppService : ICustomerAppService
 {
-    private readonly ICustomerBankInfoAppService _customerBankInfoAppService;
+    private readonly ICustomerBankInfoService _customerBankInfoService;
     private readonly IPortfolioService _portfolioService;
     private readonly ICustomerService _customerService;
     private readonly IMapper _mapper;
 
     public CustomerAppService(
-        ICustomerBankInfoAppService customerBankInfoAppService,
+        ICustomerBankInfoService customerBankInfoService,
         IPortfolioService portfolioService,
         ICustomerService customerService,
         IMapper mapper)
     {
-        _customerBankInfoAppService = customerBankInfoAppService ?? throw new ArgumentNullException(nameof(customerBankInfoAppService));
+        _customerBankInfoService = customerBankInfoService ?? throw new ArgumentNullException(nameof(customerBankInfoService));
         _portfolioService = portfolioService ?? throw new ArgumentNullException(nameof(portfolioService));
         _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -31,7 +31,7 @@ public class CustomerAppService : ICustomerAppService
         var customerMapeado = _mapper.Map<Customer>(createCustomerDto);
         var newCustomerId = _customerService.Create(customerMapeado);
 
-        _customerBankInfoAppService.Create(newCustomerId);
+        _customerBankInfoService.Create(newCustomerId);
 
         return newCustomerId;
     }

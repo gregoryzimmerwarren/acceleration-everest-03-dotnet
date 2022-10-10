@@ -34,11 +34,11 @@ public class PortfolioProductController : ControllerBase
     }
 
     [HttpDelete]
-    public IActionResult Delete(long portfolioProductId)
+    public IActionResult Delete(long portfolioId, long ProductId)
     {
         try
         {
-            _portfolioProductAppServices.Delete(portfolioProductId);
+            _portfolioProductAppServices.Delete(portfolioId, ProductId);
 
             return NoContent();
         }
@@ -68,11 +68,11 @@ public class PortfolioProductController : ControllerBase
     }
 
     [HttpGet("getPortfolioProductById/{portfolioProductId}")]
-    public IActionResult GetPortfolioProductById(long portfolioProductId)
+    public IActionResult GetPortfolioProductByIds(long portfolioId, long ProductId)
     {
         try
         {
-            var result = _portfolioProductAppServices.GetPortfolioProductById(portfolioProductId);
+            var result = _portfolioProductAppServices.GetPortfolioProductByIds(portfolioId, ProductId);
 
             return Ok(result);
         }
