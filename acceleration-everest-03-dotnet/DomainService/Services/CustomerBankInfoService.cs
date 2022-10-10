@@ -30,8 +30,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     public void Deposit(long customerId, decimal amount)
     {
         var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
-        var newAccountBalance = customerBankInfo.AccountBalance + amount;
-        customerBankInfo.AccountBalance = newAccountBalance;
+        customerBankInfo.AccountBalance += amount;
 
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
         repository.Update(customerBankInfo);
@@ -79,8 +78,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         if (customerBankInfo.AccountBalance < amount)
             throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");
 
-        var newAccountBalance = customerBankInfo.AccountBalance - amount;
-        customerBankInfo.AccountBalance = newAccountBalance;
+        customerBankInfo.AccountBalance -= amount;
 
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
         repository.Update(customerBankInfo);

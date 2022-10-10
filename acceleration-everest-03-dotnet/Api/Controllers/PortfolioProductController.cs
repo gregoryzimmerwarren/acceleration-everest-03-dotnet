@@ -9,9 +9,9 @@ namespace Api.Controllers;
 [ApiController]
 public class PortfolioProductController : ControllerBase
 {
-    private readonly IPortfolioProductAppServices _portfolioProductAppServices;
+    private readonly IPortfolioProductAppService _portfolioProductAppServices;
 
-    public PortfolioProductController(IPortfolioProductAppServices portfolioProductAppServices)
+    public PortfolioProductController(IPortfolioProductAppService portfolioProductAppServices)
     {
         _portfolioProductAppServices = portfolioProductAppServices ?? throw new System.ArgumentNullException(nameof(portfolioProductAppServices));
     }
@@ -89,7 +89,7 @@ public class PortfolioProductController : ControllerBase
     {
         try
         {
-            var result = _portfolioProductAppServices.GetPortfoliosByProductId(productId);
+            var result = _portfolioProductAppServices.GetPortfolioProductByProductId(productId);
 
             return Ok(result);
         }
@@ -106,7 +106,7 @@ public class PortfolioProductController : ControllerBase
     {
         try
         {
-            var result = _portfolioProductAppServices.GetProductsByPortfolioId(portfolioId);
+            var result = _portfolioProductAppServices.GetPortfolioProductByPortfolioId(portfolioId);
 
             return Ok(result);
         }

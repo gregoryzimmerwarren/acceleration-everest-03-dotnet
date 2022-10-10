@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace AppServices.Interfaces;
 
-public interface IPortfolioProductAppServices
+public interface IPortfolioProductAppService
 {
     long Create(CreatePortfolioProductDto createPortfolioProductDto);
     void Delete(long portfolioProductId);
     IEnumerable<PortfolioProductResultDto> GetAllPortfolioProduct();
     PortfolioProductResultDto GetPortfolioProductById(long portfolioProductId);
-    IEnumerable<PortfolioProductResultDto> GetPortfoliosByProductId(long productId);
-    IEnumerable<PortfolioProductResultDto> GetProductsByPortfolioId(long portfolioId);
+    IEnumerable<PortfolioProductResultDto> GetPortfolioProductByProductId(long productId);
+    IEnumerable<PortfolioProductResultDto> GetPortfolioProductByPortfolioId(long portfolioId);
 }

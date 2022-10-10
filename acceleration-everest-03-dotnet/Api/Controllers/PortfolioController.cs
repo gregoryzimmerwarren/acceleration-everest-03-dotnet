@@ -1,4 +1,5 @@
-﻿using AppModels.Portfolios;
+﻿using AppModels.Orders;
+using AppModels.Portfolios;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -51,11 +52,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("depositInPortfolio/{customerId}")]
-    public IActionResult Deposit(long portfolioId, decimal amount)
+    public IActionResult Deposit(long customerId, long portfolioId, decimal amount, bool amountInBankInfo)
     {
         try
         {
-            _portifolioAppService.Deposit(portfolioId, amount);
+            _portifolioAppService.Deposit(customerId, portfolioId, amount, amountInBankInfo);
 
             return Ok();
         }
@@ -119,11 +120,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("invest/{customerId}")]
-    public IActionResult Invest(long portfolioId, decimal amount)
+    public IActionResult Invest(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
     {
         try
         {
-            _portifolioAppService.Invest(portfolioId, amount);
+            _portifolioAppService.Invest(createOrderDto, portfolioId, productId, amount);
 
             return Ok();
         }

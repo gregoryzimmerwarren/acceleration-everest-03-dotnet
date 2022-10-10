@@ -7,14 +7,14 @@ using System.Collections.Generic;
 
 namespace AppServices.Services;
 
-public class PortfolioProductAppServices : IPortfolioProductAppServices
+public class PortfolioProductAppService : IPortfolioProductAppService
 {
     private readonly IPortfolioProductService _portfolioProductService;
     private readonly IPortfolioService _portfolioService;
     private readonly IProductService _productService;
     private readonly IMapper _mapper;
 
-    public PortfolioProductAppServices(
+    public PortfolioProductAppService(
         IPortfolioProductService portfolioProductService, 
         IPortfolioService portfolioService, 
         IProductService productService, 
@@ -67,7 +67,7 @@ public class PortfolioProductAppServices : IPortfolioProductAppServices
         return _mapper.Map<PortfolioProductResultDto>(portfolioProduct);
     }
 
-    public IEnumerable<PortfolioProductResultDto> GetPortfoliosByProductId(long productId)
+    public IEnumerable<PortfolioProductResultDto> GetPortfolioProductByProductId(long productId)
     {
         var portfoliosProducts = _portfolioProductService.GetPortfolioProductByProductId(productId);
 
@@ -83,7 +83,7 @@ public class PortfolioProductAppServices : IPortfolioProductAppServices
         return _mapper.Map<IEnumerable<PortfolioProductResultDto>>(portfoliosProducts);
     }
 
-    public IEnumerable<PortfolioProductResultDto> GetProductsByPortfolioId(long portfolioId)
+    public IEnumerable<PortfolioProductResultDto> GetPortfolioProductByPortfolioId(long portfolioId)
     {
         var portfoliosProducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolioId);
 

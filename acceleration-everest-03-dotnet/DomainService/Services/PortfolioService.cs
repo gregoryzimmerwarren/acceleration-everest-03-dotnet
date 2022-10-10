@@ -45,8 +45,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
     public void Deposit(long portfolioId, decimal amount)
     {
         var portfolio = GetPortfolioById(portfolioId);
-        var newAccountBalance = portfolio.AccountBalance + amount;
-        portfolio.AccountBalance = newAccountBalance;
+        portfolio.AccountBalance += amount;
 
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
@@ -97,10 +96,8 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         if (portfolio.AccountBalance < amount)
             throw new ArgumentException($"Portfolio does not have sufficient balance for this investment. Current balance: R${portfolio.AccountBalance}");
 
-        var newAccountBalance = portfolio.AccountBalance - amount;
-        var newTotalBalance = portfolio.TotalBalance + amount;
-        portfolio.AccountBalance = newAccountBalance;
-        portfolio.TotalBalance = newTotalBalance;
+        portfolio.AccountBalance -= amount;
+        portfolio.TotalBalance += amount;
 
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
@@ -116,10 +113,8 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         if (portfolio.TotalBalance < amount)
             throw new ArgumentException($"Portfolio does not have sufficient balance for this redeem. Current balance: R${portfolio.TotalBalance}");
 
-        var newTotalBalance = portfolio.TotalBalance - amount;
-        var newAccountBalance = portfolio.AccountBalance + amount;
-        portfolio.TotalBalance = newTotalBalance;
-        portfolio.AccountBalance = newAccountBalance;
+        portfolio.TotalBalance -= amount;
+        portfolio.AccountBalance += amount;
 
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
@@ -135,8 +130,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         if (portfolio.AccountBalance < amount)
             throw new ArgumentException($"Portfolio does not have sufficient balance for this withdraw. Current balance: R${portfolio.AccountBalance}");
 
-        var newAccountBalance = portfolio.AccountBalance - amount;
-        portfolio.AccountBalance = newAccountBalance;
+        portfolio.AccountBalance -= amount;
 
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
