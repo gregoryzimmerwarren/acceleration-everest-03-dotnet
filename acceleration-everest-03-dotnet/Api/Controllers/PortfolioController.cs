@@ -141,9 +141,9 @@ public class PortfolioController : ControllerBase
     {
         try
         {
-            _portifolioAppService.RedeemToPortfolio(createOrderDto, portfolioId, productId, amount);
+            var message = _portifolioAppService.RedeemToPortfolio(createOrderDto, portfolioId, productId, amount);
 
-            return Ok();
+            return Ok(message);
         }
         catch (ArgumentException exception)
         {
@@ -154,11 +154,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("withdrawFromPortfolio/{customerId}")]
-    public IActionResult WithdrawFromPortfolio(long portfolioId, decimal amount)
+    public IActionResult WithdrawFromPortfolio(long customerId, long portfolioId, decimal amount)
     {
         try
         {
-            _portifolioAppService.WithdrawFromPortfolio(portfolioId, amount);
+            _portifolioAppService.WithdrawFromPortfolio(customerId, portfolioId, amount);
 
             return Ok();
         }

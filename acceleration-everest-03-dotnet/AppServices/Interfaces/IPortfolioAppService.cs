@@ -14,5 +14,5 @@ public interface IPortfolioAppService
     IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId);
     bool Invest(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount);
     bool RedeemToPortfolio(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount);
-    bool WithdrawFromPortfolio(long portfolioId, decimal amount);
+    bool WithdrawFromPortfolio(long customerId, long portfolioId, decimal amount);
 }

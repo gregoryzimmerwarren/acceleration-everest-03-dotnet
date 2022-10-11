@@ -181,9 +181,12 @@ public class PortfolioAppService : IPortfolioAppService
             _orderAppService.Create(createOrderDto);
         }
 
-        var result = _portfolioService.Invest(portfolioId, amount);
-
         _portfolioProductAppService.Create(new CreatePortfolioProductDto(portfolioId, productId));
+
+        if (createOrderDto.LiquidatedAt > DateTime.Today)
+            throw new ArgumentException($"The investment will only take place on the liquidation date: {createOrderDto.LiquidatedAt}");
+
+        var result = _portfolioService.Invest(portfolioId, amount);
 
         return result;
     }
@@ -193,16 +196,23 @@ public class PortfolioAppService : IPortfolioAppService
         createOrderDto.Direction = OrderDirection.Sell;
         _orderAppService.Create(createOrderDto);
 
+        if (createOrderDto.LiquidatedAt > DateTime.Today)
+            throw new ArgumentException($"The amount {amount} was not credited to the portfolio Id {portfolioId}. The order liquidate in a date greater than today");
+
         var result = _portfolioService.RedeemToPortfolio(portfolioId, amount);
 
-        _portfolioProductAppService.Delete(portfolioId, productId);
+        var buyOrder = _orderAppService.GetOrderByPorfolioIdAndProductId(portfolioId, productId);
+
+        if (buyOrder.Quotes == createOrderDto.Quotes)
+            _portfolioProductAppService.Delete(portfolioId, productId);
 
         return result;
     }
 
-    public bool WithdrawFromPortfolio(long portfolioId, decimal amount)
+    public bool WithdrawFromPortfolio(long customerId, long portfolioId, decimal amount)
     {
         var result = _portfolioService.WithdrawFromPortfolio(portfolioId, amount);
+        _customerBankInfoAppService.Deposit(customerId, amount);
 
         return result;
     }
