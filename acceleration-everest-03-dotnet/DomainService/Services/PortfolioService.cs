@@ -40,6 +40,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
 
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Remove(portfolio);
+        _unitOfWork.SaveChanges();
     }
 
     public void Deposit(long portfolioId, decimal amount)
@@ -82,9 +83,6 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _repositoryFactory.Repository<Portfolio>();
         var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId);
         var portfolios = repository.Search(query);
-
-        //if (portfolios.Count == 0)
-        //    throw new ArgumentException($"No portfolio found for customer Id: {customerId}");
 
         return portfolios;
     }

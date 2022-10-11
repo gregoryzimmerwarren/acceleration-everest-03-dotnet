@@ -8,7 +8,7 @@ public interface IOrderService
     long Create(Order orderToCreate);
     IEnumerable<Order> GetAllOrders();
     Order GetOrderById(long orderId);
-    Order GetOrderByPorfolioIdAndProductId(long portfolioId, long productId);
+    IEnumerable<Order> GetOrderByPorfolioIdAndProductId(long portfolioId, long productId);
     IEnumerable<Order> GetOrdersByPortfolioId(long portfolioId);
     IEnumerable<Order> GetOrdersByProductId(long productId);
 }

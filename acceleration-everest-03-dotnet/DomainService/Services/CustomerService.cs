@@ -46,6 +46,7 @@ public class CustomerService : ICustomerService
         var customer = GetCustomerById(id);
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
+        _unitOfWork.SaveChanges();
     }
 
     public IEnumerable<Customer> GetAllCustomers()

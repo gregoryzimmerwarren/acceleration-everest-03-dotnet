@@ -62,6 +62,9 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId);
         var customerBankInfo = repository.SingleOrDefault(query);
 
+        if (customerBankInfo == null)
+            throw new ArgumentException($"No customer found for Id: {customerId}");
+
         return customerBankInfo;
     }
 

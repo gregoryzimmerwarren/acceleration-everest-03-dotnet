@@ -34,6 +34,7 @@ public class ProductService : IProductService
         var product = GetProductById(id);
         var repository = _unitOfWork.Repository<Product>();
         repository.Remove(product);
+        _unitOfWork.SaveChanges();
     }
 
     public IEnumerable<Product> GetAllProducts()

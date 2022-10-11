@@ -1,4 +1,5 @@
 ﻿using AppModels.Customers;
+using System.Text.Json.Serialization;
 
 namespace AppModels.CustomersBankInfo;
 
@@ -16,6 +17,7 @@ public class CustomerBankInfoResultDto
         Customer = customer;
     }
 
+    [JsonIgnore]
     public long Id { get; set; }
     public decimal AccountBalance { get; set; }
     public CustomerResultForOtherDtos Customer { get; set; }

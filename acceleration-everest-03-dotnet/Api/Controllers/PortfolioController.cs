@@ -120,11 +120,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("invest/{customerId}")]
-    public IActionResult Invest(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
+    public IActionResult Invest(CreateOrderDto createOrderDto, decimal amount)
     {
         try
         {
-            _portifolioAppService.Invest(createOrderDto, portfolioId, productId, amount);
+            _portifolioAppService.Invest(createOrderDto, amount);
 
             return Ok();
         }
@@ -137,13 +137,13 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("redeemToPortfolio/{customerId}")]
-    public IActionResult RedeemToPortfolio(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
+    public IActionResult RedeemToPortfolio(CreateOrderDto createOrderDto, decimal amount)
     {
         try
         {
-            var message = _portifolioAppService.RedeemToPortfolio(createOrderDto, portfolioId, productId, amount);
+            _portifolioAppService.RedeemToPortfolio(createOrderDto, amount);
 
-            return Ok(message);
+            return Ok();
         }
         catch (ArgumentException exception)
         {

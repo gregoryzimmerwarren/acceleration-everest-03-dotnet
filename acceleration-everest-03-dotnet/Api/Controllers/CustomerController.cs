@@ -23,7 +23,7 @@ public class CustomerController : ControllerBase
         {
             var id = _customerAppService.Create(customerToCreate);
             
-            return Created("", id);
+            return Created("Id:", id);
         }
         catch (ArgumentException exception)
         {

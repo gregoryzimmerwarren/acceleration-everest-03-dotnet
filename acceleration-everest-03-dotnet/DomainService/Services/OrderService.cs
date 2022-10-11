@@ -53,16 +53,16 @@ public class OrderService : IOrderService
         return order;
     }
 
-    public Order GetOrderByPorfolioIdAndProductId(long portfolioId, long productId)
+    public IEnumerable<Order> GetOrderByPorfolioIdAndProductId(long portfolioId, long productId)
     {
         var repository = _repositoryFactory.Repository<Order>();
-        var query = repository.SingleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId);
-        var order = repository.SingleOrDefault(query);
+        var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId);
+        var orders = repository.Search(query);
 
-        if (order == null)
+        if (orders.Count == 0)
             throw new ArgumentException($"No order was found between portfolio Id: {portfolioId} and product Id: {productId}");
 
-        return order;
+        return orders;
     }
 
     public IEnumerable<Order> GetOrdersByPortfolioId(long portfolioId)

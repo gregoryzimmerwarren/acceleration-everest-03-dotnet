@@ -1,5 +1,6 @@
 ﻿using DomainModels.Enums;
 using System;
+using System.Text.Json.Serialization;
 
 namespace AppModels.Products;
 
@@ -21,8 +22,9 @@ public class CreateProductDto
 
     public string Symbol { get; set; }
     public decimal UnitPrice { get; set; }
-    public int DaysToExpire { get; set; }
     public DateTime IssuanceAt { get; set; }
     public DateTime ExpirationAt { get; set; }
     public int Type { get; set; }
+    [JsonIgnore]
+    public int DaysToExpire { get; set; }
 }

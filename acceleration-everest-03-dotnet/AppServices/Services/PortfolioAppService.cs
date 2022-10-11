@@ -67,7 +67,7 @@ public class PortfolioAppService : IPortfolioAppService
         _customerBankInfoAppService.Withdraw(customerId, amount);
         _portfolioService.Deposit(portfolioId, amount);
     }
-    
+
     public IEnumerable<PortfolioResultDto> GetAllPortfolios()
     {
         var portfolios = _portfolioService.GetAllPortfolios();
@@ -177,7 +177,7 @@ public class PortfolioAppService : IPortfolioAppService
         foreach (Portfolio portfolio in portfolios)
         {
             var customer = _customerService.GetCustomerById(portfolio.CustomerId);
-            portfolio.Customer = _mapper.Map<Customer>(customer);            
+            portfolio.Customer = _mapper.Map<Customer>(customer);
 
             try
             {
@@ -204,8 +204,8 @@ public class PortfolioAppService : IPortfolioAppService
             catch (ArgumentException)
             {
                 portfolio.Products = new List<Product>();
-            }        
-                       
+            }
+
             try
             {
                 var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
@@ -219,10 +219,10 @@ public class PortfolioAppService : IPortfolioAppService
 
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
     }
-
-    public bool Invest(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
+    // REVER
+    public bool Invest(CreateOrderDto createOrderDto, decimal amount)
     {
-        var product = _productService.GetProductById(productId);
+        var product = _productService.GetProductById(createOrderDto.ProductId);
 
         if (product != null)
         {
@@ -230,30 +230,49 @@ public class PortfolioAppService : IPortfolioAppService
             _orderAppService.Create(createOrderDto);
         }
 
-        _portfolioProductAppService.Create(new CreatePortfolioProductDto(portfolioId, productId));
+        _portfolioProductAppService.Create(new CreatePortfolioProductDto(createOrderDto.PortfolioId, createOrderDto.ProductId));
 
         if (createOrderDto.LiquidatedAt > DateTime.Today)
             throw new ArgumentException($"The investment will only take place on the liquidation date: {createOrderDto.LiquidatedAt}");
 
-        var result = _portfolioService.Invest(portfolioId, amount);
+        var result = _portfolioService.Invest(createOrderDto.PortfolioId, amount);
 
         return result;
     }
 
-    public bool RedeemToPortfolio(CreateOrderDto createOrderDto, long portfolioId, long productId, decimal amount)
+    public bool RedeemToPortfolio(CreateOrderDto createOrderDto, decimal amount)
     {
         createOrderDto.Direction = OrderDirection.Sell;
         _orderAppService.Create(createOrderDto);
 
         if (createOrderDto.LiquidatedAt > DateTime.Today)
-            throw new ArgumentException($"The amount {amount} was not credited to the portfolio Id {portfolioId}. The order liquidate in a date greater than today");
+            throw new ArgumentException($"The amount {amount} was not credited to the portfolio Id {createOrderDto.PortfolioId}. The order liquidate in a date greater than today");
 
-        var result = _portfolioService.RedeemToPortfolio(portfolioId, amount);
+        var result = _portfolioService.RedeemToPortfolio(createOrderDto.PortfolioId, amount);
 
-        var buyOrder = _orderService.GetOrderByPorfolioIdAndProductId(portfolioId, productId);
+        var orders = _orderService.GetOrderByPorfolioIdAndProductId(createOrderDto.PortfolioId, createOrderDto.ProductId);
+        var sellingQuotes = createOrderDto.Quotes;
+        var boughtQuotes = 0;
 
-        if (buyOrder.Quotes == createOrderDto.Quotes)
-            _portfolioProductService.Delete(portfolioId, productId);
+        foreach (Order order in orders)
+        {
+            if (order.Direction == OrderDirection.Buy)
+            {
+                boughtQuotes += order.Quotes;
+            }
+            else
+            {
+                sellingQuotes += order.Quotes;
+            }
+        }
+
+        foreach (Order order in orders)
+            if (boughtQuotes >= sellingQuotes)
+                if (order.Direction == OrderDirection.Buy)
+                {
+                    _portfolioProductAppService.Delete(createOrderDto.PortfolioId, createOrderDto.ProductId);
+                    boughtQuotes -= order.Quotes;
+                }
 
         return result;
     }

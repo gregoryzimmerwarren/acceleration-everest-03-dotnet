@@ -34,6 +34,7 @@ public class PortfolioProductService : IPortfolioProductService
         var portfolioProduct = GetPortfolioProductByIds(portfolioId, productId);
         var repository = _unitOfWork.Repository<PortfolioProduct>();
         repository.Remove(portfolioProduct);
+        _unitOfWork.SaveChanges();
     }
 
     public IEnumerable<PortfolioProduct> GetAllPortfolioProduct()
@@ -53,7 +54,7 @@ public class PortfolioProductService : IPortfolioProductService
         var repository = _repositoryFactory.Repository<PortfolioProduct>();
         var query = repository.SingleResultQuery().AndFilter(portfolioProduct => portfolioProduct.PortfolioId == portfolioId
         && portfolioProduct.ProductId == productId);
-        var portfolioProduct = repository.SingleOrDefault(query);
+        var portfolioProduct = repository.FirstOrDefault(query);
 
         if (portfolioProduct == null)
             throw new ArgumentException($"No relationship was found between portfolio Id: {portfolioId} and product Id: {productId}");
