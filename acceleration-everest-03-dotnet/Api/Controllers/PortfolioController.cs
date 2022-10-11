@@ -102,7 +102,7 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpGet("getPortfoliosByCustomerId/{id}")]
+    [HttpGet("getPortfoliosByCustomerId/{customerId}")]
     public IActionResult GetPortfoliosByCustomerId(long customerId)
     {
         try

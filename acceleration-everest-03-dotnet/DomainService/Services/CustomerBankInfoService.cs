@@ -27,6 +27,13 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         _unitOfWork.SaveChanges();
     }
 
+    public void Delete(long customerId)
+    {
+        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        repository.Remove(customerBankInfo);
+    }
+
     public void Deposit(long customerId, decimal amount)
     {
         var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);

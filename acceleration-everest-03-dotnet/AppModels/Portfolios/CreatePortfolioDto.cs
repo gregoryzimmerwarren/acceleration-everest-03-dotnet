@@ -9,14 +9,10 @@ public class CreatePortfolioDto
     {
         Name = name;
         Description = description;
-        TotalBalance = 0;
-        AccountBalance = 0;
         CustomerId = customerId;
     }
 
     public string Name { get; set; }
     public string Description { get; set; }
-    public decimal TotalBalance { get; set; }
-    public decimal AccountBalance { get; set; }
     public long CustomerId { get; set; }
 }

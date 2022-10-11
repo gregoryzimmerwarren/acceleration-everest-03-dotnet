@@ -4,6 +4,8 @@ namespace DomainModels.Models;
 
 public class Portfolio : IEntity
 {
+    public Portfolio() { }
+
     public Portfolio(
         string name, 
         string description, 

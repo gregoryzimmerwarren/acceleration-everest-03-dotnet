@@ -55,10 +55,10 @@ public class ProductAppService : IProductAppService
             {
                 portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
             }
-            catch (ArgumentException exception)
+            catch (ArgumentException)
             {
                 continue;
-            }            
+            }
 
             List<Portfolio> portfolios = new();
 
@@ -70,7 +70,7 @@ public class ProductAppService : IProductAppService
 
                     portfolios.Add(portfolio);
                 }
-                catch (ArgumentException exception)
+                catch (ArgumentException)
                 {
                     continue;
                 }
@@ -83,7 +83,7 @@ public class ProductAppService : IProductAppService
                 var orders = _orderService.GetOrdersByPortfolioId(product.Id);
                 product.Orders = _mapper.Map<List<Order>>(orders);
             }
-            catch (ArgumentException exception)
+            catch (ArgumentException)
             {
                 product.Orders = new List<Order>();
             }
@@ -96,37 +96,47 @@ public class ProductAppService : IProductAppService
     {
         var product = _productService.GetProductById(productId);
 
-        var portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
-
-        List<Portfolio> portfolios = new();
-
-        foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
-        {
-            try
-            {
-                var portfolio = _portfolioService.GetPortfolioById(portfolioproduct.PortfolioId);
-
-                portfolios.Add(portfolio);
-            }
-            catch(ArgumentException exception)
-            {
-                continue;
-            }            
-        }
-
-        product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
-
         try
         {
-            var orders = _orderService.GetOrdersByPortfolioId(product.Id);
-            product.Orders = _mapper.Map<List<Order>>(orders);
+            var portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
+
+            List<Portfolio> portfolios = new();
+
+            foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
+            {
+                try
+                {
+                    var portfolio = _portfolioService.GetPortfolioById(portfolioproduct.PortfolioId);
+
+                    portfolios.Add(portfolio);
+                }
+                catch (ArgumentException)
+                {
+                    continue;
+                }
+            }
+
+            product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
+
+            try
+            {
+                var orders = _orderService.GetOrdersByPortfolioId(product.Id);
+                product.Orders = _mapper.Map<List<Order>>(orders);
+            }
+            catch (ArgumentException)
+            {
+                product.Orders = new List<Order>();
+            }
+
+            return _mapper.Map<ProductResultDto>(product);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentException)
         {
+            product.Portfolios = new List<Portfolio>();
             product.Orders = new List<Order>();
+
+            return _mapper.Map<ProductResultDto>(product);
         }
-        
-        return _mapper.Map<ProductResultDto>(product);
     }
 
     public void Update(long productId, UpdateProductDto updateProductDto)

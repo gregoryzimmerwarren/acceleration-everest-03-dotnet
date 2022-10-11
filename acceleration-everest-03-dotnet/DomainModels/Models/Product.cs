@@ -6,6 +6,8 @@ namespace DomainModels.Models;
 
 public class Product : IEntity
 {
+    public Product() { }
+
     public Product(
         string symbol, 
         decimal unitPrice, 

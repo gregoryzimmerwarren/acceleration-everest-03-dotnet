@@ -52,7 +52,7 @@ public class PortfolioProductService : IPortfolioProductService
     {
         var repository = _repositoryFactory.Repository<PortfolioProduct>();
         var query = repository.SingleResultQuery().AndFilter(portfolioProduct => portfolioProduct.PortfolioId == portfolioId
-        || portfolioProduct.ProductId == productId);
+        && portfolioProduct.ProductId == productId);
         var portfolioProduct = repository.SingleOrDefault(query);
 
         if (portfolioProduct == null)

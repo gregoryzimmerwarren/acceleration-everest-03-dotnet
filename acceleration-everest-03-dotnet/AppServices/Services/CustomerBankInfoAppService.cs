@@ -28,6 +28,11 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         _customerBankInfoService.Create(customerId);
     }
 
+    public void Delete(long customerId)
+    {
+        _customerBankInfoService.Delete(customerId);
+    }
+
     public void Deposit(long customerId, decimal amount)
     {
         _customerBankInfoService.Deposit(customerId, amount);

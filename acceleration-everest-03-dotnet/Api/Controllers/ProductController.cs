@@ -33,23 +33,6 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpDelete]
-    public IActionResult Delete(long productId)
-    {
-        try
-        {
-            _productAppService.Delete(productId);
-
-            return NoContent();
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return NotFound(message);
-        }
-    }
-
     [HttpGet]
     public IActionResult GetAllProducts()
     {

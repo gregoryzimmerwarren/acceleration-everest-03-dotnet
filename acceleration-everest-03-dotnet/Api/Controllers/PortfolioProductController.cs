@@ -16,40 +16,6 @@ public class PortfolioProductController : ControllerBase
         _portfolioProductAppServices = portfolioProductAppServices ?? throw new System.ArgumentNullException(nameof(portfolioProductAppServices));
     }
 
-    [HttpPost]
-    public IActionResult Create(CreatePortfolioProductDto portfolioProductToCreate)
-    {
-        try
-        {
-            var id = _portfolioProductAppServices.Create(portfolioProductToCreate);
-
-            return Created("", id);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return BadRequest(message);
-        }
-    }
-
-    [HttpDelete]
-    public IActionResult Delete(long portfolioId, long ProductId)
-    {
-        try
-        {
-            _portfolioProductAppServices.Delete(portfolioId, ProductId);
-
-            return NoContent();
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return NotFound(message);
-        }
-    }
-
     [HttpGet]
     public IActionResult GetAllPortfolioProduct()
     {
@@ -67,7 +33,7 @@ public class PortfolioProductController : ControllerBase
         }
     }
 
-    [HttpGet("getPortfolioProductById/{portfolioProductId}")]
+    [HttpGet("getPortfolioProductByIds")]
     public IActionResult GetPortfolioProductByIds(long portfolioId, long ProductId)
     {
         try

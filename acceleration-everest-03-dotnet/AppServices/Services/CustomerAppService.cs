@@ -39,6 +39,7 @@ public class CustomerAppService : ICustomerAppService
     public void Delete(long customerId)
     {
         _customerService.Delete(customerId);
+        _customerBankInfoService.Delete(customerId);
     }
 
     public IEnumerable<CustomerResultDto> GetAllCustomers()
