@@ -60,9 +60,9 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         return _mapper.Map<CustomerBankInfoResultDto>(customerBankInfo);
     }
 
-    public decimal GetTotalById(long customerId)
+    public decimal GetTotalByCustomerId(long customerId)
     {
-        return _customerBankInfoService.GetTotalById(customerId);
+        return _customerBankInfoService.GetTotalByCustomerId(customerId);
     }
 
     public bool Withdraw(long customerId, decimal amount)

@@ -52,13 +52,13 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("depositInPortfolio/{customerId}")]
-    public IActionResult Deposit(long customerId, long portfolioId, decimal amount, bool amountInBankInfo)
+    public IActionResult Deposit(long customerId, long portfolioId, decimal amount)
     {
         try
         {
-            _portifolioAppService.Deposit(customerId, portfolioId, amount, amountInBankInfo);
+            var message = _portifolioAppService.Deposit(customerId, portfolioId, amount);
 
-            return Ok();
+            return Ok(message);
         }
         catch (ArgumentException exception)
         {

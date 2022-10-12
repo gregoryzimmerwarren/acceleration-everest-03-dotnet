@@ -68,7 +68,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         return customerBankInfo;
     }
 
-    public decimal GetTotalById(long customerId)
+    public decimal GetTotalByCustomerId(long customerId)
     {
         var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
 

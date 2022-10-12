@@ -49,12 +49,12 @@ public class CustomerBankInfoController : ControllerBase
         }
     }
 
-    [HttpGet("{customerBankInfoId}")]
-    public IActionResult GetTotalById(long customerBankInfoId)
+    [HttpGet("getTotalByCustomerId/{customerBankInfoId}")]
+    public IActionResult GetTotalByCustomerId(long customerBankInfoId)
     {
         try
         {
-            var total = _customerBankInfoAppService.GetTotalById(customerBankInfoId);
+            var total = _customerBankInfoAppService.GetTotalByCustomerId(customerBankInfoId);
             return Ok(total);
         }
         catch (ArgumentException exception)

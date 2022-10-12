@@ -8,7 +8,7 @@ public interface IPortfolioAppService
 {
     long Create(CreatePortfolioDto createPortfolioDto);
     void Delete(long portfolioId);
-    void Deposit(long customerId, long portfolioId, decimal amount, bool amountInBankInfo);
+    string Deposit(long customerId, long portfolioId, decimal amount);
     IEnumerable<PortfolioResultDto> GetAllPortfolios();
     PortfolioResultDto GetPortfolioById(long portfolioId);
     IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId);

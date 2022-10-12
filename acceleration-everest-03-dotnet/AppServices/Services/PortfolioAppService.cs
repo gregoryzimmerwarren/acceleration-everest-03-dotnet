@@ -59,13 +59,23 @@ public class PortfolioAppService : IPortfolioAppService
         _portfolioService.Delete(portfolioId);
     }
 
-    public void Deposit(long customerId, long portfolioId, decimal amount, bool amountInBankInfo)
+    public string Deposit(long customerId, long portfolioId, decimal amount)
     {
-        if (amountInBankInfo == false)
+        var totalInBankInfo = _customerBankInfoAppService.GetTotalByCustomerId(customerId);
+
+        if (totalInBankInfo < amount)
+        {
             _customerBankInfoAppService.Deposit(customerId, amount);
 
-        _customerBankInfoAppService.Withdraw(customerId, amount);
-        _portfolioService.Deposit(portfolioId, amount);
+            return "Deposit made in customer bank info";
+        }
+        else
+        {
+            _customerBankInfoAppService.Withdraw(customerId, amount);
+            _portfolioService.Deposit(portfolioId, amount);
+
+            return "Deposit made in portfolio"; ;
+        }        
     }
 
     public IEnumerable<PortfolioResultDto> GetAllPortfolios()
@@ -219,7 +229,7 @@ public class PortfolioAppService : IPortfolioAppService
 
         return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
     }
-    // REVER
+
     public bool Invest(CreateOrderDto createOrderDto, decimal amount)
     {
         var product = _productService.GetProductById(createOrderDto.ProductId);
