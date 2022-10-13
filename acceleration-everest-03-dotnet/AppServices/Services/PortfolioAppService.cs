@@ -240,11 +240,10 @@ public class PortfolioAppService : IPortfolioAppService
             _orderAppService.Create(createOrderDto);
         }
 
-        _portfolioProductAppService.Create(new CreatePortfolioProductDto(createOrderDto.PortfolioId, createOrderDto.ProductId));
-
         if (createOrderDto.LiquidatedAt > DateTime.Today)
             throw new ArgumentException($"The investment will only take place on the liquidation date: {createOrderDto.LiquidatedAt}");
 
+        _portfolioProductAppService.Create(new CreatePortfolioProductDto(createOrderDto.PortfolioId, createOrderDto.ProductId));
         var result = _portfolioService.Invest(createOrderDto.PortfolioId, amount);
 
         return result;
