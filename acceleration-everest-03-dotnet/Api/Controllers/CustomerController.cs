@@ -2,6 +2,7 @@
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -51,11 +52,11 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllCustomers()
+    public async Task<IActionResult> GetAllCustomersAsync()
     {
         try
         {
-            var result = _customerAppService.GetAllCustomers();
+            var result = await _customerAppService.GetAllCustomersAsync().ConfigureAwait(false);
 
             return Ok(result);
         }
@@ -68,11 +69,11 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("{customerId}")]
-    public IActionResult GetByCustomerId(long customerId)
+    public async Task<IActionResult> GetByCustomerIdAsync(long customerId)
     {
         try
         {
-            var result = _customerAppService.GetCustomerById(customerId);
+            var result = await _customerAppService.GetCustomerByIdAsync(customerId).ConfigureAwait(false);
             
             return Ok(result);
         }

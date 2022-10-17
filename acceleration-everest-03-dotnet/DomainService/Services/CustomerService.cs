@@ -2,8 +2,10 @@
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DomainServices.Services;
 
@@ -22,38 +24,39 @@ public class CustomerService : ICustomerService
 
     public long Create(Customer customerToCreate)
     {
-        if (EmailAlreadyExists(customerToCreate))
+        if (EmailAlreadyExistsAsync(customerToCreate).Result)
         {
-            var id = GetIdByEmail(customerToCreate.Email);
+            var id = GetIdByEmailAsync(customerToCreate.Email).Result;
             throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {id}");
         }
 
-        if (CpfAlreadyExists(customerToCreate))
+        if (CpfAlreadyExistsAsync(customerToCreate).Result)
         {
-            var id = GetIdByCpf(customerToCreate.Cpf);
+            var id = GetIdByCpfAsync(customerToCreate.Cpf).Result;
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
         }
 
         var repository = _unitOfWork.Repository<Customer>();
-        repository.Add(customerToCreate);
-        _unitOfWork.SaveChanges();
+        repository.AddAsync(customerToCreate);
+        _unitOfWork.SaveChangesAsync();
 
         return customerToCreate.Id;
     }
 
     public void Delete(long id)
     {
-        var customer = GetCustomerById(id);
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
         _unitOfWork.SaveChanges();
     }
 
-    public IEnumerable<Customer> GetAllCustomers()
+    public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.MultipleResultQuery();
-        var customers = repository.Search(query);
+        var query = repository.MultipleResultQuery()
+            .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
+            .Include(portfolios => portfolios.Portfolios)); ;
+        var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (customers.Count == 0)
             throw new ArgumentException($"No customer found");
@@ -61,11 +64,13 @@ public class CustomerService : ICustomerService
         return customers;
     }
 
-    public Customer GetCustomerById(long id)
+    public async Task<Customer> GetCustomerByIdAsync(long id)
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id);
-        var customer = repository.SingleOrDefault(query);
+        var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id)
+            .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
+            .Include(portfolios => portfolios.Portfolios));
+        var customer =await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (customer == null)
             throw new ArgumentException($"No customer found for Id: {id}");
@@ -80,15 +85,15 @@ public class CustomerService : ICustomerService
         if (!repository.Any(customer => customer.Id == customerToUpdate.Id))
             throw new ArgumentException($"No customer found for Id: {customerToUpdate.Id}");
 
-        if (EmailAlreadyExists(customerToUpdate))
+        if (EmailAlreadyExistsAsync(customerToUpdate).Result)
         {
-            var existingId = GetIdByEmail(customerToUpdate.Email);
+            var existingId = GetIdByEmailAsync(customerToUpdate.Email).Result;
             throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered for Id: {existingId}");
         }
 
-        if (CpfAlreadyExists(customerToUpdate))
+        if (CpfAlreadyExistsAsync(customerToUpdate).Result)
         {
-            var existingId = GetIdByCpf(customerToUpdate.Cpf);
+            var existingId = GetIdByCpfAsync(customerToUpdate.Cpf).Result;
             throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered for Id: {existingId}");
         }
 
@@ -96,27 +101,27 @@ public class CustomerService : ICustomerService
         _unitOfWork.SaveChanges();
     }
 
-    private bool EmailAlreadyExists(Customer customerToCheck)
+    private async Task<bool> EmailAlreadyExistsAsync(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.Any(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id);
+        var query = await repository.AnyAsync(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id).ConfigureAwait(false);
 
         return query;
     }
 
-    private bool CpfAlreadyExists(Customer customerToCheck)
+    private async Task<bool> CpfAlreadyExistsAsync(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = repository.Any(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id);
+        var query = await repository.AnyAsync(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id).ConfigureAwait(false);
 
         return query;
     }
 
-    private long GetIdByCpf(string cpf)
+    private async Task<long> GetIdByCpfAsync(string cpf)
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Cpf == cpf);
-        var customer = repository.SingleOrDefault(query);
+        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (customer == null)
             throw new ArgumentException($"No customer found for Cpf: {cpf}");
@@ -124,11 +129,11 @@ public class CustomerService : ICustomerService
         return customer.Id;
     }
 
-    private long GetIdByEmail(string email)
+    private async Task<long> GetIdByEmailAsync(string email)
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Email == email);
-        var customer = repository.SingleOrDefault(query);
+        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (customer == null)
             throw new ArgumentException($"No customer found for Email: {email}");

@@ -1,25 +1,22 @@
 ﻿using AppModels.CustomersBankInfo;
 using AppServices.Interfaces;
 using AutoMapper;
-using DomainModels.Models;
 using DomainServices.Interfaces;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Services;
 
 public class CustomerBankInfoAppService : ICustomerBankInfoAppService
 {
     private readonly ICustomerBankInfoService _customerBankInfoService;
-    private readonly ICustomerService _customerService;
     private readonly IMapper _mapper;
 
     public CustomerBankInfoAppService(
         ICustomerBankInfoService customerBankInfoService,
-        ICustomerService customerService,
         IMapper mapper)
     {
         _customerBankInfoService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
-        _customerService = customerService ?? throw new System.ArgumentNullException(nameof(customerService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
@@ -38,24 +35,16 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         _customerBankInfoService.Deposit(customerId, amount);
     }
 
-    public IEnumerable<CustomerBankInfoResult> GetAllCustomersBankInfo()
+    public async Task<IEnumerable<CustomerBankInfoResult>> GetAllCustomersBankInfoAsync()
     {
-        var customersBankInfo = _customerBankInfoService.GetAllCustomersBankInfo();
-
-        foreach (CustomerBankInfo customerBankInfo in customersBankInfo)
-        {
-            var customer = _customerService.GetCustomerById(customerBankInfo.CustomerId);
-            customerBankInfo.Customer = _mapper.Map<Customer>(customer);
-        }
+        var customersBankInfo = await _customerBankInfoService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
 
         return _mapper.Map<IEnumerable<CustomerBankInfoResult>>(customersBankInfo);
     }
 
-    public CustomerBankInfoResult GetCustomerBankInfoByCustomerId(long customerId)
+    public async Task<CustomerBankInfoResult> GetCustomerBankInfoByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customerId);
-        var customer = _customerService.GetCustomerById(customerId);
-        customerBankInfo.Customer = _mapper.Map<Customer>(customer);
+        var customerBankInfo = await _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         return _mapper.Map<CustomerBankInfoResult>(customerBankInfo);
     }

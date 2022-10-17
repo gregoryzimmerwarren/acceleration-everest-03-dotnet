@@ -2,8 +2,10 @@
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DomainServices.Services;
 
@@ -29,14 +31,14 @@ public class CustomerBankInfoService : ICustomerBankInfoService
 
     public void Delete(long customerId)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
         repository.Remove(customerBankInfo);
     }
 
     public void Deposit(long customerId, decimal amount)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
         customerBankInfo.AccountBalance += amount;
 
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
@@ -44,11 +46,12 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         _unitOfWork.SaveChanges();
     }
 
-    public IEnumerable<CustomerBankInfo> GetAllCustomersBankInfo()
+    public async Task<IEnumerable<CustomerBankInfo>> GetAllCustomersBankInfoAsync()
     {
         var repository = _repositoryFactory.Repository<CustomerBankInfo>();
-        var query = repository.MultipleResultQuery();
-        var customersBankInfos = repository.Search(query);
+        var query = repository.MultipleResultQuery()
+            .Include(bankInfo => bankInfo.Include(customer => customer.Customer));
+        var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (customersBankInfos.Count == 0)
             throw new ArgumentException($"No customers bank infos found");
@@ -56,11 +59,12 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         return customersBankInfos;
     }
 
-    public CustomerBankInfo GetCustomerBankInfoByCustomerId(long customerId)
+    public async Task<CustomerBankInfo> GetCustomerBankInfoByCustomerIdAsync(long customerId)
     {
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
-        var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId);
-        var customerBankInfo = repository.SingleOrDefault(query);
+        var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId)
+            .Include(bankInfo => bankInfo.Include(customer => customer.Customer));
+        var customerBankInfo = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (customerBankInfo == null)
             throw new ArgumentException($"No customer found for Id: {customerId}");
@@ -70,7 +74,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
 
     public decimal GetTotalByCustomerId(long customerId)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
 
         if (customerBankInfo == null)
             throw new ArgumentException($"No bank information found for customer Id: {customerId}");
@@ -80,7 +84,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
 
     public bool Withdraw(long customerId, decimal amount)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerId(customerId);
+        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
 
         if (customerBankInfo == null)
             throw new ArgumentException($"No bank information found for customer Id: {customerId}");

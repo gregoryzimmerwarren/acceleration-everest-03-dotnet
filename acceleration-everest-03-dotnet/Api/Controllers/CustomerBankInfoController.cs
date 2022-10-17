@@ -1,6 +1,7 @@
 ﻿using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -33,11 +34,11 @@ public class CustomerBankInfoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllCustomersBankInfo()
+    public async Task<IActionResult> GetAllCustomersBankInfoAsync()
     {
         try
         {
-            var result = _customerBankInfoAppService.GetAllCustomersBankInfo();
+            var result = await _customerBankInfoAppService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
 
             return Ok(result);
         }
