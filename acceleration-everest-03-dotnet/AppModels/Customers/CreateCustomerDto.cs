@@ -5,6 +5,8 @@ namespace AppModels.Customers;
 
 public class CreateCustomerDto
 {
+    public CreateCustomerDto() { }
+
     public CreateCustomerDto(
         string fullName,
         string email,
