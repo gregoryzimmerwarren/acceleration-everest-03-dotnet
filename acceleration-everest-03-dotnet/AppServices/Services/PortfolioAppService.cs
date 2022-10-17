@@ -45,13 +45,11 @@ public class PortfolioAppService : IPortfolioAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreatePortfolioDto createPortfolioDto)
+    public long Create(CreatePortfolio createPortfolioDto)
     {
-        var portfolioMapeado = _mapper.Map<Portfolio>(createPortfolioDto);
-        portfolioMapeado.AccountBalance = 0;
-        portfolioMapeado.TotalBalance = 0;
+        var mappedPortfolio = _mapper.Map<Portfolio>(createPortfolioDto);
 
-        return _portfolioService.Create(portfolioMapeado);
+        return _portfolioService.Create(mappedPortfolio);
     }
 
     public void Delete(long portfolioId)
@@ -78,7 +76,7 @@ public class PortfolioAppService : IPortfolioAppService
         }        
     }
 
-    public IEnumerable<PortfolioResultDto> GetAllPortfolios()
+    public IEnumerable<PortfolioResult> GetAllPortfolios()
     {
         var portfolios = _portfolioService.GetAllPortfolios();
 
@@ -127,10 +125,10 @@ public class PortfolioAppService : IPortfolioAppService
             }
         }
 
-        return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
+        return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
-    public PortfolioResultDto GetPortfolioById(long portfolioId)
+    public PortfolioResult GetPortfolioById(long portfolioId)
     {
         var portfolio = _portfolioService.GetPortfolioById(portfolioId);
 
@@ -169,18 +167,18 @@ public class PortfolioAppService : IPortfolioAppService
                 portfolio.Orders = new List<Order>();
             }
 
-            return _mapper.Map<PortfolioResultDto>(portfolio);
+            return _mapper.Map<PortfolioResult>(portfolio);
         }
         catch (ArgumentException)
         {
             portfolio.Products = new List<Product>();
             portfolio.Orders = new List<Order>();
 
-            return _mapper.Map<PortfolioResultDto>(portfolio);
+            return _mapper.Map<PortfolioResult>(portfolio);
         }
     }
 
-    public IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId)
+    public IEnumerable<PortfolioResult> GetPortfoliosByCustomerId(long customerId)
     {
         var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
 
@@ -227,10 +225,10 @@ public class PortfolioAppService : IPortfolioAppService
             }
         }
 
-        return _mapper.Map<IEnumerable<PortfolioResultDto>>(portfolios);
+        return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
-    public bool Invest(CreateOrderDto createOrderDto, decimal amount)
+    public bool Invest(CreateOrder createOrderDto, decimal amount)
     {
         var product = _productService.GetProductById(createOrderDto.ProductId);
 
@@ -243,13 +241,13 @@ public class PortfolioAppService : IPortfolioAppService
         if (createOrderDto.LiquidatedAt > DateTime.Today)
             throw new ArgumentException($"The investment will only take place on the liquidation date: {createOrderDto.LiquidatedAt}");
 
-        _portfolioProductAppService.Create(new CreatePortfolioProductDto(createOrderDto.PortfolioId, createOrderDto.ProductId));
+        _portfolioProductAppService.Create(new CreatePortfolioProduct(createOrderDto.PortfolioId, createOrderDto.ProductId));
         var result = _portfolioService.Invest(createOrderDto.PortfolioId, amount);
 
         return result;
     }
 
-    public bool RedeemToPortfolio(CreateOrderDto createOrderDto, decimal amount)
+    public bool RedeemToPortfolio(CreateOrder createOrderDto, decimal amount)
     {
         createOrderDto.Direction = OrderDirection.Sell;
         _orderAppService.Create(createOrderDto);

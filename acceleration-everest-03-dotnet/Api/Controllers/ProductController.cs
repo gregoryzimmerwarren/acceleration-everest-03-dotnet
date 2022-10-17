@@ -17,13 +17,13 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateProductDto productToCreate)
+    public IActionResult Create(CreateProduct productToCreate)
     {
         try
         {
             var id = _productAppService.Create(productToCreate);
 
-            return Created("", id);
+            return Created("Id:", id);
         }
         catch (ArgumentException exception)
         {
@@ -68,7 +68,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(long productId, UpdateProductDto productToUpdate)
+    public IActionResult Update(long productId, UpdateProduct productToUpdate)
     {
         try
         {

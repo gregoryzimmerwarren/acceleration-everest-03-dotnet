@@ -8,7 +8,7 @@ public class PortfolioProductProfile : Profile
 {
     public PortfolioProductProfile()
     {
-        CreateMap<PortfolioProduct, PortfolioProductResultDto>();
-        CreateMap<CreatePortfolioProductDto, PortfolioProduct>();
+        CreateMap<PortfolioProduct, PortfolioProductResult>();
+        CreateMap<CreatePortfolioProduct, PortfolioProduct>();
     }
 }

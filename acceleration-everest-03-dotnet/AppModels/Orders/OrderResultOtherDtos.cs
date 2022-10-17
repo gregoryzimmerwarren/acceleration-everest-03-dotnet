@@ -5,7 +5,7 @@ namespace AppModels.Orders;
 
 public class OrderResultOtherDtos
 {
-    public OrderResultOtherDtos() { }
+    protected OrderResultOtherDtos() { }
 
     public OrderResultOtherDtos(
         long id,
@@ -18,7 +18,7 @@ public class OrderResultOtherDtos
         Quotes = quotes;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
-        Direction = GetEnumName(direction);
+        Direction = Enum.GetName(direction);
     }
 
     public long Id { get; set; }
@@ -26,12 +26,4 @@ public class OrderResultOtherDtos
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
     public string Direction { get; set; }
-
-    private static string GetEnumName(OrderDirection direction)
-    {
-        if (direction == OrderDirection.Buy)
-            return "Buy";
-
-        return "Sell";
-    }
 }

@@ -5,10 +5,10 @@ namespace AppServices.Interfaces;
 
 public interface IOrderAppService
 {
-    long Create(CreateOrderDto createOrderDto);
-    IEnumerable<OrderResultDto> GetAllOrders();
-    OrderResultDto GetOrderById(long orderId);
-    IEnumerable<OrderResultDto> GetOrdersByPorfolioIdAndProductId(long portfolioId, long productId);
-    IEnumerable<OrderResultDto> GetOrdersByPortfolioId(long portfolioId);
-    IEnumerable<OrderResultDto> GetOrdersByProductId(long productId);
+    long Create(CreateOrder createOrderDto);
+    IEnumerable<OrderResult> GetAllOrders();
+    OrderResult GetOrderById(long orderId);
+    IEnumerable<OrderResult> GetOrdersByPorfolioIdAndProductId(long portfolioId, long productId);
+    IEnumerable<OrderResult> GetOrdersByPortfolioId(long portfolioId);
+    IEnumerable<OrderResult> GetOrdersByProductId(long productId);
 }

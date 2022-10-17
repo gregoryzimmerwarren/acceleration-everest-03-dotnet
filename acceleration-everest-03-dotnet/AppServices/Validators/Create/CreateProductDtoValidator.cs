@@ -4,7 +4,7 @@ using System;
 
 namespace AppServices.Validators.Create
 {
-    public class CreateProductDtoValidator : AbstractValidator<CreateProductDto>
+    public class CreateProductDtoValidator : AbstractValidator<CreateProduct>
     {
         public CreateProductDtoValidator()
         {

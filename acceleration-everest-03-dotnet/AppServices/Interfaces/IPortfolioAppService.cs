@@ -6,13 +6,13 @@ namespace AppServices.Interfaces;
 
 public interface IPortfolioAppService
 {
-    long Create(CreatePortfolioDto createPortfolioDto);
+    long Create(CreatePortfolio createPortfolioDto);
     void Delete(long portfolioId);
     string Deposit(long customerId, long portfolioId, decimal amount);
-    IEnumerable<PortfolioResultDto> GetAllPortfolios();
-    PortfolioResultDto GetPortfolioById(long portfolioId);
-    IEnumerable<PortfolioResultDto> GetPortfoliosByCustomerId(long customerId);
-    bool Invest(CreateOrderDto createOrderDto, decimal amount);
-    bool RedeemToPortfolio(CreateOrderDto createOrderDto, decimal amount);
+    IEnumerable<PortfolioResult> GetAllPortfolios();
+    PortfolioResult GetPortfolioById(long portfolioId);
+    IEnumerable<PortfolioResult> GetPortfoliosByCustomerId(long customerId);
+    bool Invest(CreateOrder createOrderDto, decimal amount);
+    bool RedeemToPortfolio(CreateOrder createOrderDto, decimal amount);
     bool WithdrawFromPortfolio(long customerId, long portfolioId, decimal amount);
 }

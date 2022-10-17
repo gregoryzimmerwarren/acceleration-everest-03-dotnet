@@ -30,12 +30,12 @@ public class ProductAppService : IProductAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateProductDto createProductDto)
+    public long Create(CreateProduct createProductDto)
     {
-        var productMapeado = _mapper.Map<Product>(createProductDto);
-        productMapeado.DaysToExpire = (productMapeado.ExpirationAt.Subtract(productMapeado.IssuanceAt)).Days;
+        var mappedProduct = _mapper.Map<Product>(createProductDto);
+        mappedProduct.DaysToExpire = (mappedProduct.ExpirationAt.Subtract(mappedProduct.IssuanceAt)).Days;
 
-        return _productService.Create(productMapeado);
+        return _productService.Create(mappedProduct);
     }
 
     public void Delete(long productId)
@@ -43,7 +43,7 @@ public class ProductAppService : IProductAppService
         _productService.Delete(productId);
     }
 
-    public IEnumerable<ProductResultDto> GetAllProducts()
+    public IEnumerable<ProductResult> GetAllProducts()
     {
         var products = _productService.GetAllProducts();
 
@@ -89,10 +89,10 @@ public class ProductAppService : IProductAppService
             }
         }
 
-        return _mapper.Map<IEnumerable<ProductResultDto>>(products);
+        return _mapper.Map<IEnumerable<ProductResult>>(products);
     }
 
-    public ProductResultDto GetProductById(long productId)
+    public ProductResult GetProductById(long productId)
     {
         var product = _productService.GetProductById(productId);
 
@@ -128,22 +128,22 @@ public class ProductAppService : IProductAppService
                 product.Orders = new List<Order>();
             }
 
-            return _mapper.Map<ProductResultDto>(product);
+            return _mapper.Map<ProductResult>(product);
         }
         catch (ArgumentException)
         {
             product.Portfolios = new List<Portfolio>();
             product.Orders = new List<Order>();
 
-            return _mapper.Map<ProductResultDto>(product);
+            return _mapper.Map<ProductResult>(product);
         }
     }
 
-    public void Update(long productId, UpdateProductDto updateProductDto)
+    public void Update(long productId, UpdateProduct updateProductDto)
     {
-        var productMapeado = _mapper.Map<Product>(updateProductDto);
-        productMapeado.Id = productId;
+        var mappedProduct = _mapper.Map<Product>(updateProductDto);
+        mappedProduct.Id = productId;
 
-        _productService.Update(productMapeado);
+        _productService.Update(mappedProduct);
     }
 }

@@ -18,13 +18,13 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreatePortfolioDto portfolioToCreate)
+    public IActionResult Create(CreatePortfolio portfolioToCreate)
     {
         try
         {
             var id = _portifolioAppService.Create(portfolioToCreate);
 
-            return Created("", id);
+            return Created("Id:", id);
         }
         catch (ArgumentException exception)
         {
@@ -120,7 +120,7 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("invest/{customerId}")]
-    public IActionResult Invest(CreateOrderDto createOrderDto, decimal amount)
+    public IActionResult Invest(CreateOrder createOrderDto, decimal amount)
     {
         try
         {
@@ -137,7 +137,7 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("redeemToPortfolio/{customerId}")]
-    public IActionResult RedeemToPortfolio(CreateOrderDto createOrderDto, decimal amount)
+    public IActionResult RedeemToPortfolio(CreateOrder createOrderDto, decimal amount)
     {
         try
         {

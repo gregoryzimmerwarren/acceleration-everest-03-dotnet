@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace AppModels.Orders;
 
-public class CreateOrderDto
+public class CreateOrder
 {
-    public CreateOrderDto(
+    public CreateOrder(
         int quotes, 
         DateTime liquidatedAt, 
         long portfolioId, 

@@ -3,9 +3,9 @@ using System;
 
 namespace AppModels.Customers;
 
-public class CreateCustomerDto
+public class UpdateCustomer
 {
-    public CreateCustomerDto(
+    public UpdateCustomer(
         string fullName,
         string email,
         string emailConfirmation,

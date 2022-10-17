@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AppServices.Validators.Update;
 
-public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
+public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomer>
 {
     public UpdateCustomerDtoValidator()
     {

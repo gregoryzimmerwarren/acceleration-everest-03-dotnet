@@ -1,4 +1,4 @@
-﻿using AppModels.Customers;
+﻿    using AppModels.Customers;
 using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
@@ -26,10 +26,10 @@ public class CustomerAppService : ICustomerAppService
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateCustomerDto createCustomerDto)
+    public long Create(CreateCustomer createCustomerDto)
     {
-        var customerMapeado = _mapper.Map<Customer>(createCustomerDto);
-        var newCustomerId = _customerService.Create(customerMapeado);
+        var mappedCustomer = _mapper.Map<Customer>(createCustomerDto);
+        var newCustomerId = _customerService.Create(mappedCustomer);
 
         _customerBankInfoService.Create(newCustomerId);
 
@@ -42,7 +42,7 @@ public class CustomerAppService : ICustomerAppService
         _customerService.Delete(customerId);
     }
 
-    public IEnumerable<CustomerResultDto> GetAllCustomers()
+    public IEnumerable<CustomerResult> GetAllCustomers()
     {
         var customers = _customerService.GetAllCustomers();
 
@@ -55,10 +55,10 @@ public class CustomerAppService : ICustomerAppService
             customer.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
         }
 
-        return _mapper.Map<IEnumerable<CustomerResultDto>>(customers);
+        return _mapper.Map<IEnumerable<CustomerResult>>(customers);
     }
 
-    public CustomerResultDto GetCustomerById(long customerId)
+    public CustomerResult GetCustomerById(long customerId)
     {
         var customer = _customerService.GetCustomerById(customerId);
 
@@ -68,14 +68,14 @@ public class CustomerAppService : ICustomerAppService
         var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
         customer.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
 
-        return _mapper.Map<CustomerResultDto>(customer);
+        return _mapper.Map<CustomerResult>(customer);
     }
 
-    public void Update(long customerId, UpdateCustomerDto updateCustomerDto)
+    public void Update(long customerId, UpdateCustomer updateCustomerDto)
     {
-        var customerMapeado = _mapper.Map<Customer>(updateCustomerDto);
-        customerMapeado.Id = customerId;
+        var mappedCustomer = _mapper.Map<Customer>(updateCustomerDto);
+        mappedCustomer.Id = customerId;
 
-        _customerService.Update(customerMapeado);
+        _customerService.Update(mappedCustomer);
     }
 }

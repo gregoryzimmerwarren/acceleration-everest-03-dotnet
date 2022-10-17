@@ -8,8 +8,8 @@ public class PortfolioProfile : Profile
 {   
     public PortfolioProfile()
     {
-        CreateMap<Portfolio, PortfolioResultDto>();
+        CreateMap<Portfolio, PortfolioResult>();
         CreateMap<Portfolio, PortfolioResultForOthersDtos>();
-        CreateMap<CreatePortfolioDto, Portfolio>();
+        CreateMap<CreatePortfolio, Portfolio>();
     }
 }

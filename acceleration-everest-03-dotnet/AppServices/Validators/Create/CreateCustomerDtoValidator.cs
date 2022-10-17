@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AppServices.Validators.Create;
 
-public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
+public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomer>
 {
     public CreateCustomerDtoValidator()
     {

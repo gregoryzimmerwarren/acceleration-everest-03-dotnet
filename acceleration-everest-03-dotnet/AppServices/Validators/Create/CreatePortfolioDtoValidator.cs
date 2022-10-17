@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AppServices.Validators.Create;
 
-public class CreatePortfolioDtoValidator : AbstractValidator<CreatePortfolioDto>
+public class CreatePortfolioDtoValidator : AbstractValidator<CreatePortfolio>
 {
     public CreatePortfolioDtoValidator()
     {

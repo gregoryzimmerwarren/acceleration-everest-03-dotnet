@@ -5,11 +5,11 @@ using System;
 
 namespace AppModels.Orders;
 
-public class OrderResultDto
+public class OrderResult
 {
-    public OrderResultDto() { }
+    protected OrderResult() { }
 
-    public OrderResultDto(
+    public OrderResult(
         long id, 
         int quotes, 
         decimal netValue, 
@@ -22,7 +22,7 @@ public class OrderResultDto
         Quotes = quotes;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
-        Direction = GetEnumName(direction);
+        Direction = Enum.GetName(direction);
         Portfolio = portfolio;
         Product = product;
     }
@@ -34,12 +34,4 @@ public class OrderResultDto
     public string Direction { get; set; }
     public PortfolioResultForOthersDtos Portfolio { get; set; }
     public ProductResultForOthersDtos Product { get; set; }
-
-    private static string GetEnumName(OrderDirection direction)
-    {
-        if (direction == OrderDirection.Buy)
-            return "Buy";
-
-        return "Sell";
-    }
 }

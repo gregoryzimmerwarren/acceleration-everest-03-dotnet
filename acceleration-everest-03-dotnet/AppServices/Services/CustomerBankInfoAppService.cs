@@ -38,7 +38,7 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         _customerBankInfoService.Deposit(customerId, amount);
     }
 
-    public IEnumerable<CustomerBankInfoResultDto> GetAllCustomersBankInfo()
+    public IEnumerable<CustomerBankInfoResult> GetAllCustomersBankInfo()
     {
         var customersBankInfo = _customerBankInfoService.GetAllCustomersBankInfo();
 
@@ -48,16 +48,16 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
             customerBankInfo.Customer = _mapper.Map<Customer>(customer);
         }
 
-        return _mapper.Map<IEnumerable<CustomerBankInfoResultDto>>(customersBankInfo);
+        return _mapper.Map<IEnumerable<CustomerBankInfoResult>>(customersBankInfo);
     }
 
-    public CustomerBankInfoResultDto GetCustomerBankInfoByCustomerId(long customerId)
+    public CustomerBankInfoResult GetCustomerBankInfoByCustomerId(long customerId)
     {
         var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customerId);
         var customer = _customerService.GetCustomerById(customerId);
         customerBankInfo.Customer = _mapper.Map<Customer>(customer);
 
-        return _mapper.Map<CustomerBankInfoResultDto>(customerBankInfo);
+        return _mapper.Map<CustomerBankInfoResult>(customerBankInfo);
     }
 
     public decimal GetTotalByCustomerId(long customerId)

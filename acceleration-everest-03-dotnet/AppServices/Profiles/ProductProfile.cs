@@ -8,9 +8,9 @@ public class ProductProfile : Profile
 {
     public ProductProfile()
     {
-        CreateMap<Product, ProductResultDto>();
+        CreateMap<Product, ProductResult>();
         CreateMap<Product, ProductResultForOthersDtos>();
-        CreateMap<CreateProductDto, Product>();
-        CreateMap<UpdateProductDto, Product>();
+        CreateMap<CreateProduct, Product>();
+        CreateMap<UpdateProduct, Product>();
     }
 }

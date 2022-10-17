@@ -8,7 +8,7 @@ public class CustomerBankInfoProfile : Profile
 {
     public CustomerBankInfoProfile()
     {
-        CreateMap<CustomerBankInfo, CustomerBankInfoResultDto>();
+        CreateMap<CustomerBankInfo, CustomerBankInfoResult>();
         CreateMap<CustomerBankInfo, CustomerBankInfoResultForOthersDtos>();
     }
 }

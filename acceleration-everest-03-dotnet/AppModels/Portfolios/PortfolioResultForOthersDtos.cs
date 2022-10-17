@@ -1,12 +1,8 @@
-﻿using AppModels.Orders;
-using AppModels.Products;
-using System.Collections.Generic;
-
-namespace AppModels.Portfolios;
+﻿namespace AppModels.Portfolios;
 
 public class PortfolioResultForOthersDtos
 {
-    public PortfolioResultForOthersDtos() { }
+    protected PortfolioResultForOthersDtos() { }
 
     public PortfolioResultForOthersDtos(
         long id,

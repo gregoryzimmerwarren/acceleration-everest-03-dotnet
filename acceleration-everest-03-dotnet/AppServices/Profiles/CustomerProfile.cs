@@ -8,9 +8,9 @@ public class CustomerProfile : Profile
 {
     public CustomerProfile()
     {
-        CreateMap<Customer, CustomerResultDto>();
+        CreateMap<Customer, CustomerResult>();
         CreateMap<Customer, CustomerResultForOtherDtos>();
-        CreateMap<CreateCustomerDto, Customer>();
-        CreateMap<UpdateCustomerDto, Customer>();
+        CreateMap<CreateCustomer, Customer>();
+        CreateMap<UpdateCustomer, Customer>();
     }
 }

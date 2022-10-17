@@ -2,9 +2,9 @@
 
 namespace AppModels.Products;
 
-public class UpdateProductDto
+public class UpdateProduct
 {
-    public UpdateProductDto(
+    public UpdateProduct(
     string symbol,
     decimal unitPrice,
     DateTime expirationAt)

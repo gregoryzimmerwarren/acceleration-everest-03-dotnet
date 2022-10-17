@@ -5,9 +5,9 @@ namespace AppServices.Interfaces;
 
 public interface IProductAppService
 {
-    long Create(CreateProductDto createProductDto);
+    long Create(CreateProduct createProductDto);
     void Delete(long productId);
-    IEnumerable<ProductResultDto> GetAllProducts();
-    ProductResultDto GetProductById(long productId);
-    void Update(long productId, UpdateProductDto updateProductDto);
+    IEnumerable<ProductResult> GetAllProducts();
+    ProductResult GetProductById(long productId);
+    void Update(long productId, UpdateProduct updateProductDto);
 }

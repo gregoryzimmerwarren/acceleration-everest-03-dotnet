@@ -17,7 +17,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateCustomerDto customerToCreate)
+    public IActionResult Create(CreateCustomer customerToCreate)
     {
         try
         {
@@ -85,7 +85,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(long customerId, UpdateCustomerDto customerToUpdate)
+    public IActionResult Update(long customerId, UpdateCustomer customerToUpdate)
     {
         try
         {

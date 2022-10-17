@@ -2,16 +2,16 @@
 
 public class CustomerBankInfoResultForOthersDtos
 {
-public CustomerBankInfoResultForOthersDtos() { }
+    protected CustomerBankInfoResultForOthersDtos() { }
 
-public CustomerBankInfoResultForOthersDtos(
-    long id,
-    decimal accountBalance)
-{
-    Id = id;
-    AccountBalance = accountBalance;
-}
+    public CustomerBankInfoResultForOthersDtos(
+        long id,
+        decimal accountBalance)
+    {
+        Id = id;
+        AccountBalance = accountBalance;
+    }
 
-public long Id { get; set; }
-public decimal AccountBalance { get; set; }
+    public long Id { get; set; }
+    public decimal AccountBalance { get; set; }
 }

@@ -26,16 +26,16 @@ public class OrderAppService : IOrderAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateOrderDto createOrderDto)
+    public long Create(CreateOrder createOrderDto)
     {
-        var orderMapeada = _mapper.Map<Order>(createOrderDto);
-        var unitPrice = _productService.GetProductById(orderMapeada.ProductId).UnitPrice;
-        orderMapeada.NetValue = orderMapeada.Quotes * unitPrice;
+        var mappedOrder = _mapper.Map<Order>(createOrderDto);
+        var unitPrice = _productService.GetProductById(mappedOrder.ProductId).UnitPrice;
+        mappedOrder.NetValue = mappedOrder.Quotes * unitPrice;
 
-        return _orderService.Create(orderMapeada);
+        return _orderService.Create(mappedOrder);
     }
 
-    public IEnumerable<OrderResultDto> GetAllOrders()
+    public IEnumerable<OrderResult> GetAllOrders()
     {
         var orders = _orderService.GetAllOrders();
 
@@ -48,10 +48,10 @@ public class OrderAppService : IOrderAppService
             order.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
     }
 
-    public OrderResultDto GetOrderById(long orderId)
+    public OrderResult GetOrderById(long orderId)
     {
         var order = _orderService.GetOrderById(orderId);
 
@@ -61,10 +61,10 @@ public class OrderAppService : IOrderAppService
         var product = _productService.GetProductById(order.ProductId);
         order.Product = _mapper.Map<Product>(product);
 
-        return _mapper.Map<OrderResultDto>(order);
+        return _mapper.Map<OrderResult>(order);
     }
 
-    public IEnumerable<OrderResultDto> GetOrdersByPorfolioIdAndProductId(long portfolioId, long productId)
+    public IEnumerable<OrderResult> GetOrdersByPorfolioIdAndProductId(long portfolioId, long productId)
     {
         var orders = _orderService.GetOrderByPorfolioIdAndProductId(portfolioId, productId);
 
@@ -77,10 +77,10 @@ public class OrderAppService : IOrderAppService
             order.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
     }
 
-    public IEnumerable<OrderResultDto> GetOrdersByPortfolioId(long portfolioId)
+    public IEnumerable<OrderResult> GetOrdersByPortfolioId(long portfolioId)
     {
         var orders = _orderService.GetOrdersByPortfolioId(portfolioId);
 
@@ -93,10 +93,10 @@ public class OrderAppService : IOrderAppService
             order.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
     }
 
-    public IEnumerable<OrderResultDto> GetOrdersByProductId(long productId)
+    public IEnumerable<OrderResult> GetOrdersByProductId(long productId)
     {
         var orders = _orderService.GetOrdersByProductId(productId);
 
@@ -109,6 +109,6 @@ public class OrderAppService : IOrderAppService
             order.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
     }
 }

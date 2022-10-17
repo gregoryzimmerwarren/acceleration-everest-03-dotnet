@@ -26,11 +26,11 @@ public class PortfolioProductAppService : IPortfolioProductAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreatePortfolioProductDto createPortfolioProductDto)
+    public long Create(CreatePortfolioProduct createPortfolioProductDto)
     {
-        var portfolioProductMapeado = _mapper.Map<PortfolioProduct>(createPortfolioProductDto);
+        var mappedPortfolioProduct = _mapper.Map<PortfolioProduct>(createPortfolioProductDto);
 
-        return _portfolioProductService.Create(portfolioProductMapeado);
+        return _portfolioProductService.Create(mappedPortfolioProduct);
     }
 
     public void Delete(long portfolioId, long ProductId)
@@ -38,7 +38,7 @@ public class PortfolioProductAppService : IPortfolioProductAppService
         _portfolioProductService.Delete(portfolioId, ProductId);
     }
 
-    public IEnumerable<PortfolioProductResultDto> GetAllPortfolioProduct()
+    public IEnumerable<PortfolioProductResult> GetAllPortfolioProduct()
     {
         var portfoliosProducts = _portfolioProductService.GetAllPortfolioProduct();
 
@@ -51,10 +51,10 @@ public class PortfolioProductAppService : IPortfolioProductAppService
             portfolioProduct.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<PortfolioProductResultDto>>(portfoliosProducts);
+        return _mapper.Map<IEnumerable<PortfolioProductResult>>(portfoliosProducts);
     }
 
-    public PortfolioProductResultDto GetPortfolioProductByIds(long portfolioId, long ProductId)
+    public PortfolioProductResult GetPortfolioProductByIds(long portfolioId, long ProductId)
     {
         var portfolioProduct = _portfolioProductService.GetPortfolioProductByIds(portfolioId, ProductId);
 
@@ -64,10 +64,10 @@ public class PortfolioProductAppService : IPortfolioProductAppService
         var product = _productService.GetProductById(portfolioProduct.ProductId);
         portfolioProduct.Product = _mapper.Map<Product>(product);
 
-        return _mapper.Map<PortfolioProductResultDto>(portfolioProduct);
+        return _mapper.Map<PortfolioProductResult>(portfolioProduct);
     }
 
-    public IEnumerable<PortfolioProductResultDto> GetPortfolioProductByProductId(long productId)
+    public IEnumerable<PortfolioProductResult> GetPortfolioProductByProductId(long productId)
     {
         var portfoliosProducts = _portfolioProductService.GetPortfolioProductByProductId(productId);
 
@@ -80,10 +80,10 @@ public class PortfolioProductAppService : IPortfolioProductAppService
             portfolioProduct.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<PortfolioProductResultDto>>(portfoliosProducts);
+        return _mapper.Map<IEnumerable<PortfolioProductResult>>(portfoliosProducts);
     }
 
-    public IEnumerable<PortfolioProductResultDto> GetPortfolioProductByPortfolioId(long portfolioId)
+    public IEnumerable<PortfolioProductResult> GetPortfolioProductByPortfolioId(long portfolioId)
     {
         var portfoliosProducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolioId);
 
@@ -96,6 +96,6 @@ public class PortfolioProductAppService : IPortfolioProductAppService
             portfolioProduct.Product = _mapper.Map<Product>(product);
         }
 
-        return _mapper.Map<IEnumerable<PortfolioProductResultDto>>(portfoliosProducts);
+        return _mapper.Map<IEnumerable<PortfolioProductResult>>(portfoliosProducts);
     }
 }

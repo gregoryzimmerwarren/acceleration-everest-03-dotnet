@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace AppModels.Products;
 
-public class CreateProductDto
+public class CreateProduct
 {
-    public CreateProductDto(
+    public CreateProduct(
         string symbol, 
         decimal unitPrice,
         DateTime issuanceAt, 
