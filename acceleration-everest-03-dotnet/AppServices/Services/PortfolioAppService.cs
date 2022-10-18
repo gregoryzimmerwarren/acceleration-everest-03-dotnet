@@ -84,7 +84,7 @@ public class PortfolioAppService : IPortfolioAppService
         return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
-    // TODO rever criação de order
+    /* TODO rever criação de order .... criar mais três métodos: compra e venda de orders e get all orders do dia */
     public async Task<bool> InvestAsync(CreateOrder createOrderDto, decimal amount)
     {
         var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId).ConfigureAwait(false);
@@ -110,7 +110,7 @@ public class PortfolioAppService : IPortfolioAppService
         createOrderDto.Direction = OrderDirection.Sell;
         await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
 
-        if (createOrderDto.LiquidatedAt > DateTime.Today)
+        if (createOrderDto.LiquidatedAt < DateTime.Today)
             throw new ArgumentException($"The amount {amount} was not credited to the portfolio Id {createOrderDto.PortfolioId}. The order liquidate in a date greater than today");
 
         var result = await _portfolioService.RedeemToPortfolioAsync(createOrderDto.PortfolioId, amount).ConfigureAwait(false);
