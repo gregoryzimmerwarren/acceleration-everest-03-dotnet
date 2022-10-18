@@ -3,6 +3,7 @@ using AppModels.Portfolios;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -28,56 +29,66 @@ public class PortfolioController : ControllerBase
         }
         catch (ArgumentException exception)
         {
+            return BadRequest(exception);
+        }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAsync(long portfolioId)
+    {
+        try
+        {
+            await _portifolioAppService.DeleteAsync(portfolioId).ConfigureAwait(false);
+
+            return NoContent();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
+        }
+        catch (ArgumentException exception)
+        {
             var message = exception.InnerException?.Message ?? exception.Message;
 
             return BadRequest(message);
         }
     }
 
-    [HttpDelete]
-    public IActionResult Delete(long portfolioId)
-    {
-        try
-        {
-            _portifolioAppService.Delete(portfolioId);
-
-            return NoContent();
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return NotFound(message);
-        }
-    }
-
     [HttpPatch("depositInPortfolio/{customerId}")]
-    public IActionResult Deposit(long customerId, long portfolioId, decimal amount)
+    public async Task<IActionResult> DepositAsync(long customerId, long portfolioId, decimal amount)
     {
         try
         {
-            var message = _portifolioAppService.Deposit(customerId, portfolioId, amount);
+            await _portifolioAppService.DepositAsync(customerId, portfolioId, amount).ConfigureAwait(false);
 
-            return Ok(message);
+            return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
-            return NotFound(message);
+            return BadRequest(message);
         }
     }
 
     [HttpGet]
-    public IActionResult GetAllPortfolios()
+    public async Task<IActionResult> GetAllPortfoliosAsync()
     {
         try
         {
-            var result = _portifolioAppService.GetAllPortfolios();
+            var result = await _portifolioAppService.GetAllPortfoliosAsync().ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -86,15 +97,15 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpGet("{portfolioId}")]
-    public IActionResult GetPortfolioById(long portfolioId)
+    public async Task<IActionResult> GetPortfolioByIdAsync(long portfolioId)
     {
         try
         {
-            var result = _portifolioAppService.GetPortfolioById(portfolioId);
+            var result = await _portifolioAppService.GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -103,15 +114,15 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpGet("getPortfoliosByCustomerId/{customerId}")]
-    public IActionResult GetPortfoliosByCustomerId(long customerId)
+    public async Task<IActionResult> GetPortfoliosByCustomerIdAsync(long customerId)
     {
         try
         {
-            var result = _portifolioAppService.GetPortfoliosByCustomerId(customerId);
+            var result = await _portifolioAppService.GetPortfoliosByCustomerIdAsync(customerId).ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -120,53 +131,71 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("invest/{customerId}")]
-    public IActionResult Invest(CreateOrder createOrderDto, decimal amount)
+    public async Task<IActionResult> InvestAsync(CreateOrder createOrderDto, decimal amount)
     {
         try
         {
-            _portifolioAppService.Invest(createOrderDto, amount);
+            await _portifolioAppService.InvestAsync(createOrderDto, amount).ConfigureAwait(false);
 
             return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
-            return NotFound(message);
+            return BadRequest(message);
         }
     }
 
     [HttpPatch("redeemToPortfolio/{customerId}")]
-    public IActionResult RedeemToPortfolio(CreateOrder createOrderDto, decimal amount)
+    public async Task<IActionResult> RedeemToPortfolioAsync(CreateOrder createOrderDto, decimal amount)
     {
         try
         {
-            _portifolioAppService.RedeemToPortfolio(createOrderDto, amount);
+            await _portifolioAppService.RedeemToPortfolioAsync(createOrderDto, amount).ConfigureAwait(false);
 
             return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
-            return NotFound(message);
+            return BadRequest(message);
         }
     }
 
     [HttpPatch("withdrawFromPortfolio/{customerId}")]
-    public IActionResult WithdrawFromPortfolio(long customerId, long portfolioId, decimal amount)
+    public async Task<IActionResult> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)
     {
         try
         {
-            _portifolioAppService.WithdrawFromPortfolio(customerId, portfolioId, amount);
+            await _portifolioAppService.WithdrawFromPortfolioAsync(customerId, portfolioId, amount).ConfigureAwait(false);
 
             return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
-            return NotFound(message);
+            return BadRequest(message);
         }
     }
 }

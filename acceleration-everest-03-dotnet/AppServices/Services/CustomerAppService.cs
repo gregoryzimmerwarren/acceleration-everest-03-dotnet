@@ -24,20 +24,20 @@ public class CustomerAppService : ICustomerAppService
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateCustomer createCustomerDto)
+    public async Task<long> CreateAsync(CreateCustomer createCustomerDto)
     {
         var mappedCustomer = _mapper.Map<Customer>(createCustomerDto);
-        var newCustomerId = _customerService.Create(mappedCustomer);
+        var newCustomerId = await _customerService.CreateAsync(mappedCustomer).ConfigureAwait(false);
 
         _customerBankInfoAppService.Create(newCustomerId);
 
         return newCustomerId;
     }
 
-    public void Delete(long customerId)
+    public async Task DeleteAsync(long customerId)
     {
-        _customerBankInfoAppService.Delete(customerId);
-        _customerService.Delete(customerId);
+        await _customerBankInfoAppService.DeleteAsync(customerId).ConfigureAwait(false);
+        await _customerService.DeleteAsync(customerId).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<CustomerResult>> GetAllCustomersAsync()
@@ -54,11 +54,11 @@ public class CustomerAppService : ICustomerAppService
         return _mapper.Map<CustomerResult>(customer);
     }
 
-    public void Update(long customerId, UpdateCustomer updateCustomerDto)
+    public async Task UpdateAsync(long customerId, UpdateCustomer updateCustomerDto)
     {
         var mappedCustomer = _mapper.Map<Customer>(updateCustomerDto);
         mappedCustomer.Id = customerId;
 
-        _customerService.Update(mappedCustomer);
+        await _customerService.UpdateAsync(mappedCustomer).ConfigureAwait(false);
     }
 }

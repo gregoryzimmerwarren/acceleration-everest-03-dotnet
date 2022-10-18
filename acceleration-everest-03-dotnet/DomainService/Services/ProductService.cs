@@ -2,8 +2,10 @@
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DomainServices.Services;
 
@@ -29,34 +31,40 @@ public class ProductService : IProductService
         return productToCreate.Id;
     }
 
-    public void Delete(long id)
+    public async Task DeleteAsync(long id)
     {
-        var product = GetProductById(id);
+        var product = await GetProductByIdAsync(id).ConfigureAwait(false);
         var repository = _unitOfWork.Repository<Product>();
         repository.Remove(product);
         _unitOfWork.SaveChanges();
     }
 
-    public IEnumerable<Product> GetAllProducts()
+    public async Task<IEnumerable<Product>> GetAllProductsAsync()
     {
         var repository = _repositoryFactory.Repository<Product>();
-        var query = repository.MultipleResultQuery();
-        var products = repository.Search(query);
+        var query = repository.MultipleResultQuery()
+            .Include(product => product.Include(order => order.Orders)
+            .Include(portfolio => portfolio.Portfolios)
+            .Include(portfolioProduct => portfolioProduct.PortfolioProducts));
+        var products = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (products.Count == 0)
-            throw new ArgumentException($"No product found");
+            throw new ArgumentNullException($"No product found");
 
         return products;
     }
 
-    public Product GetProductById(long id)
+    public async Task<Product> GetProductByIdAsync(long id)
     {
         var repository = _repositoryFactory.Repository<Product>();
-        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
-        var product = repository.SingleOrDefault(query);
+        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id)
+            .Include(product => product.Include(order => order.Orders)
+            .Include(portfolio => portfolio.Portfolios)
+            .Include(portfolioProduct => portfolioProduct.PortfolioProducts));
+        var product = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (product == null)
-            throw new ArgumentException($"No product found for Id: {id}");
+            throw new ArgumentNullException($"No product found for Id: {id}");
 
         return product;
     }

@@ -18,11 +18,11 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateCustomer customerToCreate)
+    public async Task<IActionResult> CreateAsync(CreateCustomer customerToCreate)
     {
         try
         {
-            var id = _customerAppService.Create(customerToCreate);
+            var id = await _customerAppService.CreateAsync(customerToCreate).ConfigureAwait(false); ;
             
             return Created("Id:", id);
         }
@@ -35,12 +35,12 @@ public class CustomerController : ControllerBase
     }
 
     [HttpDelete]
-    public IActionResult Delete(long customerId)
+    public async Task<IActionResult> DeleteAsync(long customerId)
     {
         try
         {
-            _customerAppService.Delete(customerId);
-            
+            await _customerAppService.DeleteAsync(customerId).ConfigureAwait(false);
+
             return NoContent();
         }
         catch (ArgumentException exception)
@@ -60,7 +60,7 @@ public class CustomerController : ControllerBase
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
             
@@ -77,7 +77,7 @@ public class CustomerController : ControllerBase
             
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
             
@@ -86,19 +86,25 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(long customerId, UpdateCustomer customerToUpdate)
+    public async Task<IActionResult> UpdateAsync(long customerId, UpdateCustomer customerToUpdate)
     {
         try
         {
-            _customerAppService.Update(customerId, customerToUpdate);
+            await _customerAppService.UpdateAsync(customerId, customerToUpdate).ConfigureAwait(false);
             
             return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
             
-            return NotFound(message);
+            return BadRequest(message);
         }
     }
 }

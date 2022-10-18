@@ -25,14 +25,14 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         _customerBankInfoService.Create(customerId);
     }
 
-    public void Delete(long customerId)
+    public async Task DeleteAsync(long customerId)
     {
-        _customerBankInfoService.Delete(customerId);
+        await _customerBankInfoService.DeleteAsync(customerId).ConfigureAwait(false);
     }
 
-    public void Deposit(long customerId, decimal amount)
+    public async Task DepositAsync(long customerId, decimal amount)
     {
-        _customerBankInfoService.Deposit(customerId, amount);
+        await _customerBankInfoService.DepositAsync(customerId, amount).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<CustomerBankInfoResult>> GetAllCustomersBankInfoAsync()
@@ -49,14 +49,14 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         return _mapper.Map<CustomerBankInfoResult>(customerBankInfo);
     }
 
-    public decimal GetTotalByCustomerId(long customerId)
+    public async Task<decimal> GetTotalByCustomerIdAsync(long customerId)
     {
-        return _customerBankInfoService.GetTotalByCustomerId(customerId);
+        return await _customerBankInfoService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
     }
 
-    public bool Withdraw(long customerId, decimal amount)
+    public async Task<bool> WithdrawAsync(long customerId, decimal amount)
     {
-        var result = _customerBankInfoService.Withdraw(customerId, amount);
+        var result = await _customerBankInfoService.WithdrawAsync(customerId, amount).ConfigureAwait(false);
 
         return result;
     }

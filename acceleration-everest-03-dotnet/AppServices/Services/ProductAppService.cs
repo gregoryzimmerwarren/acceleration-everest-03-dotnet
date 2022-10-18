@@ -3,30 +3,21 @@ using AppServices.Interfaces;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Services;
 
 public class ProductAppService : IProductAppService
 {
-    private readonly IPortfolioProductService _portfolioProductService;
-    private readonly IPortfolioService _portfolioService;
     private readonly IProductService _productService;
-    private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
     public ProductAppService(
-        IPortfolioProductService portfolioProductService,
-        IPortfolioService portfolioService,
         IProductService productService,
-        IOrderService orderService,
         IMapper mapper)
     {
-        _portfolioProductService = portfolioProductService ?? throw new System.ArgumentNullException(nameof(portfolioProductService));
-        _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
         _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
-        _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
@@ -38,105 +29,23 @@ public class ProductAppService : IProductAppService
         return _productService.Create(mappedProduct);
     }
 
-    public void Delete(long productId)
+    public async Task DeleteAsync(long productId)
     {
-        _productService.Delete(productId);
+        await _productService.DeleteAsync(productId).ConfigureAwait(false);
     }
 
-    public IEnumerable<ProductResult> GetAllProducts()
+    public async Task<IEnumerable<ProductResult>> GetAllProductsAsync()
     {
-        var products = _productService.GetAllProducts();
-
-        foreach (Product product in products)
-        {
-            IEnumerable<PortfolioProduct> portfoliosproducts;
-
-            try
-            {
-                portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
-            }
-            catch (ArgumentException)
-            {
-                continue;
-            }
-
-            List<Portfolio> portfolios = new();
-
-            foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
-            {
-                try
-                {
-                    var portfolio = _portfolioService.GetPortfolioById(portfolioproduct.PortfolioId);
-
-                    portfolios.Add(portfolio);
-                }
-                catch (ArgumentException)
-                {
-                    continue;
-                }
-            }
-
-            product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
-
-            try
-            {
-                var orders = _orderService.GetOrdersByPortfolioId(product.Id);
-                product.Orders = _mapper.Map<List<Order>>(orders);
-            }
-            catch (ArgumentException)
-            {
-                product.Orders = new List<Order>();
-            }
-        }
+        var products = await _productService.GetAllProductsAsync().ConfigureAwait(false);
 
         return _mapper.Map<IEnumerable<ProductResult>>(products);
     }
 
-    public ProductResult GetProductById(long productId)
+    public async Task<ProductResult> GetProductByIdAsync(long productId)
     {
-        var product = _productService.GetProductById(productId);
+        var product = await _productService.GetProductByIdAsync(productId).ConfigureAwait(false);
 
-        try
-        {
-            var portfoliosproducts = _portfolioProductService.GetPortfolioProductByProductId(product.Id);
-
-            List<Portfolio> portfolios = new();
-
-            foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
-            {
-                try
-                {
-                    var portfolio = _portfolioService.GetPortfolioById(portfolioproduct.PortfolioId);
-
-                    portfolios.Add(portfolio);
-                }
-                catch (ArgumentException)
-                {
-                    continue;
-                }
-            }
-
-            product.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
-
-            try
-            {
-                var orders = _orderService.GetOrdersByPortfolioId(product.Id);
-                product.Orders = _mapper.Map<List<Order>>(orders);
-            }
-            catch (ArgumentException)
-            {
-                product.Orders = new List<Order>();
-            }
-
-            return _mapper.Map<ProductResult>(product);
-        }
-        catch (ArgumentException)
-        {
-            product.Portfolios = new List<Portfolio>();
-            product.Orders = new List<Order>();
-
-            return _mapper.Map<ProductResult>(product);
-        }
+        return _mapper.Map<ProductResult>(product);
     }
 
     public void Update(long productId, UpdateProduct updateProductDto)

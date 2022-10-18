@@ -6,9 +6,9 @@ namespace DomainServices.Interfaces;
 
 public interface ICustomerService
 {
-    long Create(Customer customerToCreate);
-    void Delete(long id);
+    Task<long> CreateAsync(Customer customerToCreate);
+    Task DeleteAsync(long id);
     Task<IEnumerable<Customer>> GetAllCustomersAsync();
     Task<Customer> GetCustomerByIdAsync(long id);
-    void Update(Customer customerToUpdate);
+    Task UpdateAsync(Customer customerToUpdate);
 }

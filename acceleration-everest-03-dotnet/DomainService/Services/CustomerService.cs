@@ -22,29 +22,30 @@ public class CustomerService : ICustomerService
         _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
     }
 
-    public long Create(Customer customerToCreate)
+    public async Task<long> CreateAsync(Customer customerToCreate)
     {
-        if (EmailAlreadyExistsAsync(customerToCreate).Result)
+        if (await EmailAlreadyExistsAsync(customerToCreate).ConfigureAwait(false))
         {
-            var id = GetIdByEmailAsync(customerToCreate.Email).Result;
+            var id = await GetIdByEmailAsync(customerToCreate.Email).ConfigureAwait(false);
             throw new ArgumentException($"Email: {customerToCreate.Email} is already registered for Id: {id}");
         }
 
-        if (CpfAlreadyExistsAsync(customerToCreate).Result)
+        if (await CpfAlreadyExistsAsync(customerToCreate).ConfigureAwait(false))
         {
-            var id = GetIdByCpfAsync(customerToCreate.Cpf).Result;
+            var id = await GetIdByCpfAsync(customerToCreate.Cpf).ConfigureAwait(false);
             throw new ArgumentException($"Cpf: {customerToCreate.Cpf} is already registered for Id: {id}"); ;
         }
 
         var repository = _unitOfWork.Repository<Customer>();
-        repository.AddAsync(customerToCreate);
-        _unitOfWork.SaveChangesAsync();
+        repository.Add(customerToCreate);
+        _unitOfWork.SaveChanges();
 
         return customerToCreate.Id;
     }
 
-    public void Delete(long id)
+    public async Task DeleteAsync(long id)
     {
+        var customer = await GetCustomerByIdAsync(id).ConfigureAwait(false);
         var repository = _unitOfWork.Repository<Customer>();
         repository.Remove(customer);
         _unitOfWork.SaveChanges();
@@ -55,11 +56,11 @@ public class CustomerService : ICustomerService
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.MultipleResultQuery()
             .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
-            .Include(portfolios => portfolios.Portfolios)); ;
+            .Include(portfolios => portfolios.Portfolios));
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (customers.Count == 0)
-            throw new ArgumentException($"No customer found");
+            throw new ArgumentNullException($"No customer found");
 
         return customers;
     }
@@ -70,30 +71,30 @@ public class CustomerService : ICustomerService
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id)
             .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
             .Include(portfolios => portfolios.Portfolios));
-        var customer =await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
+        var customer = await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (customer == null)
-            throw new ArgumentException($"No customer found for Id: {id}");
+            throw new ArgumentNullException($"No customer found for Id: {id}");
 
         return customer;
     }
 
-    public void Update(Customer customerToUpdate)
+    public async Task UpdateAsync(Customer customerToUpdate)
     {
         var repository = _unitOfWork.Repository<Customer>();
 
         if (!repository.Any(customer => customer.Id == customerToUpdate.Id))
-            throw new ArgumentException($"No customer found for Id: {customerToUpdate.Id}");
+            throw new ArgumentNullException($"No customer found for Id: {customerToUpdate.Id}");
 
-        if (EmailAlreadyExistsAsync(customerToUpdate).Result)
+        if (await EmailAlreadyExistsAsync(customerToUpdate).ConfigureAwait(false))
         {
-            var existingId = GetIdByEmailAsync(customerToUpdate.Email).Result;
+            var existingId = GetIdByEmailAsync(customerToUpdate.Email);
             throw new ArgumentException($"Email: {customerToUpdate.Email} is already registered for Id: {existingId}");
         }
 
-        if (CpfAlreadyExistsAsync(customerToUpdate).Result)
+        if (await CpfAlreadyExistsAsync(customerToUpdate).ConfigureAwait(false))
         {
-            var existingId = GetIdByCpfAsync(customerToUpdate.Cpf).Result;
+            var existingId = GetIdByCpfAsync(customerToUpdate.Cpf);
             throw new ArgumentException($"Cpf: {customerToUpdate.Cpf} is already registered for Id: {existingId}");
         }
 

@@ -29,16 +29,16 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         _unitOfWork.SaveChanges();
     }
 
-    public void Delete(long customerId)
+    public async Task DeleteAsync(long customerId)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
         repository.Remove(customerBankInfo);
     }
 
-    public void Deposit(long customerId, decimal amount)
+    public async Task DepositAsync(long customerId, decimal amount)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
         customerBankInfo.AccountBalance += amount;
 
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
@@ -54,7 +54,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (customersBankInfos.Count == 0)
-            throw new ArgumentException($"No customers bank infos found");
+            throw new ArgumentNullException($"No customers bank infos found");
 
         return customersBankInfos;
     }
@@ -67,27 +67,27 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         var customerBankInfo = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (customerBankInfo == null)
-            throw new ArgumentException($"No customer found for Id: {customerId}");
+            throw new ArgumentNullException($"No customer found for Id: {customerId}");
 
         return customerBankInfo;
     }
 
-    public decimal GetTotalByCustomerId(long customerId)
+    public async Task<decimal> GetTotalByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         if (customerBankInfo == null)
-            throw new ArgumentException($"No bank information found for customer Id: {customerId}");
+            throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
 
         return customerBankInfo.AccountBalance;
     }
 
-    public bool Withdraw(long customerId, decimal amount)
+    public async Task<bool> WithdrawAsync(long customerId, decimal amount)
     {
-        var customerBankInfo = GetCustomerBankInfoByCustomerIdAsync(customerId).Result;
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         if (customerBankInfo == null)
-            throw new ArgumentException($"No bank information found for customer Id: {customerId}");
+            throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
 
         if (customerBankInfo.AccountBalance < amount)
             throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");

@@ -6,9 +6,9 @@ namespace AppServices.Interfaces;
 
 public interface ICustomerAppService
 {
-    long Create(CreateCustomer postCustomerDto);
-    void Delete(long customerId);
+    Task<long> CreateAsync(CreateCustomer postCustomerDto);
+    Task DeleteAsync(long customerId);
     Task<IEnumerable<CustomerResult>> GetAllCustomersAsync();
     Task<CustomerResult> GetCustomerByIdAsync(long customerId);
-    void Update(long customerId, UpdateCustomer putCustomerDto);
+    Task UpdateAsync(long customerId, UpdateCustomer putCustomerDto);
 }

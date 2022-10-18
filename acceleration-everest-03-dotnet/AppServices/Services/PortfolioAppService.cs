@@ -8,6 +8,7 @@ using DomainModels.Models;
 using DomainServices.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Services;
 
@@ -15,32 +16,26 @@ public class PortfolioAppService : IPortfolioAppService
 {
     private readonly IPortfolioProductAppService _portfolioProductAppService;
     private readonly ICustomerBankInfoAppService _customerBankInfoAppService;
-    private readonly IPortfolioProductService _portfolioProductService;
+    private readonly IProductAppService _productAppService;
     private readonly IPortfolioService _portfolioService;
     private readonly IOrderAppService _orderAppService;
-    private readonly ICustomerService _customerService;
-    private readonly IProductService _productService;
     private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
     public PortfolioAppService(
         IPortfolioProductAppService portfolioProductAppService,
         ICustomerBankInfoAppService customerBankInfoService,
-        IPortfolioProductService portfolioProductService,
+        IProductAppService productAppService,
         IPortfolioService portfolioService,
         IOrderAppService orderAppService,
-        ICustomerService customerService,
-        IProductService productService,
         IOrderService orderService,
         IMapper mapper)
     {
         _portfolioProductAppService = portfolioProductAppService ?? throw new System.ArgumentNullException(nameof(portfolioProductAppService));
         _customerBankInfoAppService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
-        _portfolioProductService = portfolioProductService ?? throw new System.ArgumentNullException(nameof(portfolioProductService));
+        _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
         _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
         _orderAppService = orderAppService ?? throw new System.ArgumentNullException(nameof(orderAppService));
-        _customerService = customerService ?? throw new System.ArgumentNullException(nameof(customerService));
-        _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
         _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
@@ -52,212 +47,75 @@ public class PortfolioAppService : IPortfolioAppService
         return _portfolioService.Create(mappedPortfolio);
     }
 
-    public void Delete(long portfolioId)
+    public async Task DeleteAsync(long portfolioId)
     {
-        _portfolioService.Delete(portfolioId);
+        await _portfolioService.DeleteAsync(portfolioId).ConfigureAwait(false);
     }
 
-    public string Deposit(long customerId, long portfolioId, decimal amount)
+    public async Task DepositAsync(long customerId, long portfolioId, decimal amount)
     {
-        var totalInBankInfo = _customerBankInfoAppService.GetTotalByCustomerId(customerId);
+        var totalInBankInfo = await _customerBankInfoAppService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         if (totalInBankInfo < amount)
-        {
-            _customerBankInfoAppService.Deposit(customerId, amount);
+            throw new ArgumentException($"The customer bank info does not enough value to make this deposit. Current value: {totalInBankInfo}");
 
-            return "Deposit made in customer bank info";
-        }
-        else
-        {
-            _customerBankInfoAppService.Withdraw(customerId, amount);
-            _portfolioService.Deposit(portfolioId, amount);
-
-            return "Deposit made in portfolio"; ;
-        }        
+        await _customerBankInfoAppService.WithdrawAsync(customerId, amount).ConfigureAwait(false);
+        await _portfolioService.DepositAsync(portfolioId, amount).ConfigureAwait(false);
     }
 
-    public IEnumerable<PortfolioResult> GetAllPortfolios()
+    public async Task<IEnumerable<PortfolioResult>> GetAllPortfoliosAsync()
     {
-        var portfolios = _portfolioService.GetAllPortfolios();
-
-        foreach (Portfolio portfolio in portfolios)
-        {
-            var customer = _customerService.GetCustomerById(portfolio.CustomerId);
-            portfolio.Customer = _mapper.Map<Customer>(customer);
-
-            IEnumerable<PortfolioProduct> portfoliosproducts;
-
-            try
-            {
-                portfoliosproducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolio.Id);
-            }
-            catch (ArgumentException)
-            {
-                continue;
-            }
-
-            List<Product> products = new();
-
-            foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
-            {
-                try
-                {
-                    var product = _productService.GetProductById(portfolioproduct.ProductId);
-
-                    products.Add(product);
-                }
-                catch (ArgumentException)
-                {
-                    continue;
-                }
-            }
-
-            portfolio.Products = _mapper.Map<List<Product>>(products);
-
-            try
-            {
-                var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
-                portfolio.Orders = _mapper.Map<List<Order>>(orders);
-            }
-            catch (ArgumentException)
-            {
-                portfolio.Orders = new List<Order>();
-            }
-        }
+        var portfolios = await _portfolioService.GetAllPortfoliosAsync().ConfigureAwait(false);
 
         return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
-    public PortfolioResult GetPortfolioById(long portfolioId)
+    public async Task<PortfolioResult> GetPortfolioByIdAsync(long portfolioId)
     {
-        var portfolio = _portfolioService.GetPortfolioById(portfolioId);
+        var portfolio = await _portfolioService.GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
-        var customer = _customerService.GetCustomerById(portfolio.CustomerId);
-        portfolio.Customer = _mapper.Map<Customer>(customer);
-
-        try
-        {
-            var portfoliosproducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolio.Id);
-
-            List<Product> products = new();
-
-            foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
-            {
-                try
-                {
-                    var product = _productService.GetProductById(portfolioproduct.ProductId);
-
-                    products.Add(product);
-                }
-                catch (ArgumentException)
-                {
-                    continue;
-                }
-            }
-
-            portfolio.Products = _mapper.Map<List<Product>>(products);
-
-            try
-            {
-                var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
-                portfolio.Orders = _mapper.Map<List<Order>>(orders);
-            }
-            catch (ArgumentException)
-            {
-                portfolio.Orders = new List<Order>();
-            }
-
-            return _mapper.Map<PortfolioResult>(portfolio);
-        }
-        catch (ArgumentException)
-        {
-            portfolio.Products = new List<Product>();
-            portfolio.Orders = new List<Order>();
-
-            return _mapper.Map<PortfolioResult>(portfolio);
-        }
+        return _mapper.Map<PortfolioResult>(portfolio);
     }
 
-    public IEnumerable<PortfolioResult> GetPortfoliosByCustomerId(long customerId)
+    public async Task<IEnumerable<PortfolioResult>> GetPortfoliosByCustomerIdAsync(long customerId)
     {
-        var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
-
-        foreach (Portfolio portfolio in portfolios)
-        {
-            var customer = _customerService.GetCustomerById(portfolio.CustomerId);
-            portfolio.Customer = _mapper.Map<Customer>(customer);
-
-            try
-            {
-                var portfoliosproducts = _portfolioProductService.GetPortfolioProductByPortfolioId(portfolio.Id);
-
-                List<Product> products = new();
-
-                foreach (PortfolioProduct portfolioproduct in portfoliosproducts)
-                {
-                    try
-                    {
-                        var product = _productService.GetProductById(portfolioproduct.ProductId);
-
-                        products.Add(product);
-                    }
-                    catch (ArgumentException)
-                    {
-                        continue;
-                    }
-                }
-
-                portfolio.Products = _mapper.Map<List<Product>>(products);
-            }
-            catch (ArgumentException)
-            {
-                portfolio.Products = new List<Product>();
-            }
-
-            try
-            {
-                var orders = _orderService.GetOrdersByPortfolioId(portfolio.Id);
-                portfolio.Orders = _mapper.Map<List<Order>>(orders);
-            }
-            catch (ArgumentException)
-            {
-                portfolio.Orders = new List<Order>();
-            }
-        }
+        var portfolios = await _portfolioService.GetPortfoliosByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
-    public bool Invest(CreateOrder createOrderDto, decimal amount)
+    // TODO rever criação de order
+    public async Task<bool> InvestAsync(CreateOrder createOrderDto, decimal amount)
     {
-        var product = _productService.GetProductById(createOrderDto.ProductId);
+        var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId).ConfigureAwait(false);
 
         if (product != null)
         {
             createOrderDto.Direction = OrderDirection.Buy;
-            _orderAppService.Create(createOrderDto);
+            await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
         }
 
         if (createOrderDto.LiquidatedAt > DateTime.Today)
             throw new ArgumentException($"The investment will only take place on the liquidation date: {createOrderDto.LiquidatedAt}");
 
         _portfolioProductAppService.Create(new CreatePortfolioProduct(createOrderDto.PortfolioId, createOrderDto.ProductId));
-        var result = _portfolioService.Invest(createOrderDto.PortfolioId, amount);
+        var result = await _portfolioService.InvestAsync(createOrderDto.PortfolioId, amount).ConfigureAwait(false);
 
         return result;
     }
-
-    public bool RedeemToPortfolio(CreateOrder createOrderDto, decimal amount)
+    
+    // TODO rever criação de order
+    public async Task<bool> RedeemToPortfolioAsync(CreateOrder createOrderDto, decimal amount)
     {
         createOrderDto.Direction = OrderDirection.Sell;
-        _orderAppService.Create(createOrderDto);
+        await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
 
         if (createOrderDto.LiquidatedAt > DateTime.Today)
             throw new ArgumentException($"The amount {amount} was not credited to the portfolio Id {createOrderDto.PortfolioId}. The order liquidate in a date greater than today");
 
-        var result = _portfolioService.RedeemToPortfolio(createOrderDto.PortfolioId, amount);
+        var result = await _portfolioService.RedeemToPortfolioAsync(createOrderDto.PortfolioId, amount).ConfigureAwait(false);
 
-        var orders = _orderService.GetOrderByPorfolioIdAndProductId(createOrderDto.PortfolioId, createOrderDto.ProductId);
+        var orders = await _orderService.GetOrderByPorfolioIdAndProductIdAsync(createOrderDto.PortfolioId, createOrderDto.ProductId).ConfigureAwait(false);
         var sellingQuotes = createOrderDto.Quotes;
         var boughtQuotes = 0;
 
@@ -277,17 +135,17 @@ public class PortfolioAppService : IPortfolioAppService
             if (boughtQuotes >= sellingQuotes)
                 if (order.Direction == OrderDirection.Buy)
                 {
-                    _portfolioProductAppService.Delete(createOrderDto.PortfolioId, createOrderDto.ProductId);
+                    await _portfolioProductAppService.DeleteAsync(createOrderDto.PortfolioId, createOrderDto.ProductId).ConfigureAwait(false);
                     boughtQuotes -= order.Quotes;
                 }
 
         return result;
     }
 
-    public bool WithdrawFromPortfolio(long customerId, long portfolioId, decimal amount)
+    public async Task<bool> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)
     {
-        var result = _portfolioService.WithdrawFromPortfolio(portfolioId, amount);
-        _customerBankInfoAppService.Deposit(customerId, amount);
+        var result = await _portfolioService.WithdrawFromPortfolioAsync(portfolioId, amount).ConfigureAwait(false); ;
+        await _customerBankInfoAppService.DepositAsync(customerId, amount).ConfigureAwait(false); ;
 
         return result;
     }

@@ -1,13 +1,14 @@
 ﻿using AppModels.Products;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Interfaces;
 
 public interface IProductAppService
 {
     long Create(CreateProduct createProductDto);
-    void Delete(long productId);
-    IEnumerable<ProductResult> GetAllProducts();
-    ProductResult GetProductById(long productId);
+    Task DeleteAsync(long productId);
+    Task<IEnumerable<ProductResult>> GetAllProductsAsync();
+    Task<ProductResult> GetProductByIdAsync(long productId);
     void Update(long productId, UpdateProduct updateProductDto);
 }
