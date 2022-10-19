@@ -10,16 +10,16 @@ namespace AppServices.Services;
 
 public class OrderAppService : IOrderAppService
 {
-    private readonly IProductService _productService;
+    private readonly IProductAppService _productAppService;
     private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
     public OrderAppService(
-        IProductService productService, 
+        IProductAppService productAppService, 
         IOrderService orderService, 
         IMapper mapper)
     {
-        _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
+        _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
         _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
@@ -27,12 +27,12 @@ public class OrderAppService : IOrderAppService
     public async Task<long> CreateAsync(CreateOrder createOrderDto)
     {
         var mappedOrder = _mapper.Map<Order>(createOrderDto);
-        var produt = await _productService.GetProductByIdAsync(mappedOrder.ProductId).ConfigureAwait(false);
+        var produt = await _productAppService.GetProductByIdAsync(mappedOrder.ProductId).ConfigureAwait(false);
         var unitPrice = produt.UnitPrice;
         mappedOrder.NetValue = mappedOrder.Quotes * unitPrice;
 
         return _orderService.Create(mappedOrder);
-    }
+    }    
 
     public async Task<IEnumerable<OrderResult>> GetAllOrdersAsync()
     {

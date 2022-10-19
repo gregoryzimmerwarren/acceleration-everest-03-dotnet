@@ -1,0 +1,21 @@
+﻿using EntityFrameworkCore.UnitOfWork.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Infrastructure.Data.DependencyInjections
+{
+    public static class InfrastructureDataExtensions
+    {
+        public static IServiceCollection AddInfrastructureDataDependecyInjections(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<WarrenEverestDotnetDbContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
+
+            return services;
+        }
+    }
+}
