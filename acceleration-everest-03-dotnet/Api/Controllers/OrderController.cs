@@ -2,6 +2,7 @@
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -16,33 +17,16 @@ public class OrderController : ControllerBase
         _orderAppService = orderAppService ?? throw new System.ArgumentNullException(nameof(orderAppService));
     }
 
-    [HttpPost]
-    public IActionResult Create(CreateOrderDto orderToCreate)
-    {
-        try
-        {
-            var id = _orderAppService.Create(orderToCreate);
-
-            return Created("", id);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return BadRequest(message);
-        }
-    }
-
     [HttpGet]
-    public IActionResult GetAllOrders()
+    public async Task<IActionResult> GetAllOrdersAsync()
     {
         try
         {
-            var result = _orderAppService.GetAllOrders();
+            var result = await _orderAppService.GetAllOrdersAsync().ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -51,15 +35,15 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{orderId}")]
-    public IActionResult GetOrderById(long orderId)
+    public async Task<IActionResult> GetOrderByIdAsync(long orderId)
     {
         try
         {
-            var result = _orderAppService.GetOrderById(orderId);
+            var result = await _orderAppService.GetOrderByIdAsync(orderId).ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -68,15 +52,15 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("getOrdersByPortfolioId/{portfolioId}")]
-    public IActionResult GetOrdersByPortfolioId(long portfolioId)
+    public async Task<IActionResult> GetOrdersByPortfolioIdAsync(long portfolioId)
     {
         try
         {
-            var result = _orderAppService.GetOrdersByPortfolioId(portfolioId);
+            var result = await _orderAppService.GetOrdersByPortfolioIdAsync(portfolioId).ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -85,15 +69,15 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("getOrdersByProductId/{productId}")]
-    public IActionResult GetOrdersByProductId(long productId)
+    public async Task<IActionResult> GetOrdersByProductIdAsync(long productId)
     {
         try
         {
-            var result = _orderAppService.GetOrdersByProductId(productId);
+            var result = await _orderAppService.GetOrdersByProductIdAsync(productId).ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 

@@ -1,14 +1,15 @@
 ﻿using AppModels.PortfoliosProducts;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Interfaces;
 
 public interface IPortfolioProductAppService
 {
-    long Create(CreatePortfolioProductDto createPortfolioProductDto);
-    void Delete(long portfolioId, long ProductId);
-    IEnumerable<PortfolioProductResultDto> GetAllPortfolioProduct();
-    PortfolioProductResultDto GetPortfolioProductByIds(long portfolioId, long ProductId);
-    IEnumerable<PortfolioProductResultDto> GetPortfolioProductByProductId(long productId);
-    IEnumerable<PortfolioProductResultDto> GetPortfolioProductByPortfolioId(long portfolioId);
+    void Create(CreatePortfolioProduct createPortfolioProductDto);
+    Task DeleteAsync(long portfolioId, long ProductId);
+    Task<IEnumerable<PortfolioProductResult>> GetAllPortfolioProductAsync();
+    Task<PortfolioProductResult> GetPortfolioProductByIdsAsync(long portfolioId, long ProductId);
+    Task<IEnumerable<PortfolioProductResult>> GetPortfolioProductByProductIdAsync(long productId);
+    Task<IEnumerable<PortfolioProductResult>> GetPortfolioProductByPortfolioIdAsync(long portfolioId);
 }

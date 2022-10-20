@@ -1,13 +1,14 @@
 ﻿using AppModels.Customers;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Interfaces;
 
 public interface ICustomerAppService
 {
-    long Create(CreateCustomerDto postCustomerDto);
-    void Delete(long customerId);
-    IEnumerable<CustomerResultDto> GetAllCustomers();
-    CustomerResultDto GetCustomerById(long customerId);
-    void Update(long customerId, UpdateCustomerDto putCustomerDto);
+    Task<long> CreateAsync(CreateCustomer postCustomerDto);
+    Task DeleteAsync(long customerId);
+    Task<IEnumerable<CustomerResult>> GetAllCustomersAsync();
+    Task<CustomerResult> GetCustomerByIdAsync(long customerId);
+    Task UpdateAsync(long customerId, UpdateCustomer putCustomerDto);
 }

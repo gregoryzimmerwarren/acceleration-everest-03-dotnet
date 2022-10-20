@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace AppModels.CustomersBankInfo;
 
-public class CustomerBankInfoResultDto
+public class CustomerBankInfoResult
 {
-    public CustomerBankInfoResultDto() { }
+    protected CustomerBankInfoResult() { }
 
-    public CustomerBankInfoResultDto(
+    public CustomerBankInfoResult(
         long id, 
         decimal accountBalance,
         CustomerResultForOtherDtos customer)

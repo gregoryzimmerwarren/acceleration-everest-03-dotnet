@@ -5,77 +5,60 @@ using DomainModels.Models;
 using DomainServices.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Services;
 public class CustomerAppService : ICustomerAppService
 {
-    private readonly ICustomerBankInfoService _customerBankInfoService;
-    private readonly IPortfolioService _portfolioService;
+    private readonly ICustomerBankInfoAppService _customerBankInfoAppService;
     private readonly ICustomerService _customerService;
     private readonly IMapper _mapper;
 
     public CustomerAppService(
-        ICustomerBankInfoService customerBankInfoService,
-        IPortfolioService portfolioService,
+        ICustomerBankInfoAppService customerBankInfoAppService,
         ICustomerService customerService,
         IMapper mapper)
     {
-        _customerBankInfoService = customerBankInfoService ?? throw new ArgumentNullException(nameof(customerBankInfoService));
-        _portfolioService = portfolioService ?? throw new ArgumentNullException(nameof(portfolioService));
+        _customerBankInfoAppService = customerBankInfoAppService ?? throw new ArgumentNullException(nameof(customerBankInfoAppService));
         _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateCustomerDto createCustomerDto)
+    public async Task<long> CreateAsync(CreateCustomer createCustomerDto)
     {
-        var customerMapeado = _mapper.Map<Customer>(createCustomerDto);
-        var newCustomerId = _customerService.Create(customerMapeado);
+        var mappedCustomer = _mapper.Map<Customer>(createCustomerDto);
+        var newCustomerId = await _customerService.CreateAsync(mappedCustomer).ConfigureAwait(false);
 
-        _customerBankInfoService.Create(newCustomerId);
+        _customerBankInfoAppService.Create(newCustomerId);
 
         return newCustomerId;
     }
 
-    public void Delete(long customerId)
+    public async Task DeleteAsync(long customerId)
     {
-        _customerBankInfoService.Delete(customerId);
-        _customerService.Delete(customerId);
+        await _customerBankInfoAppService.DeleteAsync(customerId).ConfigureAwait(false);
+        await _customerService.DeleteAsync(customerId).ConfigureAwait(false);
     }
 
-    public IEnumerable<CustomerResultDto> GetAllCustomers()
+    public async Task<IEnumerable<CustomerResult>> GetAllCustomersAsync()
     {
-        var customers = _customerService.GetAllCustomers();
+        var customers = await _customerService.GetAllCustomersAsync().ConfigureAwait(false);
 
-        foreach (Customer customer in customers)
-        {
-            var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customer.Id);
-            customer.CustomerBankInfo = _mapper.Map<CustomerBankInfo>(customerBankInfo);
-
-            var portfolios = _portfolioService.GetPortfoliosByCustomerId(customer.Id);
-            customer.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
-        }
-
-        return _mapper.Map<IEnumerable<CustomerResultDto>>(customers);
+        return _mapper.Map<IEnumerable<CustomerResult>>(customers);
     }
 
-    public CustomerResultDto GetCustomerById(long customerId)
+    public async Task<CustomerResult> GetCustomerByIdAsync(long customerId)
     {
-        var customer = _customerService.GetCustomerById(customerId);
+        var customer = await _customerService.GetCustomerByIdAsync(customerId).ConfigureAwait(false);
 
-        var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customerId);
-        customer.CustomerBankInfo = _mapper.Map<CustomerBankInfo>(customerBankInfo);
-
-        var portfolios = _portfolioService.GetPortfoliosByCustomerId(customerId);
-        customer.Portfolios = _mapper.Map<List<Portfolio>>(portfolios);
-
-        return _mapper.Map<CustomerResultDto>(customer);
+        return _mapper.Map<CustomerResult>(customer);
     }
 
-    public void Update(long customerId, UpdateCustomerDto updateCustomerDto)
+    public async Task UpdateAsync(long customerId, UpdateCustomer updateCustomerDto)
     {
-        var customerMapeado = _mapper.Map<Customer>(updateCustomerDto);
-        customerMapeado.Id = customerId;
+        var mappedCustomer = _mapper.Map<Customer>(updateCustomerDto);
+        mappedCustomer.Id = customerId;
 
-        _customerService.Update(customerMapeado);
+        await _customerService.UpdateAsync(mappedCustomer).ConfigureAwait(false);
     }
 }

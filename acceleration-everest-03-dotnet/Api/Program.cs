@@ -1,21 +1,14 @@
 using AppServices.DependencyInjections;
 using DomainServices.DependencyInjections;
-using EntityFrameworkCore.UnitOfWork.Extensions;
 using FluentValidation.AspNetCore;
-using Infrastructure.Data;
+using Infrastructure.Data.DependencyInjections;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<WarrenEverestDotnetDbContext>(
-    dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), ServiceLifetime.Transient);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -23,8 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddAppServicesDependecyInjections();
 builder.Services.AddDomainServicesDependecyInjections();
+builder.Services.AddInfrastructureDataDependecyInjections(builder.Configuration);
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
-builder.Services.AddUnitOfWork<WarrenEverestDotnetDbContext>(ServiceLifetime.Transient);
 
 var app = builder.Build();
 

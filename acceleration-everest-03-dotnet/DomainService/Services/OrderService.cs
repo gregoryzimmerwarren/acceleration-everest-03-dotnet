@@ -2,8 +2,10 @@
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DomainServices.Services;
 
@@ -29,63 +31,80 @@ public class OrderService : IOrderService
         return orderToCreate.Id;
     }
 
-    public IEnumerable<Order> GetAllOrders()
+    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
         var repository = _repositoryFactory.Repository<Order>();
-        var query = repository.MultipleResultQuery();
-        var orders = repository.Search(query);
+        var query = repository.MultipleResultQuery()
+            .Include(order => order.Include(portfolio => portfolio.Portfolio)
+            .Include(product => product.Product));
+        var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (orders.Count == 0)
-            throw new ArgumentException("No order found");
+            throw new ArgumentNullException("No order found");
 
         return orders;
     }
 
-    public Order GetOrderById(long orderId)
+    public async Task<Order> GetOrderByIdAsync(long orderId)
     {
         var repository = _repositoryFactory.Repository<Order>();
-        var query = repository.SingleResultQuery().AndFilter(order => order.Id == orderId);
-        var order = repository.SingleOrDefault(query);
+        var query = repository.SingleResultQuery().AndFilter(order => order.Id == orderId)
+            .Include(order => order.Include(portfolio => portfolio.Portfolio)
+            .Include(product => product.Product));
+        var order = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (order == null)
-            throw new ArgumentException($"No order found for Id: {orderId}");
+            throw new ArgumentNullException($"No order found for Id: {orderId}");
 
         return order;
     }
 
-    public IEnumerable<Order> GetOrderByPorfolioIdAndProductId(long portfolioId, long productId)
+    public async Task<IEnumerable<Order>> GetOrderByPorfolioIdAndProductIdAsync(long portfolioId, long productId)
     {
         var repository = _repositoryFactory.Repository<Order>();
-        var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId);
-        var orders = repository.Search(query);
+        var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId)
+            .Include(order => order.Include(portfolio => portfolio.Portfolio)
+            .Include(product => product.Product));
+        var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (orders.Count == 0)
-            throw new ArgumentException($"No order was found between portfolio Id: {portfolioId} and product Id: {productId}");
+            throw new ArgumentNullException($"No order was found between portfolio Id: {portfolioId} and product Id: {productId}");
 
         return orders;
     }
 
-    public IEnumerable<Order> GetOrdersByPortfolioId(long portfolioId)
+    public async Task<IEnumerable<Order>> GetOrdersByPortfolioIdAsync(long portfolioId)
     {
         var repository = _repositoryFactory.Repository<Order>();
-        var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId);
-        var orders = repository.Search(query);
+        var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId)
+            .Include(order => order.Include(portfolio => portfolio.Portfolio)
+            .Include(product => product.Product));
+        var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (orders.Count == 0)
-            throw new ArgumentException($"No order found for portfolio Id: {portfolioId}");
+            throw new ArgumentNullException($"No order found for portfolio Id: {portfolioId}");
 
         return orders;
     }
 
-    public IEnumerable<Order> GetOrdersByProductId(long productId)
+    public async Task<IEnumerable<Order>> GetOrdersByProductIdAsync(long productId)
     {
         var repository = _repositoryFactory.Repository<Order>();
-        var query = repository.MultipleResultQuery().AndFilter(order => order.ProductId == productId);
-        var orders = repository.Search(query);
+        var query = repository.MultipleResultQuery().AndFilter(order => order.ProductId == productId)
+            .Include(order => order.Include(portfolio => portfolio.Portfolio)
+            .Include(product => product.Product));
+        var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (orders.Count == 0)
-            throw new ArgumentException($"No order found for product Id: {productId}");
+            throw new ArgumentNullException($"No order found for product Id: {productId}");
 
         return orders;
+    }
+
+    public void Update(Order orderToUpdate)
+    {
+        var repository = _unitOfWork.Repository<Order>();
+        repository.Update(orderToUpdate);
+        _unitOfWork.SaveChanges();
     }
 }

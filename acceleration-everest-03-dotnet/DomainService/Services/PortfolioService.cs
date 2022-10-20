@@ -2,19 +2,21 @@
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DomainServices.Services;
 
 public class PortfolioService : IPortfolioService
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IRepositoryFactory _repositoryFactory;
+    private readonly IUnitOfWork _unitOfWork;
 
     public PortfolioService(
-        IUnitOfWork<WarrenEverestDotnetDbContext> unitOfWork,
-        IRepositoryFactory<WarrenEverestDotnetDbContext> repositoryFactory)
+        IRepositoryFactory<WarrenEverestDotnetDbContext> repositoryFactory,
+        IUnitOfWork<WarrenEverestDotnetDbContext> unitOfWork)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
@@ -29,9 +31,9 @@ public class PortfolioService : IPortfolioService
         return portfolioToCreate.Id;
     }
 
-    public void Delete(long portfolioId)
+    public async Task DeleteAsync(long portfolioId)
     {
-        var portfolio = GetPortfolioById(portfolioId);
+        var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
         if (portfolio.TotalBalance > 0 || portfolio.AccountBalance > 0)
             throw new ArgumentException($@"It is not possible to delete the portfolio for Id: {portfolioId}.
@@ -43,9 +45,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         _unitOfWork.SaveChanges();
     }
 
-    public void Deposit(long portfolioId, decimal amount)
+    public async Task DepositAsync(long portfolioId, decimal amount)
     {
-        var portfolio = GetPortfolioById(portfolioId);
+        var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
         portfolio.AccountBalance += amount;
 
         var repository = _unitOfWork.Repository<Portfolio>();
@@ -53,43 +55,57 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         _unitOfWork.SaveChanges();
     }
 
-    public IEnumerable<Portfolio> GetAllPortfolios()
+    public async Task<IEnumerable<Portfolio>> GetAllPortfoliosAsync()
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
-        var query = repository.MultipleResultQuery();
-        var portfolios = repository.Search(query);
+        var query = repository.MultipleResultQuery()
+            .Include(portfolio => portfolio.Include(customer => customer.Customer)
+            .Include(order => order.Orders)
+            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .Include(product => product.Products));
+        var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (portfolios.Count == 0)
-            throw new ArgumentException("No portfolio found");
+            throw new ArgumentNullException("No portfolio found");
 
         return portfolios;
     }
 
-    public Portfolio GetPortfolioById(long portfolioId)
+    public async Task<Portfolio> GetPortfolioByIdAsync(long portfolioId)
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
-        var query = repository.SingleResultQuery().AndFilter(portfolio => portfolio.Id == portfolioId);
-        var portfolio = repository.SingleOrDefault(query);
+        var query = repository.SingleResultQuery().AndFilter(portfolio => portfolio.Id == portfolioId)
+            .Include(portfolio => portfolio.Include(customer => customer.Customer)
+            .Include(order => order.Orders)
+            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .Include(product => product.Products));
+        var portfolio = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (portfolio == null)
-            throw new ArgumentException($"No portfolio found for Id: {portfolioId}");
+            throw new ArgumentNullException($"No portfolio found for Id: {portfolioId}");
 
         return portfolio;
-
     }
 
-    public IEnumerable<Portfolio> GetPortfoliosByCustomerId(long customerId)
+    public async Task<IEnumerable<Portfolio>> GetPortfoliosByCustomerIdAsync(long customerId)
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
-        var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId);
-        var portfolios = repository.Search(query);
+        var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId)
+            .Include(portfolio => portfolio.Include(customer => customer.Customer)
+            .Include(order => order.Orders)
+            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .Include(product => product.Products));
+        var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
+
+        if (portfolios.Count == 0)
+            throw new ArgumentNullException($"No portfolio found for Customer with Id: {customerId}");
 
         return portfolios;
     }
 
-    public bool Invest(long portfolioId, decimal amount)
+    public async Task<bool> InvestAsync(long portfolioId, decimal amount)
     {
-        var portfolio = GetPortfolioById(portfolioId);
+        var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
         if (portfolio.AccountBalance < amount)
             throw new ArgumentException($"Portfolio does not have sufficient balance for this investment. Current balance: R${portfolio.AccountBalance}");
@@ -104,9 +120,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         return true;
     }
 
-    public bool RedeemToPortfolio(long portfolioId, decimal amount)
+    public async Task<bool> RedeemToPortfolioAsync(long portfolioId, decimal amount)
     {
-        var portfolio = GetPortfolioById(portfolioId);
+        var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
         if (portfolio.TotalBalance < amount)
             throw new ArgumentException($"Portfolio does not have sufficient balance for this redeem. Current balance: R${portfolio.TotalBalance}");
@@ -121,9 +137,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         return true;
     }
 
-    public bool WithdrawFromPortfolio(long portfolioId, decimal amount)
+    public async Task<bool> WithdrawFromPortfolioAsync(long portfolioId, decimal amount)
     {
-        var portfolio = GetPortfolioById(portfolioId);
+        var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
         if (portfolio.AccountBalance < amount)
             throw new ArgumentException($"Portfolio does not have sufficient balance for this withdraw. Current balance: R${portfolio.AccountBalance}");

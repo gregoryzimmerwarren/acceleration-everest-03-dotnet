@@ -1,25 +1,22 @@
 ﻿using AppModels.CustomersBankInfo;
 using AppServices.Interfaces;
 using AutoMapper;
-using DomainModels.Models;
 using DomainServices.Interfaces;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Services;
 
 public class CustomerBankInfoAppService : ICustomerBankInfoAppService
 {
     private readonly ICustomerBankInfoService _customerBankInfoService;
-    private readonly ICustomerService _customerService;
     private readonly IMapper _mapper;
 
     public CustomerBankInfoAppService(
         ICustomerBankInfoService customerBankInfoService,
-        ICustomerService customerService,
         IMapper mapper)
     {
         _customerBankInfoService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
-        _customerService = customerService ?? throw new System.ArgumentNullException(nameof(customerService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
@@ -28,46 +25,38 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         _customerBankInfoService.Create(customerId);
     }
 
-    public void Delete(long customerId)
+    public async Task DeleteAsync(long customerId)
     {
-        _customerBankInfoService.Delete(customerId);
+        await _customerBankInfoService.DeleteAsync(customerId).ConfigureAwait(false);
     }
 
-    public void Deposit(long customerId, decimal amount)
+    public async Task DepositAsync(long customerId, decimal amount)
     {
-        _customerBankInfoService.Deposit(customerId, amount);
+        await _customerBankInfoService.DepositAsync(customerId, amount).ConfigureAwait(false);
     }
 
-    public IEnumerable<CustomerBankInfoResultDto> GetAllCustomersBankInfo()
+    public async Task<IEnumerable<CustomerBankInfoResult>> GetAllCustomersBankInfoAsync()
     {
-        var customersBankInfo = _customerBankInfoService.GetAllCustomersBankInfo();
+        var customersBankInfo = await _customerBankInfoService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
 
-        foreach (CustomerBankInfo customerBankInfo in customersBankInfo)
-        {
-            var customer = _customerService.GetCustomerById(customerBankInfo.CustomerId);
-            customerBankInfo.Customer = _mapper.Map<Customer>(customer);
-        }
-
-        return _mapper.Map<IEnumerable<CustomerBankInfoResultDto>>(customersBankInfo);
+        return _mapper.Map<IEnumerable<CustomerBankInfoResult>>(customersBankInfo);
     }
 
-    public CustomerBankInfoResultDto GetCustomerBankInfoByCustomerId(long customerId)
+    public async Task<CustomerBankInfoResult> GetCustomerBankInfoByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = _customerBankInfoService.GetCustomerBankInfoByCustomerId(customerId);
-        var customer = _customerService.GetCustomerById(customerId);
-        customerBankInfo.Customer = _mapper.Map<Customer>(customer);
+        var customerBankInfo = await _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
-        return _mapper.Map<CustomerBankInfoResultDto>(customerBankInfo);
+        return _mapper.Map<CustomerBankInfoResult>(customerBankInfo);
     }
 
-    public decimal GetTotalByCustomerId(long customerId)
+    public async Task<decimal> GetTotalByCustomerIdAsync(long customerId)
     {
-        return _customerBankInfoService.GetTotalByCustomerId(customerId);
+        return await _customerBankInfoService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
     }
 
-    public bool Withdraw(long customerId, decimal amount)
+    public async Task<bool> WithdrawAsync(long customerId, decimal amount)
     {
-        var result = _customerBankInfoService.Withdraw(customerId, amount);
+        var result = await _customerBankInfoService.WithdrawAsync(customerId, amount).ConfigureAwait(false);
 
         return result;
     }

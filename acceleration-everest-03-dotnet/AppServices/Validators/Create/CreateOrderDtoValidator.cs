@@ -5,7 +5,7 @@ using System;
 
 namespace AppServices.Validators.Create;
 
-public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
+public class CreateOrderDtoValidator : AbstractValidator<CreateOrder>
 {
     public CreateOrderDtoValidator()
     {

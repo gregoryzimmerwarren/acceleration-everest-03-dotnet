@@ -2,6 +2,7 @@
 using DomainModels.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppModels.Products;
 
@@ -22,30 +23,15 @@ public class ProductResultForOthersDtos
         UnitPrice = unitPrice;
         DaysToExpire = daysToExpire;
         ExpirationAt = expirationAt;
-        Type = GetEnumName(type);
+        Type = Enum.GetName(type);
     }
 
     public long Id { get; set; }
     public string Symbol { get; set; }
     public decimal UnitPrice { get; set; }
     public int DaysToExpire { get; set; }
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime ExpirationAt { get; set; }
     public string Type { get; set; }
-
-    private static string GetEnumName(ProductType direction)
-    {
-        if (direction == ProductType.FixedIncome)
-            return "FixedIncome";
-
-        if (direction == ProductType.Trade)
-            return "Trade";
-
-        if (direction == ProductType.Funds)
-            return "Funds";
-
-        if (direction == ProductType.Fii)
-            return "Fii";
-
-        return "Crypto";
-    }
 }

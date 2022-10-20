@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace AppModels.Customers;
 
-public class CustomerResultDto
+public class CustomerResult
 {
-    protected CustomerResultDto() { }
+    protected CustomerResult() { }
 
-    public CustomerResultDto(
+    public CustomerResult(
         long id, 
         string fullName, 
         string email, 
@@ -17,7 +17,7 @@ public class CustomerResultDto
         string city, 
         string postalCode,
         CustomerBankInfoResultForOthersDtos customerBankInfo, 
-        List<PortfolioResultForOthersDtos> portfolios)
+        IEnumerable<PortfolioResultForOthersDtos> portfolios)
     {
         Id = id;
         FullName = fullName;
@@ -38,5 +38,5 @@ public class CustomerResultDto
     public string City { get; set; }
     public string PostalCode { get; set; }
     public CustomerBankInfoResultForOthersDtos CustomerBankInfo { get; set; }
-    public List<PortfolioResultForOthersDtos> Portfolios { get; set; }
+    public IEnumerable<PortfolioResultForOthersDtos> Portfolios { get; set; }
 }

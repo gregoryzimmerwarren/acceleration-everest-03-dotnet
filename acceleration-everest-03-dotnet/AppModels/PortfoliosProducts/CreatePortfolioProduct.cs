@@ -1,8 +1,8 @@
 ﻿namespace AppModels.PortfoliosProducts;
 
-public class CreatePortfolioProductDto
+public class CreatePortfolioProduct
 {
-    public CreatePortfolioProductDto(
+    public CreatePortfolioProduct(
         long portfolioId, 
         long productId)
     {

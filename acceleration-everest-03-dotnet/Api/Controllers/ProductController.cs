@@ -2,6 +2,7 @@
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -17,32 +18,30 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(CreateProductDto productToCreate)
+    public IActionResult Create(CreateProduct productToCreate)
     {
         try
         {
             var id = _productAppService.Create(productToCreate);
 
-            return Created("", id);
+            return Created("Id:", id);
         }
-        catch (ArgumentException exception)
+        catch (Exception exception)
         {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return BadRequest(message);
+            return BadRequest(exception);
         }
     }
 
     [HttpGet]
-    public IActionResult GetAllProducts()
+    public async Task<IActionResult> GetAllProductsAsync()
     {
         try
         {
-            var result = _productAppService.GetAllProducts();
+            var result = await _productAppService.GetAllProductsAsync().ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -51,15 +50,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{productId}")]
-    public IActionResult GetProductById(long productId)
+    public async Task<IActionResult> GetProductByIdAsync(long productId)
     {
         try
         {
-            var result = _productAppService.GetProductById(productId);
+            var result = await _productAppService.GetProductByIdAsync(productId).ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
 
@@ -68,7 +67,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(long productId, UpdateProductDto productToUpdate)
+    public IActionResult Update(long productId, UpdateProduct productToUpdate)
     {
         try
         {
@@ -76,11 +75,9 @@ public class ProductController : ControllerBase
 
             return Ok();
         }
-        catch (ArgumentException exception)
+        catch (Exception exception)
         {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return NotFound(message);
+            return BadRequest(exception);
         }
     }
 }

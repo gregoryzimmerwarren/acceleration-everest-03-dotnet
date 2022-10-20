@@ -3,11 +3,11 @@ using AppModels.Products;
 
 namespace AppModels.PortfoliosProducts;
 
-public class PortfolioProductResultDto
+public class PortfolioProductResult
 {
-    public PortfolioProductResultDto() { }
+    protected PortfolioProductResult() { }
 
-    public PortfolioProductResultDto(
+    public PortfolioProductResult(
         long id,
         PortfolioResultForOthersDtos portfolio,
         ProductResultForOthersDtos product)

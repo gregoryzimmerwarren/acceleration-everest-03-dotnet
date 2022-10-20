@@ -1,14 +1,17 @@
 ﻿using AppModels.Orders;
+using DomainModels.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Interfaces;
 
 public interface IOrderAppService
 {
-    long Create(CreateOrderDto createOrderDto);
-    IEnumerable<OrderResultDto> GetAllOrders();
-    OrderResultDto GetOrderById(long orderId);
-    IEnumerable<OrderResultDto> GetOrdersByPorfolioIdAndProductId(long portfolioId, long productId);
-    IEnumerable<OrderResultDto> GetOrdersByPortfolioId(long portfolioId);
-    IEnumerable<OrderResultDto> GetOrdersByProductId(long productId);
+    Task<long> CreateAsync(CreateOrder createOrderDto);
+    Task<IEnumerable<OrderResult>> GetAllOrdersAsync();
+    Task<OrderResult> GetOrderByIdAsync(long orderId);
+    Task<int> GetAvailableQuotes(long portfolioId, long productId);
+    Task<IEnumerable<OrderResult>> GetOrdersByPortfolioIdAsync(long portfolioId);
+    Task<IEnumerable<OrderResult>> GetOrdersByProductIdAsync(long productId);
+    void Update(UpdateOrder updateOrderDto);
 }

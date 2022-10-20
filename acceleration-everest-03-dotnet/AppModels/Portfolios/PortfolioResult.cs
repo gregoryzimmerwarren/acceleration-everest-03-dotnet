@@ -5,19 +5,19 @@ using System.Collections.Generic;
 
 namespace AppModels.Portfolios;
 
-public class PortfolioResultDto
+public class PortfolioResult
 {
-    public PortfolioResultDto() { }
+    protected PortfolioResult() { }
 
-    public PortfolioResultDto(
+    public PortfolioResult(
         long id, 
         string name, 
         string description, 
         decimal totalBalance, 
         decimal accountBalance,
-        CustomerResultForOtherDtos customer, 
-        List<ProductResultForOthersDtos> products, 
-        List<OrderResultOtherDtos> orders)
+        CustomerResultForOtherDtos customer,
+        IEnumerable<ProductResultForOthersDtos> products,
+        IEnumerable<OrderResultOtherDtos> orders)
     {
         Id = id;
         Name = name;
@@ -35,6 +35,6 @@ public class PortfolioResultDto
     public decimal TotalBalance { get; set; }
     public decimal AccountBalance { get; set; }
     public CustomerResultForOtherDtos Customer { get; set; }
-    public List<ProductResultForOthersDtos> Products { get; set; }
-    public List<OrderResultOtherDtos> Orders { get; set; }
+    public IEnumerable<ProductResultForOthersDtos> Products { get; set; }
+    public IEnumerable<OrderResultOtherDtos> Orders { get; set; }
 }

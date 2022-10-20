@@ -1,114 +1,97 @@
 ﻿using AppModels.Orders;
 using AppServices.Interfaces;
 using AutoMapper;
+using DomainModels.Enums;
 using DomainModels.Models;
 using DomainServices.Interfaces;
+using DomainServices.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppServices.Services;
 
 public class OrderAppService : IOrderAppService
 {
-    private readonly IPortfolioService _portfolioService;
-    private readonly IProductService _productService;
+    private readonly IProductAppService _productAppService;
     private readonly IOrderService _orderService;
     private readonly IMapper _mapper;
 
     public OrderAppService(
-        IPortfolioService portfolioService, 
-        IProductService productService, 
-        IOrderService orderService, 
+        IProductAppService productAppService,
+        IOrderService orderService,
         IMapper mapper)
     {
-        _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
-        _productService = productService ?? throw new System.ArgumentNullException(nameof(productService));
+        _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
         _orderService = orderService ?? throw new System.ArgumentNullException(nameof(orderService));
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreateOrderDto createOrderDto)
+    public async Task<long> CreateAsync(CreateOrder createOrderDto)
     {
-        var orderMapeada = _mapper.Map<Order>(createOrderDto);
-        var unitPrice = _productService.GetProductById(orderMapeada.ProductId).UnitPrice;
-        orderMapeada.NetValue = orderMapeada.Quotes * unitPrice;
+        var mappedOrder = _mapper.Map<Order>(createOrderDto);
+        var produt = await _productAppService.GetProductByIdAsync(mappedOrder.ProductId).ConfigureAwait(false);
+        var unitPrice = produt.UnitPrice;
+        mappedOrder.NetValue = mappedOrder.Quotes * unitPrice;
 
-        return _orderService.Create(orderMapeada);
+        return _orderService.Create(mappedOrder);
     }
 
-    public IEnumerable<OrderResultDto> GetAllOrders()
+    public async Task<IEnumerable<OrderResult>> GetAllOrdersAsync()
     {
-        var orders = _orderService.GetAllOrders();
+        var orders = await _orderService.GetAllOrdersAsync().ConfigureAwait(false);
 
-        foreach (Order order in orders)
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
+    }
+
+    public async Task<OrderResult> GetOrderByIdAsync(long orderId)
+    {
+        var order = await _orderService.GetOrderByIdAsync(orderId);
+
+        return _mapper.Map<OrderResult>(order);
+    }
+
+    public async Task<int> GetAvailableQuotes(long portfolioId, long productId)
+    {
+        var orders = await _orderService.GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
+
+        var sellingQuotes = 0;
+        var boughtQuotes = 0;
+
+        foreach (var order in orders)
         {
-            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
-            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
-
-            var product = _productService.GetProductById(order.ProductId);
-            order.Product = _mapper.Map<Product>(product);
+            if (order.Direction == OrderDirection.Buy)
+            {
+                boughtQuotes += order.Quotes;
+            }
+            else
+            {
+                sellingQuotes += order.Quotes;
+            }
         }
 
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        var totalQuotes = boughtQuotes - sellingQuotes;
+        return totalQuotes;
     }
 
-    public OrderResultDto GetOrderById(long orderId)
+    public async Task<IEnumerable<OrderResult>> GetOrdersByPortfolioIdAsync(long portfolioId)
     {
-        var order = _orderService.GetOrderById(orderId);
+        var orders = await _orderService.GetOrdersByPortfolioIdAsync(portfolioId).ConfigureAwait(false);
 
-        var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
-        order.Portfolio = _mapper.Map<Portfolio>(portfolio);
-
-        var product = _productService.GetProductById(order.ProductId);
-        order.Product = _mapper.Map<Product>(product);
-
-        return _mapper.Map<OrderResultDto>(order);
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
     }
 
-    public IEnumerable<OrderResultDto> GetOrdersByPorfolioIdAndProductId(long portfolioId, long productId)
+    public async Task<IEnumerable<OrderResult>> GetOrdersByProductIdAsync(long productId)
     {
-        var orders = _orderService.GetOrderByPorfolioIdAndProductId(portfolioId, productId);
+        var orders = await _orderService.GetOrdersByProductIdAsync(productId).ConfigureAwait(false);
 
-        foreach (Order order in orders)
-        {
-            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
-            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
-
-            var product = _productService.GetProductById(order.ProductId);
-            order.Product = _mapper.Map<Product>(product);
-        }
-
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        return _mapper.Map<IEnumerable<OrderResult>>(orders);
     }
 
-    public IEnumerable<OrderResultDto> GetOrdersByPortfolioId(long portfolioId)
+    public void Update(UpdateOrder updateOrderDto)
     {
-        var orders = _orderService.GetOrdersByPortfolioId(portfolioId);
+        var mappedOrder = _mapper.Map<Order>(updateOrderDto);
+        mappedOrder.WasExecuted = true;
 
-        foreach (Order order in orders)
-        {
-            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
-            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
-
-            var product = _productService.GetProductById(order.ProductId);
-            order.Product = _mapper.Map<Product>(product);
-        }
-
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
-    }
-
-    public IEnumerable<OrderResultDto> GetOrdersByProductId(long productId)
-    {
-        var orders = _orderService.GetOrdersByProductId(productId);
-
-        foreach (Order order in orders)
-        {
-            var portfolio = _portfolioService.GetPortfolioById(order.PortfolioId);
-            order.Portfolio = _mapper.Map<Portfolio>(portfolio);
-
-            var product = _productService.GetProductById(order.ProductId);
-            order.Product = _mapper.Map<Product>(product);
-        }
-
-        return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        _orderService.Update(mappedOrder);
     }
 }

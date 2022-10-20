@@ -1,6 +1,7 @@
 ﻿using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -16,15 +17,15 @@ public class CustomerBankInfoController : ControllerBase
     }
 
     [HttpPatch("depositInCustomerBankInfo/{customerId}")]
-    public IActionResult Deposit(long customerId, decimal amount)
+    public async Task<IActionResult> DepositAsync(long customerId, decimal amount)
     {
         try
         {
-            _customerBankInfoAppService.Deposit(customerId, amount);
+            await _customerBankInfoAppService.DepositAsync(customerId, amount).ConfigureAwait(false);
             
             return Ok();
         }        
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
             
@@ -33,15 +34,15 @@ public class CustomerBankInfoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllCustomersBankInfo()
+    public async Task<IActionResult> GetAllCustomersBankInfoAsync()
     {
         try
         {
-            var result = _customerBankInfoAppService.GetAllCustomersBankInfo();
+            var result = await _customerBankInfoAppService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
 
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
             
@@ -49,15 +50,15 @@ public class CustomerBankInfoController : ControllerBase
         }
     }
 
-    [HttpGet("getTotalByCustomerId/{customerBankInfoId}")]
-    public IActionResult GetTotalByCustomerId(long customerBankInfoId)
+    [HttpGet("getTotalByCustomerId/{customerId}")]
+    public async Task<IActionResult> GetTotalByCustomerIdAsync(long customerId)
     {
         try
         {
-            var total = _customerBankInfoAppService.GetTotalByCustomerId(customerBankInfoId);
+            var total = await _customerBankInfoAppService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
             return Ok(total);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
            
@@ -66,19 +67,25 @@ public class CustomerBankInfoController : ControllerBase
     }
 
     [HttpPatch("withdraw/{customerId}")]
-    public IActionResult Withdraw(long customerId, decimal amount)
+    public async Task<IActionResult> WithdrawAsync(long customerId, decimal amount)
     {
         try
         {
-            _customerBankInfoAppService.Withdraw(customerId, amount);
+            await _customerBankInfoAppService.WithdrawAsync(customerId, amount).ConfigureAwait(false);
             
             return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
             
-            return NotFound(message);
+            return BadRequest(message);
         }
     }
 }
