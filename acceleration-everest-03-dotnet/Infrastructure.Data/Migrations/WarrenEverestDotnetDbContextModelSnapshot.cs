@@ -145,6 +145,10 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INT")
                         .HasColumnName("Quotes");
 
+                    b.Property<ulong>("WasExecuted")
+                        .HasColumnType("BIT")
+                        .HasColumnName("WasExecuted");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PortfolioId");

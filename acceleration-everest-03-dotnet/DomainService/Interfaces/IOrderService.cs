@@ -12,4 +12,5 @@ public interface IOrderService
     Task<IEnumerable<Order>> GetOrderByPorfolioIdAndProductIdAsync(long portfolioId, long productId);
     Task<IEnumerable<Order>> GetOrdersByPortfolioIdAsync(long portfolioId);
     Task<IEnumerable<Order>> GetOrdersByProductIdAsync(long productId);
+    void Update(Order orderToUpdate);
 }

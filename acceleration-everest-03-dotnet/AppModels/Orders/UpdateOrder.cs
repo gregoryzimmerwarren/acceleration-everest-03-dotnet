@@ -1,33 +1,31 @@
 ﻿using AppModels.Portfolios;
 using AppModels.Products;
-using DomainModels.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppModels.Orders;
 
-public class OrderResult
+public class UpdateOrder
 {
-    protected OrderResult() { }
-
-    public OrderResult(
-        long id, 
-        int quotes, 
-        decimal netValue, 
-        DateTime liquidatedAt, 
-        OrderDirection direction,
+    public UpdateOrder(
+        long id,
+        int quotes,
+        decimal netValue,
+        string direction,
         bool wasExecuted,
-        PortfolioResultForOthersDtos portfolio,
-        ProductResultForOthersDtos product)
+        DateTime liquidatedAt,
+        long portfolioId,
+        long productId)
     {
         Id = id;
         Quotes = quotes;
         NetValue = netValue;
-        LiquidatedAt = liquidatedAt;
-        Direction = Enum.GetName(direction);
+        Direction = direction;
         WasExecuted = wasExecuted;
-        Portfolio = portfolio;
-        Product = product;
+        LiquidatedAt = liquidatedAt;
+        PortfolioId = portfolioId;
+        ProductId = productId;
+        WasExecuted = false;
     }
 
     public long Id { get; set; }
@@ -35,8 +33,8 @@ public class OrderResult
     public decimal NetValue { get; set; }
     public string Direction { get; set; }
     public bool WasExecuted { get; set; }
-    public PortfolioResultForOthersDtos Portfolio { get; set; }
-    public ProductResultForOthersDtos Product { get; set; }
+    public long PortfolioId { get; set; }
+    public long ProductId { get; set; }
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

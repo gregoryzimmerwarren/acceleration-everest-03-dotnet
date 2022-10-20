@@ -1,5 +1,4 @@
 using AppServices.DependencyInjections;
-using AutoMapper;
 using DomainServices.DependencyInjections;
 using HostedServiceCronos.DependecyInjection;
 using HostedServiceCronos.Services;
@@ -12,7 +11,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddCronJob<CronJobExecuteOrders>(config =>
         {
             config.TimeZoneInfo = TimeZoneInfo.Local;
-            config.CronExpression = "48 16 * * *";
+            config.CronExpression = "30 09 * * *";
         });
 
         services.AddAppServicesDependecyInjections();

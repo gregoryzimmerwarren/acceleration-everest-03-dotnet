@@ -2,19 +2,17 @@
 
 namespace HostedServiceCronos.Services;
 
-public abstract class CronJobService : IHostedService, IDisposable
+public class CronJobService : IHostedService, IDisposable
 {
     private System.Timers.Timer _timer;
-    private bool disposedValue;
     private readonly CronExpression _expression;
     private readonly TimeZoneInfo _timeZoneInfo;
 
-    protected CronJobService(string cronExpression, TimeZoneInfo timeZoneInfo)
+    public CronJobService(string cronExpression, TimeZoneInfo timeZoneInfo)
     {
         _expression = CronExpression.Parse(cronExpression);
         _timeZoneInfo = timeZoneInfo;
     }
-
     public virtual async Task StartAsync(CancellationToken cancellationToken)
     {
         await ScheduleJob(cancellationToken);
@@ -30,12 +28,20 @@ public abstract class CronJobService : IHostedService, IDisposable
             {
                 await ScheduleJob(cancellationToken);
             }
+
             _timer = new System.Timers.Timer(delay.TotalMilliseconds);
             _timer.Elapsed += async (sender, args) =>
             {
+                _timer.Dispose();
+                _timer = null;
+
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await DoWork(cancellationToken);
+                    DoWork(cancellationToken);
+                }
+
+                if (!cancellationToken.IsCancellationRequested)
+                {
                     await ScheduleJob(cancellationToken);
                 }
             };
@@ -55,22 +61,8 @@ public abstract class CronJobService : IHostedService, IDisposable
         await Task.CompletedTask;
     }
 
-    protected virtual void Dispose(bool disposing)
+    public virtual void Dispose()
     {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                _timer.Dispose();
-            }
-
-            disposedValue = true;
-        }
-    }
-   
-    void IDisposable.Dispose()
-    {       
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        _timer?.Dispose();
     }
 }

@@ -131,11 +131,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("invest/{customerId}")]
-    public async Task<IActionResult> InvestAsync(CreateOrder createOrderDto, decimal amount)
+    public async Task<IActionResult> InvestAsync(CreateOrder createOrderDto)
     {
         try
         {
-            await _portifolioAppService.InvestAsync(createOrderDto, amount).ConfigureAwait(false);
+            await _portifolioAppService.InvestAsync(createOrderDto).ConfigureAwait(false);
 
             return Ok();
         }
@@ -154,11 +154,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpPatch("redeemToPortfolio/{customerId}")]
-    public async Task<IActionResult> RedeemToPortfolioAsync(CreateOrder createOrderDto, decimal amount)
+    public async Task<IActionResult> RedeemToPortfolioAsync(CreateOrder createOrderDto)
     {
         try
         {
-            await _portifolioAppService.RedeemToPortfolioAsync(createOrderDto, amount).ConfigureAwait(false);
+            await _portifolioAppService.RedeemToPortfolioAsync(createOrderDto).ConfigureAwait(false);
 
             return Ok();
         }

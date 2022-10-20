@@ -6,9 +6,9 @@ namespace AppModels.Products;
 public class UpdateProduct
 {
     public UpdateProduct(
-    string symbol,
-    decimal unitPrice,
-    DateTime expirationAt)
+        string symbol, 
+        decimal unitPrice, 
+        DateTime expirationAt)
     {
         Symbol = symbol;
         UnitPrice = unitPrice;

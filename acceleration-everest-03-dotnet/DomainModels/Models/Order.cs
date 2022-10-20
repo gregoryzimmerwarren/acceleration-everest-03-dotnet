@@ -8,13 +8,15 @@ public class Order : IEntity
     public Order(
         int quotes, 
         DateTime liquidatedAt, 
-        OrderDirection direction, 
+        OrderDirection direction,
+        bool wasExecuted,
         long portfolioId, 
         long productId)
     {
         Quotes = quotes;
         LiquidatedAt = liquidatedAt;
         Direction = direction;
+        WasExecuted = wasExecuted;
         PortfolioId = portfolioId;
         ProductId = productId;
     }
@@ -23,6 +25,7 @@ public class Order : IEntity
     public int Quotes { get; set; }
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
+    public bool WasExecuted { get; set; }
 
     public OrderDirection Direction { get; set; }
     public long PortfolioId { get; set; }

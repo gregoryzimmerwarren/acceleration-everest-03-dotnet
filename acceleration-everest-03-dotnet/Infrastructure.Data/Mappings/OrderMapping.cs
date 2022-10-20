@@ -32,6 +32,11 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .IsRequired()
             .HasColumnName("Direction");
 
+        builder.Property(order => order.WasExecuted)
+            .HasColumnType("BIT")
+            .IsRequired()
+            .HasColumnName("WasExecuted");
+
         builder.Property(order => order.PortfolioId)
             .HasColumnType("BIGINT")
             .IsRequired()

@@ -12,8 +12,8 @@ namespace Infrastructure.Data.DependencyInjections
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<WarrenEverestDotnetDbContext>(
     dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-            services.AddUnitOfWork<WarrenEverestDotnetDbContext>();
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)), contextLifetime: ServiceLifetime.Transient);
+            services.AddUnitOfWork<WarrenEverestDotnetDbContext>(ServiceLifetime.Transient);
 
             return services;
         }

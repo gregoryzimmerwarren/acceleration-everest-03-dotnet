@@ -34,6 +34,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
         var repository = _unitOfWork.Repository<CustomerBankInfo>();
         repository.Remove(customerBankInfo);
+        _unitOfWork.SaveChanges();
     }
 
     public async Task DepositAsync(long customerId, decimal amount)

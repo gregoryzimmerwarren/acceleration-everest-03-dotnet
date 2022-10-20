@@ -17,14 +17,20 @@ public class CreateOrder
         LiquidatedAt = liquidatedAt;
         PortfolioId = portfolioId;
         ProductId = productId;
+        WasExecuted = false;
     }
     
     public int Quotes { get; set; }
+    public long PortfolioId { get; set; }
+    public long ProductId { get; set; }
+
+    [JsonIgnore]
+    public bool WasExecuted { get; set; }
+
+    [JsonIgnore]
+    public OrderDirection Direction { get; set; }
+
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime LiquidatedAt { get; set; }
-    public long PortfolioId { get; set; }
-    public long ProductId { get; set; }
-    [JsonIgnore]
-    public OrderDirection Direction { get; set; }
 }

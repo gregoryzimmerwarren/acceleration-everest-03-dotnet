@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(WarrenEverestDotnetDbContext))]
-    [Migration("20221007171012_CreateTables")]
+    [Migration("20221020115020_CreateTables")]
     partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,6 +146,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("Quotes")
                         .HasColumnType("INT")
                         .HasColumnName("Quotes");
+
+                    b.Property<ulong>("WasExecuted")
+                        .HasColumnType("BIT")
+                        .HasColumnName("WasExecuted");
 
                     b.HasKey("Id");
 

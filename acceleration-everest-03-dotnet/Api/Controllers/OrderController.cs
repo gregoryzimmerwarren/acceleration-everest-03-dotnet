@@ -17,21 +17,6 @@ public class OrderController : ControllerBase
         _orderAppService = orderAppService ?? throw new System.ArgumentNullException(nameof(orderAppService));
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAsync(CreateOrder orderToCreate)
-    {
-        try
-        {
-            var id = await _orderAppService.CreateAsync(orderToCreate).ConfigureAwait(false);
-
-            return Created("Id:", id);
-        }
-        catch (ArgumentException exception)
-        {
-            return BadRequest(exception);
-        }
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllOrdersAsync()
     {

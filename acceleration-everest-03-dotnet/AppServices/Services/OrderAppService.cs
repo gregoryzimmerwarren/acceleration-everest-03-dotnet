@@ -1,8 +1,10 @@
 ﻿using AppModels.Orders;
 using AppServices.Interfaces;
 using AutoMapper;
+using DomainModels.Enums;
 using DomainModels.Models;
 using DomainServices.Interfaces;
+using DomainServices.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,8 +17,8 @@ public class OrderAppService : IOrderAppService
     private readonly IMapper _mapper;
 
     public OrderAppService(
-        IProductAppService productAppService, 
-        IOrderService orderService, 
+        IProductAppService productAppService,
+        IOrderService orderService,
         IMapper mapper)
     {
         _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
@@ -32,7 +34,7 @@ public class OrderAppService : IOrderAppService
         mappedOrder.NetValue = mappedOrder.Quotes * unitPrice;
 
         return _orderService.Create(mappedOrder);
-    }    
+    }
 
     public async Task<IEnumerable<OrderResult>> GetAllOrdersAsync()
     {
@@ -48,11 +50,27 @@ public class OrderAppService : IOrderAppService
         return _mapper.Map<OrderResult>(order);
     }
 
-    public async Task<IEnumerable<OrderResult>> GetOrdersByPorfolioIdAndProductIdAsync(long portfolioId, long productId)
+    public async Task<int> GetAvailableQuotes(long portfolioId, long productId)
     {
         var orders = await _orderService.GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
 
-        return _mapper.Map<IEnumerable<OrderResult>>(orders);
+        var sellingQuotes = 0;
+        var boughtQuotes = 0;
+
+        foreach (var order in orders)
+        {
+            if (order.Direction == OrderDirection.Buy)
+            {
+                boughtQuotes += order.Quotes;
+            }
+            else
+            {
+                sellingQuotes += order.Quotes;
+            }
+        }
+
+        var totalQuotes = boughtQuotes - sellingQuotes;
+        return totalQuotes;
     }
 
     public async Task<IEnumerable<OrderResult>> GetOrdersByPortfolioIdAsync(long portfolioId)
@@ -67,5 +85,13 @@ public class OrderAppService : IOrderAppService
         var orders = await _orderService.GetOrdersByProductIdAsync(productId).ConfigureAwait(false);
 
         return _mapper.Map<IEnumerable<OrderResult>>(orders);
+    }
+
+    public void Update(UpdateOrder updateOrderDto)
+    {
+        var mappedOrder = _mapper.Map<Order>(updateOrderDto);
+        mappedOrder.WasExecuted = true;
+
+        _orderService.Update(mappedOrder);
     }
 }

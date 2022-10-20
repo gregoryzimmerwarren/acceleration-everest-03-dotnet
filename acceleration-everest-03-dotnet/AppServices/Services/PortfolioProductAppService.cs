@@ -21,11 +21,11 @@ public class PortfolioProductAppService : IPortfolioProductAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public long Create(CreatePortfolioProduct createPortfolioProductDto)
+    public void Create(CreatePortfolioProduct createPortfolioProductDto)
     {
         var mappedPortfolioProduct = _mapper.Map<PortfolioProduct>(createPortfolioProductDto);
 
-        return _portfolioProductService.Create(mappedPortfolioProduct);
+        _portfolioProductService.Create(mappedPortfolioProduct);
     }
 
     public async Task DeleteAsync(long portfolioId, long ProductId)

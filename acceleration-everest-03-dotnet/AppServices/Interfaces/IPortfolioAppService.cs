@@ -12,11 +12,11 @@ public interface IPortfolioAppService
     Task DepositAsync(long customerId, long portfolioId, decimal amount);
     Task ExecuteBuyOrderAsync(long portfolioId, long productId, decimal amount);
     Task ExecuteOrdersOfTheDayAsync();
-    Task ExecuteSellOrderAsync(long portfolioId, long productId, int quotes, decimal amount);
+    Task ExecuteSellOrderAsync(long portfolioId, long productId, decimal amount);
     Task<IEnumerable<PortfolioResult>> GetAllPortfoliosAsync();
     Task<PortfolioResult> GetPortfolioByIdAsync(long portfolioId);
     Task<IEnumerable<PortfolioResult>> GetPortfoliosByCustomerIdAsync(long customerId);
-    Task InvestAsync(CreateOrder createOrderDto, decimal amount);
-    Task RedeemToPortfolioAsync(CreateOrder createOrderDto, decimal amount);
+    Task InvestAsync(CreateOrder createOrderDto);
+    Task RedeemToPortfolioAsync(CreateOrder createOrderDto);
     Task<bool> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount);
 }

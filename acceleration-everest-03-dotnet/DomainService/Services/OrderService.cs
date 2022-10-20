@@ -100,4 +100,11 @@ public class OrderService : IOrderService
 
         return orders;
     }
+
+    public void Update(Order orderToUpdate)
+    {
+        var repository = _unitOfWork.Repository<Order>();
+        repository.Update(orderToUpdate);
+        _unitOfWork.SaveChanges();
+    }
 }

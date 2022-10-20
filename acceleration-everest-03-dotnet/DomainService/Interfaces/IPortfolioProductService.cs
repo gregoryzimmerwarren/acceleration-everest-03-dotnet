@@ -6,7 +6,7 @@ namespace DomainServices.Interfaces;
 
 public interface IPortfolioProductService
 {
-    long Create(PortfolioProduct portfolioProductToCreate);
+    void Create(PortfolioProduct portfolioProductToCreate);
     Task DeleteAsync(long portfolioId, long productId);
     Task<IEnumerable<PortfolioProduct>> GetAllPortfolioProductAsync();
     Task<PortfolioProduct> GetPortfolioProductByIdsAsync(long portfolioId, long productId);

@@ -123,6 +123,7 @@ namespace Infrastructure.Data.Migrations
                     Quotes = table.Column<int>(type: "INT", nullable: false),
                     NetValue = table.Column<decimal>(type: "DECIMAL(14,2)", nullable: false),
                     LiquidatedAt = table.Column<DateTime>(type: "DATE", nullable: false),
+                    WasExecuted = table.Column<ulong>(type: "BIT", nullable: false),
                     Direction = table.Column<string>(type: "VARCHAR(4)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PortfolioId = table.Column<long>(type: "BIGINT", nullable: false),

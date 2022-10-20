@@ -22,13 +22,11 @@ public class PortfolioProductService : IPortfolioProductService
         _repositoryFactory = repositoryFactory ?? (IRepositoryFactory)_unitOfWork;
     }
 
-    public long Create(PortfolioProduct portfolioProductToCreate)
+    public void Create(PortfolioProduct portfolioProductToCreate)
     {
         var repository = _unitOfWork.Repository<PortfolioProduct>();
         repository.Add(portfolioProductToCreate);
         _unitOfWork.SaveChanges();
-
-        return portfolioProductToCreate.Id;
     }
 
     public async Task DeleteAsync(long portfolioId, long productId)

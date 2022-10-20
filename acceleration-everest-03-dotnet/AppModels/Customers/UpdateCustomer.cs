@@ -6,7 +6,7 @@ namespace AppModels.Customers;
 
 public class UpdateCustomer
 {
-    public UpdateCustomer(
+    public UpdateCustomer(  
         string fullName,
         string email,
         string emailConfirmation,

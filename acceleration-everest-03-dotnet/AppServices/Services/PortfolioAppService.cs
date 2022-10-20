@@ -62,8 +62,16 @@ public class PortfolioAppService : IPortfolioAppService
 
     public async Task ExecuteBuyOrderAsync(long portfolioId, long productId, decimal amount)
     {
-        _portfolioProductAppService.Create(new CreatePortfolioProduct(portfolioId, productId));
         await _portfolioService.InvestAsync(portfolioId, amount).ConfigureAwait(false);
+
+        try
+        {
+            await _portfolioProductAppService.GetPortfolioProductByIdsAsync(portfolioId, productId);
+        }
+        catch (ArgumentNullException)
+        {
+            _portfolioProductAppService.Create(new CreatePortfolioProduct(portfolioId, productId));
+        }
     }
 
     public async Task ExecuteOrdersOfTheDayAsync()
@@ -72,44 +80,30 @@ public class PortfolioAppService : IPortfolioAppService
 
         foreach (var order in orders)
         {
-            if (order.LiquidatedAt == DateTime.Now.Date)
+            if (order.LiquidatedAt == DateTime.Now.Date && order.WasExecuted == false)
             {
                 if (order.Direction == "Buy")
                 {
                     await ExecuteBuyOrderAsync(order.Product.Id, order.Product.Id, order.NetValue).ConfigureAwait(false);
                 }
-                await ExecuteSellOrderAsync(order.Product.Id, order.Product.Id, order.Quotes, order.NetValue).ConfigureAwait(false);
+                else
+                {
+                    await ExecuteSellOrderAsync(order.Product.Id, order.Product.Id, order.NetValue).ConfigureAwait(false);
+                }
+
+                _orderAppService.Update(new UpdateOrder(order.Id, order.Quotes, order.NetValue, order.Direction, order.WasExecuted, order.LiquidatedAt, order.Portfolio.Id, order.Product.Id));
             }
         }
     }
 
-    public async Task ExecuteSellOrderAsync(long portfolioId, long productId, int quotes, decimal amount)
+    public async Task ExecuteSellOrderAsync(long portfolioId, long productId, decimal amount)
     {
         await _portfolioService.RedeemToPortfolioAsync(portfolioId, amount).ConfigureAwait(false);
 
-        var orders = await _orderAppService.GetOrdersByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
-        var sellingQuotes = quotes;
-        var boughtQuotes = 0;
+        var totalQuotes = await _orderAppService.GetAvailableQuotes(portfolioId, productId).ConfigureAwait(false);
 
-        foreach (var order in orders)
-        {
-            if (order.Direction == "Buy")
-            {
-                boughtQuotes += order.Quotes;
-            }
-            else
-            {
-                sellingQuotes += order.Quotes;
-            }
-        }
-
-        foreach (var order in orders)
-            if (boughtQuotes >= sellingQuotes)
-                if (order.Direction == "Buy")
-                {
-                    await _portfolioProductAppService.DeleteAsync(portfolioId, productId).ConfigureAwait(false);
-                    boughtQuotes -= order.Quotes;
-                }
+        if (totalQuotes == 0)
+            await _portfolioProductAppService.DeleteAsync(portfolioId, productId).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<PortfolioResult>> GetAllPortfoliosAsync()
@@ -133,27 +127,44 @@ public class PortfolioAppService : IPortfolioAppService
         return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
-    public async Task InvestAsync(CreateOrder createOrderDto, decimal amount)
+    public async Task InvestAsync(CreateOrder createOrderDto)
     {
-        var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId).ConfigureAwait(false);
+        var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId);
+        decimal amount = 0;
 
         if (product != null)
         {
+            amount = product.UnitPrice * createOrderDto.Quotes;
             createOrderDto.Direction = OrderDirection.Buy;
-            await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
         }
 
-        if (createOrderDto.LiquidatedAt < DateTime.Now.Date)
+        if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
+        {
             await ExecuteBuyOrderAsync(createOrderDto.ProductId, createOrderDto.ProductId, amount);
+            createOrderDto.WasExecuted = true;
+        }
+
+        await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
     }
 
-    public async Task RedeemToPortfolioAsync(CreateOrder createOrderDto, decimal amount)
+    public async Task RedeemToPortfolioAsync(CreateOrder createOrderDto)
     {
-        createOrderDto.Direction = OrderDirection.Sell;
-        await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
+        var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId);
+        decimal amount = 0;
 
-        if (createOrderDto.LiquidatedAt < DateTime.Now.Date)
-            await ExecuteSellOrderAsync(createOrderDto.ProductId, createOrderDto.ProductId, createOrderDto.Quotes, amount);
+        if (product != null)
+        {
+            amount = product.UnitPrice * createOrderDto.Quotes;
+            createOrderDto.Direction = OrderDirection.Sell;
+        }
+
+        if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
+        {
+            await ExecuteSellOrderAsync(createOrderDto.ProductId, createOrderDto.ProductId, amount);
+            createOrderDto.WasExecuted = true;
+        }
+
+        await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
     }
 
     public async Task<bool> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)
