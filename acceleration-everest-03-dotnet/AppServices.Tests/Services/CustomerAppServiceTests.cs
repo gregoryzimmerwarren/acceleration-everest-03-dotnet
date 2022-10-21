@@ -1,6 +1,9 @@
-﻿using AppServices.Services;
-using AppServices.Tests.Fixtures;
+﻿using AppModels.Customers;
+using AppServices.Interfaces;
+using AppServices.Services;
+using AppServices.Tests.Fixtures.Customers;
 using AutoMapper;
+using DomainModels.Models;
 using DomainServices.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -9,33 +12,37 @@ namespace AppServicesTests.Services;
 
 public class CustomerAppServiceTests
 {
-    private readonly ICustomerBankInfoService _customerBankInfoService;
+    private readonly Mock<ICustomerBankInfoAppService> _mockCustomerBankInfoAppService;
+    private readonly Mock<ICustomerService> _mockCustomerService;
     private readonly CustomerAppService _customerAppService;
-    private readonly IPortfolioService _portfolioService;
-    private readonly ICustomerService _customerService;
-    private readonly IMapper _mapper;
+    private readonly Mock<IMapper> _mockMapper;
 
     public CustomerAppServiceTests()
     {
-        _customerBankInfoService = Mock.Of<ICustomerBankInfoService>(MockBehavior.Default);
-        _portfolioService = Mock.Of<IPortfolioService>(MockBehavior.Default);
-        _customerService = Mock.Of<ICustomerService>(MockBehavior.Default);
-        _mapper = Mock.Of<IMapper>(MockBehavior.Default);
-
-        _customerAppService = new CustomerAppService(_customerBankInfoService, _portfolioService, _customerService, _mapper);
-
+        _mockCustomerBankInfoAppService = new Mock<ICustomerBankInfoAppService>();
+        _mockMapper = new Mock<IMapper>();
+        _mockCustomerService = new Mock<ICustomerService>();
+        _customerAppService = new CustomerAppService(_mockCustomerBankInfoAppService.Object, _mockCustomerService.Object, _mockMapper.Object);
     }
-        
+
     [Fact]
-    public void Should_Create_Successfully()
+        public async void Should_Create_Successfully()
     {
-        // Arrange            
-        var customerDtoTest = CustomerBogus.GenerateCustomerDto();
+        // Arrange  
+        var createCustomerTest = CreateCustomerBogus.GenerateCreateCustomerBogus();
+        Customer customer = CustomerBogus.GenerateCustomerBogus();
+        long idTest = 1;
+                     
+        _mockCustomerService.Setup(service => service.CreateAsync(It.IsAny<Customer>())).ReturnsAsync(idTest);
+        _mockCustomerBankInfoAppService.Setup(appService => appService.Create(idTest));
 
         // Action
-        var result = _customerAppService.Create(customerDtoTest);
+        var result = await _customerAppService.CreateAsync(createCustomerTest);
 
         // Assert
-        result.Should().BeGreaterThan(0);  
+        result.Should().BeGreaterThan(0);
+
+        _mockCustomerService.Verify(service => service.CreateAsync(It.IsAny<Customer>()), Times.Once);
+        _mockCustomerBankInfoAppService.Verify(appService => appService.Create(idTest), Times.Once);
     }
 }
