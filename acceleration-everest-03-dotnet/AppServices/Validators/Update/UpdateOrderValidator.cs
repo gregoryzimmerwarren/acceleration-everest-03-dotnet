@@ -4,9 +4,9 @@ using System;
 
 namespace AppServices.Validators.Update
 {
-    public class UpdateOrderDtoValidator : AbstractValidator<UpdateOrder>
+    public class UpdateOrderValidator : AbstractValidator<UpdateOrder>
     {
-        public UpdateOrderDtoValidator()
+        public UpdateOrderValidator()
         {
             RuleFor(order => order.Quotes)
             .NotEmpty()

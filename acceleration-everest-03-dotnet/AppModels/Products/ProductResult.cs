@@ -1,6 +1,6 @@
-﻿using AppModels.Orders;
+﻿using AppModels.Enums;
+using AppModels.Orders;
 using AppModels.Portfolios;
-using DomainModels.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

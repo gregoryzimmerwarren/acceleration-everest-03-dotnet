@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using DomainModels.Enums;
+using DomainModels.Models;
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Infrastructure.Data;
@@ -43,6 +44,29 @@ public class OrderService : IOrderService
             throw new ArgumentNullException("No order found");
 
         return orders;
+    }
+
+    public async Task<int> GetAvailableQuotes(long portfolioId, long productId)
+    {
+        var orders = await GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
+
+        var sellingQuotes = 0;
+        var boughtQuotes = 0;
+
+        foreach (var order in orders)
+        {
+            if (order.Direction == OrderDirection.Buy)
+            {
+                boughtQuotes += order.Quotes;
+            }
+            else
+            {
+                sellingQuotes += order.Quotes;
+            }
+        }
+
+        var totalQuotes = boughtQuotes - sellingQuotes;
+        return totalQuotes;
     }
 
     public async Task<Order> GetOrderByIdAsync(long orderId)

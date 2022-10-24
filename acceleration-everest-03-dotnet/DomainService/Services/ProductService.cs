@@ -69,6 +69,18 @@ public class ProductService : IProductService
         return product;
     }
 
+    public async Task<decimal> GetProductUnitPriceByIdAsync (long id)
+    {
+        var repository = _repositoryFactory.Repository<Product>();
+        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
+        var product = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
+
+        if (product == null)
+            throw new ArgumentNullException($"No product found for Id: {id}");
+
+        return product.UnitPrice;
+    }
+
     public void Update(Product productToUpdate)
     {
         var repository = _unitOfWork.Repository<Product>();

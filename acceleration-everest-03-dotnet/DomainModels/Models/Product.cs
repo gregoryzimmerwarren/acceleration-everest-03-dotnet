@@ -28,8 +28,8 @@ public class Product : IEntity
     public int DaysToExpire { get; set; }
     public DateTime IssuanceAt { get; set; }
     public DateTime ExpirationAt { get; set; }
-
     public ProductType Type { get; set; }
+
     public IEnumerable<Portfolio> Portfolios { get; set; }
     public List<Order> Orders { get; set; }
     public List<PortfolioProduct> PortfolioProducts { get; set; }

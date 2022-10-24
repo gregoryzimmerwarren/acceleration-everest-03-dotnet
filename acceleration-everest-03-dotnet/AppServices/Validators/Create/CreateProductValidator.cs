@@ -4,9 +4,9 @@ using System;
 
 namespace AppServices.Validators.Create
 {
-    public class CreateProductDtoValidator : AbstractValidator<CreateProduct>
+    public class CreateProductValidator : AbstractValidator<CreateProduct>
     {
-        public CreateProductDtoValidator()
+        public CreateProductValidator()
         {
             RuleFor(product => product.Symbol)
                 .NotEmpty()

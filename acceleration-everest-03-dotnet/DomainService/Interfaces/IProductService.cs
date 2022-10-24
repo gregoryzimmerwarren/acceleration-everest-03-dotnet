@@ -10,5 +10,6 @@ public interface IProductService
     Task DeleteAsync(long id);
     Task<IEnumerable<Product>> GetAllProductsAsync();
     Task<Product> GetProductByIdAsync(long id);
+    Task<decimal> GetProductUnitPriceByIdAsync(long id);
     void Update(Product productToUpdate);
 }

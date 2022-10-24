@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace AppServices.Validators.Create
 {
-    public class CreatePortfolioProductDtoValidator : AbstractValidator<CreatePortfolioProduct>
+    public class CreatePortfolioProductValidator : AbstractValidator<CreatePortfolioProduct>
     {
-        public CreatePortfolioProductDtoValidator()
+        public CreatePortfolioProductValidator()
         {
             RuleFor(portfolioProduct => portfolioProduct.PortfolioId)
                 .NotEmpty()

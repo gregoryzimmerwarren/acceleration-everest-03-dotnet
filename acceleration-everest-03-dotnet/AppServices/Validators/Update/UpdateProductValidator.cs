@@ -4,9 +4,9 @@ using System;
 
 namespace AppServices.Validators.Update
 {
-    internal class UpdateProductDtoValidator : AbstractValidator<CreateProduct>
+    internal class UpdateProductValidator : AbstractValidator<CreateProduct>
     {
-        public UpdateProductDtoValidator()
+        public UpdateProductValidator()
         {
             RuleFor(product => product.Symbol)
                 .NotEmpty()

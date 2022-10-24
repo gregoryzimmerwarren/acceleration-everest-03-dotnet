@@ -48,6 +48,11 @@ public class ProductAppService : IProductAppService
         return _mapper.Map<ProductResult>(product);
     }
 
+    public async Task<decimal> GetProductUnitPriceByIdAsync(long productId)
+    {
+        return await _productService.GetProductUnitPriceByIdAsync(productId).ConfigureAwait(false);
+    }
+
     public void Update(long productId, UpdateProduct updateProductDto)
     {
         var mappedProduct = _mapper.Map<Product>(updateProductDto);

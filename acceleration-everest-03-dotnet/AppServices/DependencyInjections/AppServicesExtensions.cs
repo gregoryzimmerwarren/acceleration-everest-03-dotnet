@@ -11,7 +11,6 @@ public static class AppServicesExtensions
         services.AddTransient<ICustomerBankInfoAppService, CustomerBankInfoAppService>();
         services.AddTransient<ICustomerAppService, CustomerAppService>();
         services.AddTransient<IOrderAppService, OrderAppService>();
-        services.AddTransient<IPortfolioProductAppService, PortfolioProductAppService>();
         services.AddTransient<IPortfolioAppService, PortfolioAppService>();
         services.AddTransient<IProductAppService, ProductAppService>();
 

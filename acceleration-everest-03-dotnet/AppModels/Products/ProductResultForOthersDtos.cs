@@ -1,7 +1,5 @@
-﻿using AppModels.Orders;
-using DomainModels.Enums;
+﻿using AppModels.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppModels.Products;

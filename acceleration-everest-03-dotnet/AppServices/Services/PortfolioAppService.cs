@@ -1,9 +1,8 @@
-﻿using AppModels.Orders;
+﻿using AppModels.Enums;
+using AppModels.Orders;
 using AppModels.Portfolios;
-using AppModels.PortfoliosProducts;
 using AppServices.Interfaces;
 using AutoMapper;
-using DomainModels.Enums;
 using DomainModels.Models;
 using DomainServices.Interfaces;
 using System;
@@ -14,23 +13,23 @@ namespace AppServices.Services;
 
 public class PortfolioAppService : IPortfolioAppService
 {
-    private readonly IPortfolioProductAppService _portfolioProductAppService;
     private readonly ICustomerBankInfoAppService _customerBankInfoAppService;
+    private readonly IPortfolioProductService _portfolioProductService;
     private readonly IProductAppService _productAppService;
     private readonly IPortfolioService _portfolioService;
     private readonly IOrderAppService _orderAppService;
     private readonly IMapper _mapper;
 
     public PortfolioAppService(
-        IPortfolioProductAppService portfolioProductAppService,
         ICustomerBankInfoAppService customerBankInfoService,
+        IPortfolioProductService portfolioProductService,
         IProductAppService productAppService,
         IPortfolioService portfolioService,
         IOrderAppService orderAppService,
         IMapper mapper)
     {
-        _portfolioProductAppService = portfolioProductAppService ?? throw new System.ArgumentNullException(nameof(portfolioProductAppService));
         _customerBankInfoAppService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
+        _portfolioProductService = portfolioProductService ?? throw new System.ArgumentNullException(nameof(portfolioProductService));
         _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
         _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
         _orderAppService = orderAppService ?? throw new System.ArgumentNullException(nameof(orderAppService));
@@ -66,11 +65,12 @@ public class PortfolioAppService : IPortfolioAppService
 
         try
         {
-            await _portfolioProductAppService.GetPortfolioProductByIdsAsync(portfolioId, productId);
+            await _portfolioProductService.GetPortfolioProductByIdsAsync(portfolioId, productId);
         }
         catch (ArgumentNullException)
         {
-            _portfolioProductAppService.Create(new CreatePortfolioProduct(portfolioId, productId));
+            _portfolioProductService.Create(new PortfolioProduct(portfolioId, productId));
+
         }
     }
 
@@ -103,7 +103,7 @@ public class PortfolioAppService : IPortfolioAppService
         var totalQuotes = await _orderAppService.GetAvailableQuotes(portfolioId, productId).ConfigureAwait(false);
 
         if (totalQuotes == 0)
-            await _portfolioProductAppService.DeleteAsync(portfolioId, productId).ConfigureAwait(false);
+            await _portfolioProductService.DeleteAsync(portfolioId, productId).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<PortfolioResult>> GetAllPortfoliosAsync()
@@ -140,7 +140,7 @@ public class PortfolioAppService : IPortfolioAppService
 
         if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
         {
-            await ExecuteBuyOrderAsync(createOrderDto.ProductId, createOrderDto.ProductId, amount);
+            await ExecuteBuyOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, amount);
             createOrderDto.WasExecuted = true;
         }
 
@@ -160,7 +160,7 @@ public class PortfolioAppService : IPortfolioAppService
 
         if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
         {
-            await ExecuteSellOrderAsync(createOrderDto.ProductId, createOrderDto.ProductId, amount);
+            await ExecuteSellOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, amount);
             createOrderDto.WasExecuted = true;
         }
 

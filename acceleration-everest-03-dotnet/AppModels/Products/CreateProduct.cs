@@ -1,5 +1,4 @@
-﻿using DomainModels.Enums;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -19,6 +18,7 @@ public class CreateProduct
         IssuanceAt = issuanceAt;
         ExpirationAt = expirationAt;
         Type = type;
+        DaysToExpire = (expirationAt.Subtract(issuanceAt)).Days;
     }
 
     public string Symbol { get; set; }

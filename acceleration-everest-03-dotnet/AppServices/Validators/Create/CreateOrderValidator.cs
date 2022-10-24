@@ -5,9 +5,9 @@ using System;
 
 namespace AppServices.Validators.Create;
 
-public class CreateOrderDtoValidator : AbstractValidator<CreateOrder>
+public class CreateOrderValidator : AbstractValidator<CreateOrder>
 {
-    public CreateOrderDtoValidator()
+    public CreateOrderValidator()
     {
         RuleFor(order => order.Quotes)
             .NotEmpty()
