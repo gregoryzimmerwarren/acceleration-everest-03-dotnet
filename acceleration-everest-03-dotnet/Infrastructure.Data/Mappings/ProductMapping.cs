@@ -10,7 +10,8 @@ public class ProductMapping : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("Products");
 
-        builder.HasKey(product => product.Id);
+        builder.HasKey(product => product.Id)
+             .ValueGenereateOnAdd();
 
         builder.Property(product => product.Symbol)
             .HasColumnType("VARCHAR(50)")
