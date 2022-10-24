@@ -6,7 +6,7 @@ namespace DomainModels.Models;
 
 public class Product : IEntity
 {
-    public Product() { }
+    protected Product() { }
 
     public Product(
         string symbol, 

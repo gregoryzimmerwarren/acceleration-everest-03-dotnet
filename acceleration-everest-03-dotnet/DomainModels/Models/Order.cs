@@ -26,10 +26,11 @@ public class Order : IEntity
     public decimal NetValue { get; set; }
     public DateTime LiquidatedAt { get; set; }
     public bool WasExecuted { get; set; }
-
     public OrderDirection Direction { get; set; }
+    
     public long PortfolioId { get; set; }
     public Portfolio Portfolio { get; set; }
+    
     public long ProductId { get; set; }
     public Product Product { get; set; }
 }

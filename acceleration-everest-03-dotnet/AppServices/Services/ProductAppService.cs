@@ -24,8 +24,7 @@ public class ProductAppService : IProductAppService
     public long Create(CreateProduct createProductDto)
     {
         var mappedProduct = _mapper.Map<Product>(createProductDto);
-        mappedProduct.DaysToExpire = (mappedProduct.ExpirationAt.Subtract(mappedProduct.IssuanceAt)).Days;
-
+      
         return _productService.Create(mappedProduct);
     }
 
