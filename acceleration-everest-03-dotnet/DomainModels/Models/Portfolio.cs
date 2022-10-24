@@ -28,7 +28,8 @@ public class Portfolio : IEntity
 
     public long CustomerId { get; set; }
     public Customer Customer { get; set; }
-    public IEnumerable<Product> Products { get; set; }
-    public List<Order> Orders { get; set; }
-    public List<PortfolioProduct> PortfolioProducts { get; set; }
+    
+    public ICollection<Product> Products { get; set; }
+    public ICollection<Order> Orders { get; set; }
+    public ICollection<PortfolioProduct> PortfolioProducts { get; set; }
 }
