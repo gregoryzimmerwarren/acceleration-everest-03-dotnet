@@ -10,7 +10,8 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
     {
         builder.ToTable("Orders");
 
-        builder.HasKey(order => order.Id);
+        builder.HasKey(order => order.Id)
+             .ValueGenereateOnAdd();
 
         builder.Property(order => order.Quotes)
             .HasColumnType("INT")
