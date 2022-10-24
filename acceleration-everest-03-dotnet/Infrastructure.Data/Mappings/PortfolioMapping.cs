@@ -10,8 +10,7 @@ public class PortfolioMapping : IEntityTypeConfiguration<Portfolio>
     {
         builder.ToTable("Portfolios");
 
-        builder.HasKey(portfolio => portfolio.Id)
-             .ValueGenereateOnAdd();
+        builder.HasKey(portfolio => portfolio.Id);
 
         builder.Property(portfolio => portfolio.Name)
             .HasColumnType("VARCHAR(50)")
