@@ -47,27 +47,6 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Symbol = table.Column<string>(type: "VARCHAR(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UnitPrice = table.Column<decimal>(type: "DECIMAL(5,2)", nullable: false),
-                    DaysToExpire = table.Column<int>(type: "INT", nullable: false),
-                    IssuanceAt = table.Column<DateTime>(type: "DATE", nullable: false),
-                    ExpirationAt = table.Column<DateTime>(type: "DATE", nullable: false),
-                    Type = table.Column<string>(type: "VARCHAR(11)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "CustomersBankInfo",
                 columns: table => new
                 {
@@ -115,12 +94,40 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Symbol = table.Column<string>(type: "VARCHAR(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UnitPrice = table.Column<decimal>(type: "DECIMAL(5,2)", nullable: false),
+                    DaysToExpire = table.Column<int>(type: "INT", nullable: false),
+                    IssuanceAt = table.Column<DateTime>(type: "DATE", nullable: false),
+                    ExpirationAt = table.Column<DateTime>(type: "DATE", nullable: false),
+                    Type = table.Column<string>(type: "VARCHAR(11)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PortfolioId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Portfolios_PortfolioId",
+                        column: x => x.PortfolioId,
+                        principalTable: "Portfolios",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Quotes = table.Column<int>(type: "INT", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "DECIMAL(5,2)", nullable: false),
                     NetValue = table.Column<decimal>(type: "DECIMAL(14,2)", nullable: false),
                     LiquidatedAt = table.Column<DateTime>(type: "DATE", nullable: false),
                     WasExecuted = table.Column<ulong>(type: "BIT", nullable: false),
@@ -153,8 +160,8 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PortfolioId = table.Column<long>(type: "bigint", nullable: false),
-                    ProductId = table.Column<long>(type: "bigint", nullable: false)
+                    PortfolioId = table.Column<long>(type: "BIGINT", nullable: false),
+                    ProductId = table.Column<long>(type: "BIGINT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,6 +223,11 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_Portfolios_CustomerId",
                 table: "Portfolios",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_PortfolioId",
+                table: "Products",
+                column: "PortfolioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -230,10 +242,10 @@ namespace Infrastructure.Data.Migrations
                 name: "PortfolioProduct");
 
             migrationBuilder.DropTable(
-                name: "Portfolios");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Portfolios");
 
             migrationBuilder.DropTable(
                 name: "Customers");

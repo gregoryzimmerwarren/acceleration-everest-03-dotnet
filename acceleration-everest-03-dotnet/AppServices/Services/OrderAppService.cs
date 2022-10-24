@@ -24,11 +24,9 @@ public class OrderAppService : IOrderAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<long> CreateAsync(CreateOrder createOrderDto)
+    public long Create(CreateOrder createOrderDto)
     {
-        var mappedOrder = _mapper.Map<Order>(createOrderDto); 
-        var unitPrice = await _productAppService.GetProductUnitPriceByIdAsync(mappedOrder.ProductId).ConfigureAwait(false);
-        mappedOrder.NetValue = mappedOrder.Quotes * unitPrice;
+        var mappedOrder = _mapper.Map<Order>(createOrderDto);
 
         return _orderService.Create(mappedOrder);
     }

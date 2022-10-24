@@ -13,6 +13,11 @@ public class CreateOrderValidator : AbstractValidator<CreateOrder>
             .NotEmpty()
             .GreaterThan(0);
 
+        RuleFor(order => order.UnitPrice)
+                .NotEmpty()
+                .GreaterThan(0)
+                .WithMessage("Unit price must be more than R$0,00.");
+
         RuleFor(order => order.LiquidatedAt)
             .NotEmpty()
             .GreaterThanOrEqualTo(DateTime.Now.Date);

@@ -91,7 +91,7 @@ public class PortfolioAppService : IPortfolioAppService
                     await ExecuteSellOrderAsync(order.Product.Id, order.Product.Id, order.NetValue).ConfigureAwait(false);
                 }
 
-                _orderAppService.Update(new UpdateOrder(order.Id, order.Quotes, order.NetValue, order.Direction, order.WasExecuted, order.LiquidatedAt, order.Portfolio.Id, order.Product.Id));
+                _orderAppService.Update(new UpdateOrder(order.Id, order.Quotes, order.UnitPrice, order.Direction, order.WasExecuted, order.LiquidatedAt, order.Portfolio.Id, order.Product.Id));
             }
         }
     }
@@ -104,13 +104,6 @@ public class PortfolioAppService : IPortfolioAppService
 
         if (totalQuotes == 0)
             await _portfolioProductService.DeleteAsync(portfolioId, productId).ConfigureAwait(false);
-    }
-
-    public async Task<IEnumerable<PortfolioResult>> GetAllPortfoliosAsync()
-    {
-        var portfolios = await _portfolioService.GetAllPortfoliosAsync().ConfigureAwait(false);
-
-        return _mapper.Map<IEnumerable<PortfolioResult>>(portfolios);
     }
 
     public async Task<PortfolioResult> GetPortfolioByIdAsync(long portfolioId)
@@ -129,14 +122,11 @@ public class PortfolioAppService : IPortfolioAppService
 
     public async Task InvestAsync(CreateOrder createOrderDto)
     {
-        var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId);
-        decimal amount = 0;
-
-        if (product != null)
-        {
-            amount = product.UnitPrice * createOrderDto.Quotes;
-            createOrderDto.Direction = OrderDirection.Buy;
-        }
+        var unitPrice = await _productAppService.GetProductUnitPriceByIdAsync(createOrderDto.ProductId);
+        createOrderDto.UnitPrice = unitPrice;
+        decimal amount = createOrderDto.UnitPrice * createOrderDto.Quotes;
+        createOrderDto.NetValue = amount;
+        createOrderDto.Direction = OrderDirection.Buy;
 
         if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
         {
@@ -144,19 +134,17 @@ public class PortfolioAppService : IPortfolioAppService
             createOrderDto.WasExecuted = true;
         }
 
-        await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
+
+        _orderAppService.Create(createOrderDto);
     }
 
     public async Task RedeemToPortfolioAsync(CreateOrder createOrderDto)
     {
-        var product = await _productAppService.GetProductByIdAsync(createOrderDto.ProductId);
-        decimal amount = 0;
-
-        if (product != null)
-        {
-            amount = product.UnitPrice * createOrderDto.Quotes;
-            createOrderDto.Direction = OrderDirection.Sell;
-        }
+        var unitPrice = await _productAppService.GetProductUnitPriceByIdAsync(createOrderDto.ProductId);
+        createOrderDto.UnitPrice = unitPrice;
+        decimal amount = createOrderDto.UnitPrice * createOrderDto.Quotes;
+        createOrderDto.NetValue = amount;
+        createOrderDto.Direction = OrderDirection.Sell;
 
         if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
         {
@@ -164,7 +152,7 @@ public class PortfolioAppService : IPortfolioAppService
             createOrderDto.WasExecuted = true;
         }
 
-        await _orderAppService.CreateAsync(createOrderDto).ConfigureAwait(false);
+        _orderAppService.Create(createOrderDto);
     }
 
     public async Task<bool> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)

@@ -16,6 +16,11 @@ namespace AppServices.Validators.Update
                 .NotEmpty()
                 .GreaterThanOrEqualTo(DateTime.Now.Date);
 
+            RuleFor(order => order.UnitPrice)
+                .NotEmpty()
+                .GreaterThan(0)
+                .WithMessage("Unit price must be more than R$0,00.");
+
             RuleFor(order => order.Direction)
                 .NotNull()
                 .IsInEnum();

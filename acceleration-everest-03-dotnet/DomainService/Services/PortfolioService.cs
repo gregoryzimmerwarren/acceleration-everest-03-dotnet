@@ -55,29 +55,13 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         _unitOfWork.SaveChanges();
     }
 
-    public async Task<IEnumerable<Portfolio>> GetAllPortfoliosAsync()
-    {
-        var repository = _repositoryFactory.Repository<Portfolio>();
-        var query = repository.MultipleResultQuery()
-            .Include(portfolio => portfolio.Include(customer => customer.Customer)
-            .Include(order => order.Orders)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
-            .Include(product => product.Products));
-        var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
-
-        if (portfolios.Count == 0)
-            throw new ArgumentNullException("No portfolio found");
-
-        return portfolios;
-    }
-
     public async Task<Portfolio> GetPortfolioByIdAsync(long portfolioId)
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
         var query = repository.SingleResultQuery().AndFilter(portfolio => portfolio.Id == portfolioId)
             .Include(portfolio => portfolio.Include(customer => customer.Customer)
             .Include(order => order.Orders)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .ThenInclude(product => product.Product)
             .Include(product => product.Products));
         var portfolio = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
@@ -93,7 +77,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId)
             .Include(portfolio => portfolio.Include(customer => customer.Customer)
             .Include(order => order.Orders)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .ThenInclude(product => product.Product)
             .Include(product => product.Products));
         var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
 

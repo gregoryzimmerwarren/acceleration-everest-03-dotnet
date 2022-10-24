@@ -13,7 +13,6 @@ public interface IPortfolioAppService
     Task ExecuteBuyOrderAsync(long portfolioId, long productId, decimal amount);
     Task ExecuteOrdersOfTheDayAsync();
     Task ExecuteSellOrderAsync(long portfolioId, long productId, decimal amount);
-    Task<IEnumerable<PortfolioResult>> GetAllPortfoliosAsync();
     Task<PortfolioResult> GetPortfolioByIdAsync(long portfolioId);
     Task<IEnumerable<PortfolioResult>> GetPortfoliosByCustomerIdAsync(long customerId);
     Task InvestAsync(CreateOrder createOrderDto);

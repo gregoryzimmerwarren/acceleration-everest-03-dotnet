@@ -8,12 +8,12 @@ namespace AppModels.Orders;
 public class CreateOrder
 {
     public CreateOrder(
-        int quotes, 
+        int quotes,
         DateTime liquidatedAt, 
         long portfolioId, 
         long productId)
     {
-        Quotes = quotes;
+        Quotes = quotes;      
         LiquidatedAt = liquidatedAt;
         PortfolioId = portfolioId;
         ProductId = productId;
@@ -21,6 +21,10 @@ public class CreateOrder
     }
     
     public int Quotes { get; set; }
+    [JsonIgnore]
+    public decimal UnitPrice { get; set; }
+    [JsonIgnore]
+    public decimal NetValue { get; set; }
     public long PortfolioId { get; set; }
     public long ProductId { get; set; }
 

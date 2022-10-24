@@ -79,23 +79,6 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllPortfoliosAsync()
-    {
-        try
-        {
-            var result = await _portifolioAppService.GetAllPortfoliosAsync().ConfigureAwait(false);
-
-            return Ok(result);
-        }
-        catch (ArgumentNullException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-
-            return NotFound(message);
-        }
-    }
-
     [HttpGet("{portfolioId}")]
     public async Task<IActionResult> GetPortfolioByIdAsync(long portfolioId)
     {

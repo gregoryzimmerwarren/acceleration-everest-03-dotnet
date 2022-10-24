@@ -1,7 +1,6 @@
-﻿using AppModels.Portfolios;
-using AppModels.Products;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AppModels.Orders;
 
@@ -10,7 +9,7 @@ public class UpdateOrder
     public UpdateOrder(
         long id,
         int quotes,
-        decimal netValue,
+        decimal unitPrice,
         string direction,
         bool wasExecuted,
         DateTime liquidatedAt,
@@ -19,7 +18,7 @@ public class UpdateOrder
     {
         Id = id;
         Quotes = quotes;
-        NetValue = netValue;
+        NetValue = quotes * unitPrice;
         Direction = direction;
         WasExecuted = wasExecuted;
         LiquidatedAt = liquidatedAt;
@@ -30,6 +29,7 @@ public class UpdateOrder
 
     public long Id { get; set; }
     public int Quotes { get; set; }
+    public decimal UnitPrice { get; set; }
     public decimal NetValue { get; set; }
     public string Direction { get; set; }
     public bool WasExecuted { get; set; }

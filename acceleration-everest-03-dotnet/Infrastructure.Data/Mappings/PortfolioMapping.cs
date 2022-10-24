@@ -12,6 +12,9 @@ public class PortfolioMapping : IEntityTypeConfiguration<Portfolio>
 
         builder.HasKey(portfolio => portfolio.Id);
 
+        builder.Property(portfolio => portfolio.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(portfolio => portfolio.Name)
             .HasColumnType("VARCHAR(50)")
             .IsRequired()
@@ -40,13 +43,5 @@ public class PortfolioMapping : IEntityTypeConfiguration<Portfolio>
         builder.HasOne(portfolio => portfolio.Customer)
             .WithMany(portfolio => portfolio.Portfolios)
             .HasForeignKey(portfolio => portfolio.CustomerId);
-
-        builder.HasMany(portfolio => portfolio.Products)
-            .WithMany(portfolio => portfolio.Portfolios)
-            .UsingEntity<PortfolioProduct>(
-            joinTable => joinTable
-                    .HasOne(portfolioProduct => portfolioProduct.Portfolio)
-                    .WithMany(portfolio => portfolio.PortfolioProducts)
-                    .HasForeignKey(portfolioProduct => portfolioProduct.PortfolioId));
     }
 }
