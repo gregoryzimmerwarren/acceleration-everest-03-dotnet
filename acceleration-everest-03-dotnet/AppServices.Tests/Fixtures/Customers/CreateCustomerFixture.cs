@@ -1,16 +1,14 @@
 ﻿using AppModels.Customers;
 using Bogus;
 using Bogus.Extensions.Brazil;
-using FluentAssertions;
-using System;
 
 namespace AppServices.Tests.Fixtures.Customers;
 
-public class CreateCustomerBogus
+public class CreateCustomerFixture
 {
-    public static CreateCustomer GenerateCreateCustomerBogus()
+    public static CreateCustomer GenerateCreateCustomerFixture()
     {
-        var testCustomerDto = new Faker<CreateCustomer>("pt_BR")
+        var testCreateCustomerDto = new Faker<CreateCustomer>("pt_BR")
             .CustomInstantiator(faker => new CreateCustomer(
             fullName: faker.Name.FirstName() + " " + faker.Name.LastName(),
             email: faker.Internet.Email(),
@@ -26,7 +24,7 @@ public class CreateCustomerBogus
             whatsapp: faker.Random.Bool(),
             dateOfBirth: faker.Date.Past(18)));
 
-        var customerDto = testCustomerDto.Generate();
-        return customerDto;
+        var createCustomerDto = testCreateCustomerDto.Generate();
+        return createCustomerDto;
     }
 }

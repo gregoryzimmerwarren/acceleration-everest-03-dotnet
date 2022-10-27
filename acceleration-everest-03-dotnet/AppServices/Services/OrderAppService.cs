@@ -4,7 +4,6 @@ using AutoMapper;
 using DomainModels.Enums;
 using DomainModels.Models;
 using DomainServices.Interfaces;
-using DomainServices.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

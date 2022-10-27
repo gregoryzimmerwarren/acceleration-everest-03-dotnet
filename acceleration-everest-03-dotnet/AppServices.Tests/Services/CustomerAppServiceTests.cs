@@ -1,15 +1,15 @@
-﻿using AppServices.Interfaces;
+﻿    using AppModels.Customers;
+using AppServices.Interfaces;
 using AppServices.Services;
 using AppServices.Tests.Fixtures.Customers;
 using AutoMapper;
-using Castle.Core.Resource;
 using DomainModels.Models;
 using DomainServices.Interfaces;
-using DomainServices.Services;
 using FluentAssertions;
 using Moq;
+using System.Collections.Generic;
 
-namespace AppServicesTests.Services;
+namespace AppServices.Tests.Services;
 
 public class CustomerAppServiceTests
 {
@@ -18,42 +18,47 @@ public class CustomerAppServiceTests
     private readonly CustomerBankInfoAppService _customerBankInfoAppService;
     private readonly Mock<ICustomerService> _mockCustomerService;
     private readonly CustomerAppService _customerAppService;
-    private readonly Mock<IMapper> _mockMapper;
+    private readonly IMapper _mapper;
 
     public CustomerAppServiceTests()
     {
-        _mockMapper = new Mock<IMapper>();
+        var config = new MapperConfiguration(cfg => {
+            cfg.CreateMap<Customer, CustomerResult>();
+            cfg.CreateMap<CreateCustomer, Customer>();
+            cfg.CreateMap<UpdateCustomer, Customer>(); 
+        });
+        _mapper = config.CreateMapper();
         _mockCustomerService = new Mock<ICustomerService>();
         _mockCustomerBankInfoService = new Mock<ICustomerBankInfoService>();
         _mockCustomerBankInfoAppService = new Mock<ICustomerBankInfoAppService>();
-        _customerBankInfoAppService = new CustomerBankInfoAppService(_mockCustomerBankInfoService.Object, _mockMapper.Object);
-        _customerAppService = new CustomerAppService(_mockCustomerBankInfoAppService.Object, _mockCustomerService.Object, _mockMapper.Object);
+        _customerBankInfoAppService = new CustomerBankInfoAppService(_mockCustomerBankInfoService.Object, _mapper);
+        _customerAppService = new CustomerAppService(_mockCustomerBankInfoAppService.Object, _mockCustomerService.Object, _mapper);
     }
 
     [Fact]
-        public async void Should_Create_Successfully()
+    public async void Should_CreateCustomer_Successfully()
     {
         // Arrange  
-        var createCustomerTest = CreateCustomerBogus.GenerateCreateCustomerBogus();
-        Customer customer = CustomerBogus.GenerateCustomerBogus();
-        long idTest = 1;
-                     
+        var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
+        var customerTest = CustomerFixture.GenerateCustomerFixture();
+        long idTest = 1;    
+
         _mockCustomerService.Setup(customerService => customerService.CreateAsync(It.IsAny<Customer>())).ReturnsAsync(idTest);
-        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.Create(idTest)); 
+        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.Create(It.IsAny<long>()));
 
         // Action
         var result = await _customerAppService.CreateAsync(createCustomerTest).ConfigureAwait(false);
         _customerBankInfoAppService.Create(idTest);
 
         // Assert
-        result.Should().BeGreaterThan(0);
+        result.Should().Be(idTest);
 
         _mockCustomerService.Verify(customerService => customerService.CreateAsync(It.IsAny<Customer>()), Times.Once);
-        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.Create(idTest), Times.Once);
+        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.Create(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
-    public async void Should_Delete_Successfully()
+    public async void Should_DeleteCustomer_Successfully()
     {
         // Arrange  
         long idTest = 1;
@@ -68,5 +73,59 @@ public class CustomerAppServiceTests
         // Assert
         _mockCustomerService.Verify(customerService => customerService.DeleteAsync(It.IsAny<long>()), Times.Once);
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.DeleteAsync(It.IsAny<long>()), Times.Once);
+    }
+
+    [Fact]
+    public async void Should_GetAllCustomersAsync_Successfully()
+    {
+        // Arrange        
+        var listCustomersResultTest = CustomerResultFixture.GenerateListCustomerResultFixture(3);
+        var listCustomerTest = CustomerFixture.GenerateListCustomerFixture(3);
+
+        _mockCustomerService.Setup(customerService => customerService.GetAllCustomersAsync()).ReturnsAsync(listCustomerTest);
+        _mapper.Map<IEnumerable<CustomerResult>>(listCustomerTest);
+
+        // Action
+        var result = await _customerAppService.GetAllCustomersAsync().ConfigureAwait(false);
+
+        // Assert
+        result.Should().HaveCountGreaterThanOrEqualTo(3);
+        _mockCustomerService.Verify(customerService => customerService.GetAllCustomersAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async void Should_GetCustomerByIdAsync_Successfully()
+    {
+        // Arrange
+        long idTest = 1;
+        var customerTest = CustomerFixture.GenerateCustomerFixture();
+        customerTest.Id = idTest;
+
+        _mockCustomerService.Setup(customerService => customerService.GetCustomerByIdAsync(It.IsAny<long>())).ReturnsAsync(customerTest);
+        _mapper.Map<CustomerResult>(customerTest);
+
+        // Action
+        var result = await _customerAppService.GetCustomerByIdAsync(idTest).ConfigureAwait(false);
+
+        // Assert
+        result.Should().NotBeNull();
+        _mockCustomerService.Verify(customerService => customerService.GetCustomerByIdAsync(idTest), Times.Once);
+    }
+
+    [Fact]
+    public async void Should_UpdateCustomerAsync_Successfully()
+    {
+        // Arrange
+        var updateCustomerTest = UpdadeCustomerFixture.GenerateUpdateCustomerFixture();
+        var customerTest = CustomerFixture.GenerateCustomerFixture();
+        long idTest = 1;
+
+        _mockCustomerService.Setup(customerService => customerService.UpdateAsync(It.IsAny<Customer>()));
+
+        // Action
+        await _customerAppService.UpdateAsync(idTest, updateCustomerTest).ConfigureAwait(false);
+
+        // Assert
+        _mockCustomerService.Verify(customerService => customerService.UpdateAsync(It.IsAny<Customer>()), Times.Once);
     }
 }

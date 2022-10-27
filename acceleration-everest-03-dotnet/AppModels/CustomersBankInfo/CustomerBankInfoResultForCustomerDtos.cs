@@ -1,10 +1,10 @@
 ﻿namespace AppModels.CustomersBankInfo;
 
-public class CustomerBankInfoResultForOthersDtos
+public class CustomerBankInfoResultForCustomerDtos
 {
-    protected CustomerBankInfoResultForOthersDtos() { }
+    protected CustomerBankInfoResultForCustomerDtos() { }
 
-    public CustomerBankInfoResultForOthersDtos(
+    public CustomerBankInfoResultForCustomerDtos(
         long id,
         decimal accountBalance)
     {
