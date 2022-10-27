@@ -66,7 +66,7 @@ public class CustomerBankInfoAppServiceTests
         decimal amountTest = 17.05m;
 
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.DepositAsync(It.IsAny<long>(), It.IsAny<decimal>()));
-        
+            
         // Action
         await _customerBankInfoAppService.DepositAsync(idTest, amountTest).ConfigureAwait(false);
 

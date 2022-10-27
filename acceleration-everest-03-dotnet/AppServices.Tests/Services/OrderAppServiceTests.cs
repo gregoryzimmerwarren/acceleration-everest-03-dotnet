@@ -47,16 +47,16 @@ public class OrderAppServiceTests
         var productTest = ProductFixture.GenerateProductFixture();
         var productResultTest = ProductResultFixture.GenerateProductResultFixture();
 
-        _mockProductAppService.Setup(product => product.GetProductByIdAsync(It.IsAny<long>())).ReturnsAsync(productResultTest);
-        _mockOrderService.Setup(order => order.Create(It.IsAny<Order>())).Returns(idTest);
+        _mockProductAppService.Setup(productService => productService.GetProductByIdAsync(It.IsAny<long>())).ReturnsAsync(productResultTest);
+        _mockOrderService.Setup(orderService => orderService.Create(It.IsAny<Order>())).Returns(idTest);
 
         // Action
         var resultOrder = await _orderAppService.CreateAsync(createdOrderTest).ConfigureAwait(false);
 
         // Assert
         resultOrder.Should().Be(idTest);
-        _mockProductAppService.Verify(product => product.GetProductByIdAsync(It.IsAny<long>()), Times.Once);
-        _mockOrderService.Verify(order => order.Create(It.IsAny<Order>()), Times.Once);
+        _mockProductAppService.Verify(productService => productService.GetProductByIdAsync(It.IsAny<long>()), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.Create(It.IsAny<Order>()), Times.Once);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class OrderAppServiceTests
         var listOrderResultTest = OrderResultFixture.GenerateListOrderResultFixture(3);
         var listOrderTest = OrderFixture.GenerateListOrderFixture(3);
 
-        _mockOrderService.Setup(order => order.GetAllOrdersAsync()).ReturnsAsync(listOrderTest);
+        _mockOrderService.Setup(orderService => orderService.GetAllOrdersAsync()).ReturnsAsync(listOrderTest);
         _mapper.Map<IEnumerable<OrderResult>>(listOrderTest);
 
         // Action
@@ -74,7 +74,7 @@ public class OrderAppServiceTests
 
         // Assert
         result.Should().HaveCountGreaterThanOrEqualTo(3);
-        _mockOrderService.Verify(order => order.GetAllOrdersAsync(), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.GetAllOrdersAsync(), Times.Once);
     }
 
     [Fact]
@@ -85,14 +85,14 @@ public class OrderAppServiceTests
         var productTest = ProductFixture.GenerateProductFixture();
         var listOrderTest = OrderFixture.GenerateListOrderFixture(3);
 
-        _mockOrderService.Setup(order => order.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(listOrderTest);
+        _mockOrderService.Setup(orderService => orderService.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(listOrderTest);
 
         // Action
         var result = await _orderAppService.GetAvailableQuotes(portfolioTest.Id, productTest.Id).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBe(null);
-        _mockOrderService.Verify(order => order.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
@@ -102,7 +102,7 @@ public class OrderAppServiceTests
         var orderListTest = OrderFixture.GenerateListOrderFixture(3);
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
 
-        _mockOrderService.Setup(order => order.GetOrdersByPortfolioIdAsync(It.IsAny<long>())).ReturnsAsync(orderListTest);
+        _mockOrderService.Setup(orderService => orderService.GetOrdersByPortfolioIdAsync(It.IsAny<long>())).ReturnsAsync(orderListTest);
         _mapper.Map<IEnumerable<OrderResult>>(orderListTest);
 
         // Action
@@ -110,7 +110,7 @@ public class OrderAppServiceTests
 
         // Assert
         result.Should().NotBeNull();
-        _mockOrderService.Verify(order => order.GetOrdersByPortfolioIdAsync(It.IsAny<long>()), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.GetOrdersByPortfolioIdAsync(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
@@ -120,7 +120,7 @@ public class OrderAppServiceTests
         var orderListTest = OrderFixture.GenerateListOrderFixture(3);
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockOrderService.Setup(order => order.GetOrdersByProductIdAsync(It.IsAny<long>())).ReturnsAsync(orderListTest);
+        _mockOrderService.Setup(orderService => orderService.GetOrdersByProductIdAsync(It.IsAny<long>())).ReturnsAsync(orderListTest);
         _mapper.Map<IEnumerable<OrderResult>>(orderListTest);
 
         // Action
@@ -128,7 +128,7 @@ public class OrderAppServiceTests
 
         // Assert
         result.Should().NotBeNull();
-        _mockOrderService.Verify(order => order.GetOrdersByProductIdAsync(It.IsAny<long>()), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.GetOrdersByProductIdAsync(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
@@ -138,12 +138,12 @@ public class OrderAppServiceTests
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         var orderTest = OrderFixture.GenerateOrderFixture();
 
-        _mockOrderService.Setup(order => order.Update(It.IsAny<Order>()));
+        _mockOrderService.Setup(orderService => orderService.Update(It.IsAny<Order>()));
 
         // Action
         _orderAppService.Update(updateOrderTest);
 
         // Assert
-        _mockOrderService.Verify(order => order.Update(It.IsAny<Order>()), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.Update(It.IsAny<Order>()), Times.Once);
     }
 }

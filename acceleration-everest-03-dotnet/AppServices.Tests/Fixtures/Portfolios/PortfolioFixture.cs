@@ -10,10 +10,10 @@ public class PortfolioFixture
     {
         var testPortfolio = new Faker<Portfolio>("pt_BR")
             .CustomInstantiator(faker => new Portfolio(
-                name: faker.Random.String(10),
+                name: faker.Random.String2(10),
                 description: faker.Lorem.Random.Words(10),
-                totalBalance: faker.Random.Decimal(),
-                accountBalance: faker.Random.Decimal(),
+                totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
+                accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 customerId: 1));
 
         var portfolio = testPortfolio.Generate();
@@ -24,10 +24,10 @@ public class PortfolioFixture
     {
         var testPortfolio = new Faker<Portfolio>("pt_BR")
             .CustomInstantiator(faker => new Portfolio(
-                name: faker.Random.String(10),
+                name: faker.Random.String2(10),
                 description: faker.Lorem.Random.Words(10),
-                totalBalance: faker.Random.Decimal(),
-                accountBalance: faker.Random.Decimal(),
+                totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
+                accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 customerId: 1));
 
         var portfolio = testPortfolio.Generate(generatedQuantity);

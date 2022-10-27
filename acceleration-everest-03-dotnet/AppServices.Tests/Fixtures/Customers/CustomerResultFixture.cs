@@ -21,7 +21,7 @@ public class CustomerResultFixture
                 city: faker.Address.City(),
                 postalCode: faker.Address.ZipCode(),
                 customerBankInfo: CustomerBankInfoResultForCustomerDtosFixture.GenerateCustomerBankInfoResultForCustomerDtosFixture(),
-                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosBogusFixture(2)));
+                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(2)));
 
         var customerResult = testCustomerResult.Generate();
         return customerResult;
@@ -39,7 +39,7 @@ public class CustomerResultFixture
                 city: faker.Address.City(),
                 postalCode: faker.Address.ZipCode(),
                 customerBankInfo: CustomerBankInfoResultForCustomerDtosFixture.GenerateCustomerBankInfoResultForCustomerDtosFixture(),
-                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosBogusFixture(2)));
+                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(2)));
 
         var listCustomerResult = testListCustomerResult.Generate(generatedQuantity);
         return listCustomerResult;

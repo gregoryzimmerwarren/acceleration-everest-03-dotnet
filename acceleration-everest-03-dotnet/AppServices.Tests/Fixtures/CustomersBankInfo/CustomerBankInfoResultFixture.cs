@@ -12,7 +12,7 @@ public class CustomerBankInfoResultFixture
         var testCustomerBankInfoResult = new Faker<CustomerBankInfoResult>("pt_BR")
             .CustomInstantiator(faker => new CustomerBankInfoResult(
                 id: 1,
-                accountBalance: faker.Random.Decimal(),
+                accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 customer: CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture()));
 
         var customerBankInfoResult = testCustomerBankInfoResult.Generate();
@@ -24,7 +24,7 @@ public class CustomerBankInfoResultFixture
         var testListCustomerBankInfoResult = new Faker<CustomerBankInfoResult>("pt_BR")
             .CustomInstantiator(faker => new CustomerBankInfoResult(
                 id: 1,
-                accountBalance: faker.Random.Decimal(),
+                accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 customer: CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture()));
 
         var listCustomerBankInfoResult = testListCustomerBankInfoResult.Generate(generatedQuantity);

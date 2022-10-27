@@ -13,7 +13,7 @@ public class ProductResultForOthersDtosFixture
             .CustomInstantiator(faker => new ProductResultForOthersDtos(
                 id: faker.Random.Long(),
                 symbol: faker.Random.String2(5),
-                unitPrice: faker.Random.Decimal(),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
                 expirationAt: faker.Date.Future(1),
                 type: faker.PickRandom<ProductType>()));
@@ -28,7 +28,7 @@ public class ProductResultForOthersDtosFixture
             .CustomInstantiator(faker => new ProductResultForOthersDtos(
                 id: faker.Random.Long(),
                 symbol: faker.Random.String2(5),
-                unitPrice: faker.Random.Decimal(),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
                 expirationAt: faker.Date.Future(1),
                 type: faker.PickRandom<ProductType>()));

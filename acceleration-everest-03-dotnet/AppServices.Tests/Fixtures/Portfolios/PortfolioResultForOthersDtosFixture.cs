@@ -6,27 +6,27 @@ namespace AppServices.Tests.Fixtures.Portfolios;
 
 public class PortfolioResultForOthersDtosFixture
 {
-    public static PortfolioResultForOthersDtos GeneratePortfolioResultForOthersDtosBogusFixture()
+    public static PortfolioResultForOthersDtos GeneratePortfolioResultForOthersDtosFixture()
     {
-        var testPortfolioResultForOthersDtosBogus = new Faker<PortfolioResultForOthersDtos>("pt_BR")
+        var testPortfolioResultForOthersDtos = new Faker<PortfolioResultForOthersDtos>("pt_BR")
             .CustomInstantiator(faker => new PortfolioResultForOthersDtos(
                 id: faker.Random.Long(0, 10),
                 name: faker.Random.String2(5),
-                totalBalance: faker.Random.Decimal()));
+                totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m)));
 
-        var portfolioResultForOthersDtosBogus = testPortfolioResultForOthersDtosBogus.Generate();
-        return portfolioResultForOthersDtosBogus;
+        var portfolioResultForOthersDtos = testPortfolioResultForOthersDtos.Generate();
+        return portfolioResultForOthersDtos;
     }
     
-    public static IEnumerable<PortfolioResultForOthersDtos> GenerateListPortfolioResultForOthersDtosBogusFixture(int generatedQuantity)
+    public static IEnumerable<PortfolioResultForOthersDtos> GenerateListPortfolioResultForOthersDtosFixture(int generatedQuantity)
     {
-        var testListPortfolioResultForOthersDtosBogus = new Faker<PortfolioResultForOthersDtos>("pt_BR")
+        var testListPortfolioResultForOthersDtos = new Faker<PortfolioResultForOthersDtos>("pt_BR")
             .CustomInstantiator(faker => new PortfolioResultForOthersDtos(
                 id: faker.Random.Long(0, 10),
                 name: faker.Random.String2(5),
-                totalBalance: faker.Random.Decimal()));
+                totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m)));
 
-        var listPortfolioResultForOthersDtosBogus = testListPortfolioResultForOthersDtosBogus.Generate(generatedQuantity);
-        return listPortfolioResultForOthersDtosBogus;
+        var listPortfolioResultForOthersDtos = testListPortfolioResultForOthersDtos.Generate(generatedQuantity);
+        return listPortfolioResultForOthersDtos;
     }
 }

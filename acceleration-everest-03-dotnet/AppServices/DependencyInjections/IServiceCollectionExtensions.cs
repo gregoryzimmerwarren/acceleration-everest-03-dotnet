@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppServices.DependencyInjections;
 
-public static class AppServicesExtensions
+public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddAppServicesDependecyInjections(this IServiceCollection services)
     {

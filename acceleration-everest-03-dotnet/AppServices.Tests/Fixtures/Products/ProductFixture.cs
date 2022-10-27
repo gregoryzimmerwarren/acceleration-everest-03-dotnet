@@ -13,7 +13,7 @@ public class ProductFixture
         var testProduct = new Faker<Product>("pt_BR")
             .CustomInstantiator(faker => new Product(                
                 symbol: faker.Random.String2(5),
-                unitPrice: faker.Random.Decimal(),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 issuanceAt: faker.Date.Future(1),
                 expirationAt: faker.Date.Future(1),
                 type: faker.PickRandom<ProductType>()));
@@ -27,7 +27,7 @@ public class ProductFixture
         var testProduct = new Faker<Product>("pt_BR")
             .CustomInstantiator(faker => new Product(
                 symbol: faker.Random.String2(5),
-                unitPrice: faker.Random.Decimal(),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 issuanceAt: faker.Date.Future(1),
                 expirationAt: faker.Date.Future(1),
                 type: faker.PickRandom<ProductType>()));

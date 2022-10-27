@@ -23,14 +23,14 @@ public class PortfolioAppService : IPortfolioAppService
 
     public PortfolioAppService(
         IPortfolioProductAppService portfolioProductAppService,
-        ICustomerBankInfoAppService customerBankInfoService,
+        ICustomerBankInfoAppService customerBankInfoAppService,
         IProductAppService productAppService,
         IPortfolioService portfolioService,
         IOrderAppService orderAppService,
         IMapper mapper)
     {
         _portfolioProductAppService = portfolioProductAppService ?? throw new System.ArgumentNullException(nameof(portfolioProductAppService));
-        _customerBankInfoAppService = customerBankInfoService ?? throw new System.ArgumentNullException(nameof(customerBankInfoService));
+        _customerBankInfoAppService = customerBankInfoAppService ?? throw new System.ArgumentNullException(nameof(customerBankInfoAppService));
         _productAppService = productAppService ?? throw new System.ArgumentNullException(nameof(productAppService));
         _portfolioService = portfolioService ?? throw new System.ArgumentNullException(nameof(portfolioService));
         _orderAppService = orderAppService ?? throw new System.ArgumentNullException(nameof(orderAppService));

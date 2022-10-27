@@ -1,6 +1,7 @@
 ﻿using AppServices.Interfaces;
 using AppServices.Services;
 using HostedServiceCronos.Interfaces;
+using System.Diagnostics;
 
 namespace HostedServiceCronos.Services;
 
@@ -20,17 +21,17 @@ public class CronJobExecuteOrders : CronJobService
     {
         try
         {
-            _logger.LogInformation(@$"
-{DateTime.Now:hh:mm:ss} CronJobExecuteOrders started working.
+            var stopwatch = Stopwatch.StartNew();
+
+            Console.WriteLine(@"
+CronJobExecuteOrders started working.
 ");
 
             var scope = _serviceScopeFactory.CreateScope();
             var repository = scope.ServiceProvider.GetRequiredService<IPortfolioAppService>();
             await repository.ExecuteOrdersOfTheDayAsync().ConfigureAwait(false);
 
-            _logger.LogInformation(@$"
-{DateTime.Now:hh:mm:ss} CronJobExecuteOrders finished working.
-");
+            Console.WriteLine($"CronJobExecuteOrders finished working. Time taken: {stopwatch.ElapsedMilliseconds}ms.");
         }
         catch (Exception exception)
         {

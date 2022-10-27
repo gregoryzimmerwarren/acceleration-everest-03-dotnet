@@ -19,7 +19,7 @@ public class OrderResultFixture
                 liquidatedAt: faker.Date.Future(1),
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: false,
-                portfolio: PortfolioResultForOthersDtosFixture.GeneratePortfolioResultForOthersDtosBogusFixture(),
+                portfolio: PortfolioResultForOthersDtosFixture.GeneratePortfolioResultForOthersDtosFixture(),
                 product: ProductResultForOthersDtosFixture.GenerateProductResultForOthersDtosFixture()));
 
         var orderResultDto = testOrderResultDto.Generate();
@@ -36,7 +36,7 @@ public class OrderResultFixture
                 liquidatedAt: faker.Date.Future(1),
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: false,
-                portfolio: PortfolioResultForOthersDtosFixture.GeneratePortfolioResultForOthersDtosBogusFixture(),
+                portfolio: PortfolioResultForOthersDtosFixture.GeneratePortfolioResultForOthersDtosFixture(),
                 product: ProductResultForOthersDtosFixture.GenerateProductResultForOthersDtosFixture()));
 
         var listOrderResultDto = testListOrderResultDto.Generate(generatedQuantity);

@@ -11,7 +11,7 @@ public class CustomerBankInfoFixture
         var testCustomerBankInfoDto = new Faker<CustomerBankInfo>("pt_BR")
             .CustomInstantiator(faker => new CustomerBankInfo(
                 customerId: 1,
-                accountBalance: faker.Random.Decimal()));
+                accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m)));
 
         var customerBankInfoDto = testCustomerBankInfoDto.Generate();
         return customerBankInfoDto;
@@ -22,7 +22,7 @@ public class CustomerBankInfoFixture
         var testListCustomerBankInfoDto = new Faker<CustomerBankInfo>("pt_BR")
             .CustomInstantiator(faker => new CustomerBankInfo(
                 customerId: 1,
-                accountBalance: faker.Random.Decimal()));
+                accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m)));
 
         var listCustomerBankInfoDto = testListCustomerBankInfoDto.Generate(generatedQuantity);
         return listCustomerBankInfoDto;

@@ -15,11 +15,11 @@ public class ProductResultFixture
             .CustomInstantiator(faker => new ProductResult(
                 id: faker.Random.Long(),
                 symbol: faker.Random.String2(5),
-                unitPrice: faker.Random.Decimal(),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
                 expirationAt: faker.Date.Future(1),
                 type: faker.PickRandom<ProductType>(),
-                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosBogusFixture(3),
+                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(3),
                 orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
 
         var productResult = testProductResult.Generate();
@@ -32,11 +32,11 @@ public class ProductResultFixture
             .CustomInstantiator(faker => new ProductResult(
                 id: faker.Random.Long(),
                 symbol: faker.Random.String2(5),
-                unitPrice: faker.Random.Decimal(),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
                 expirationAt: faker.Date.Future(1),
                 type: faker.PickRandom<ProductType>(),
-                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosBogusFixture(3),
+                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(3),
                 orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
 
         var listProductResult = testListProductResult.Generate(generatedQuantity);
