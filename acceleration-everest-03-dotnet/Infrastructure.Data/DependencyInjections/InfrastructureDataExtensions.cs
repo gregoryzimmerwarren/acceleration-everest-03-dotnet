@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Data.DependencyInjections
 {
-    public static class InfrastructureDataExtensions
+    public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddInfrastructureDataDependecyInjections(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureDataConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<WarrenEverestDotnetDbContext>(

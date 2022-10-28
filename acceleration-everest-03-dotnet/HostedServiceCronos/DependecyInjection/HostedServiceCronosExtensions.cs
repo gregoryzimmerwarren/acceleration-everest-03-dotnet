@@ -10,7 +10,7 @@ public static class HostedServiceCronosExtensions
     {
         if (options == null)
         {
-            throw new ArgumentNullException(nameof(options), @"Please provide Schedule Configurations.");
+            throw new ArgumentNullException(nameof(options));
         }
 
         var config = new ScheduleConfig<T>();
@@ -18,7 +18,7 @@ public static class HostedServiceCronosExtensions
 
         if (string.IsNullOrWhiteSpace(config.CronExpression))
         {
-            throw new ArgumentNullException(nameof(ScheduleConfig<T>.CronExpression), @"Empty Cron Expression is not allowed.");
+            throw new ArgumentNullException(nameof(config.CronExpression));
         }
 
         services.AddSingleton<IScheduleConfig<T>>(config);
