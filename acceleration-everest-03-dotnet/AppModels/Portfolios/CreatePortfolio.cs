@@ -11,18 +11,12 @@ public class CreatePortfolio
     {
         Name = name;
         Description = description;
-        TotalBalance = 0;
-        AccountBalance = 0;
         CustomerId = customerId;
     }
 
     [JsonIgnore]
     public long Id { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
-    [JsonIgnore]
-    public decimal TotalBalance { get; set; }
-    [JsonIgnore]
-    public decimal AccountBalance { get; set; }
+    public string Description { get; set; }   
     public long CustomerId { get; set; }
 }

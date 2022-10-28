@@ -1,6 +1,6 @@
-﻿using AppModels.Portfolios;
+﻿using AppModels.Enums;
+using AppModels.Portfolios;
 using AppModels.Products;
-using DomainModels.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,16 +12,18 @@ public class OrderResult
 
     public OrderResult(
         long id, 
-        int quotes, 
+        int quotes,
+        decimal unitPrice,
         decimal netValue, 
         DateTime liquidatedAt, 
         OrderDirection direction,
         bool wasExecuted,
         PortfolioResultForOthersDtos portfolio,
-        ProductResultForOthersDtos product)
+        ProductResult product)
     {
         Id = id;
         Quotes = quotes;
+        UnitPrice = unitPrice;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
         Direction = Enum.GetName(direction);
@@ -32,11 +34,12 @@ public class OrderResult
 
     public long Id { get; set; }
     public int Quotes { get; set; }
+    public decimal UnitPrice { get; set; }
     public decimal NetValue { get; set; }
     public string Direction { get; set; }
     public bool WasExecuted { get; set; }
     public PortfolioResultForOthersDtos Portfolio { get; set; }
-    public ProductResultForOthersDtos Product { get; set; }
+    public ProductResult Product { get; set; }
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

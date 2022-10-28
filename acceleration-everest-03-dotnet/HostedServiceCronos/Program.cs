@@ -14,11 +14,10 @@ IHost host = Host.CreateDefaultBuilder(args)
             config.CronExpression = "30 09 * * *";
         });
 
-        services.AddAppServicesDependecyInjections();
-        services.AddDomainServicesDependecyInjections();
+        services.AddAppServicesConfiguration();
+        services.AddDomainServicesConfiguration();
         services.AddInfrastructureDataDependecyInjections(hostContext.Configuration);
         services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
-
     })
     .Build();
 

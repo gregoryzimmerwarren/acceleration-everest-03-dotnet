@@ -12,6 +12,9 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
 
         builder.HasKey(customer => customer.Id);
 
+        builder.Property(customer => customer.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(customer => customer.FullName)
             .HasColumnType("VARCHAR(250)")
             .IsRequired()

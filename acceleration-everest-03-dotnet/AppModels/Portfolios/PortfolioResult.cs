@@ -1,5 +1,6 @@
 ﻿using AppModels.Customers;
 using AppModels.Orders;
+using AppModels.PortfoliosProducts;
 using AppModels.Products;
 using System.Collections.Generic;
 
@@ -16,7 +17,6 @@ public class PortfolioResult
         decimal totalBalance, 
         decimal accountBalance,
         CustomerResultForOtherDtos customer,
-        IEnumerable<ProductResultForOthersDtos> products,
         IEnumerable<OrderResultOtherDtos> orders)
     {
         Id = id;
@@ -25,7 +25,6 @@ public class PortfolioResult
         TotalBalance = totalBalance;
         AccountBalance = accountBalance;
         Customer = customer;
-        Products = products;
         Orders = orders;
     }
 
@@ -35,6 +34,5 @@ public class PortfolioResult
     public decimal TotalBalance { get; set; }
     public decimal AccountBalance { get; set; }
     public CustomerResultForOtherDtos Customer { get; set; }
-    public IEnumerable<ProductResultForOthersDtos> Products { get; set; }
     public IEnumerable<OrderResultOtherDtos> Orders { get; set; }
 }

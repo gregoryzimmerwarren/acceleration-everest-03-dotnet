@@ -14,8 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddAppServicesDependecyInjections();
-builder.Services.AddDomainServicesDependecyInjections();
+builder.Services.AddAppServicesConfiguration();
+builder.Services.AddDomainServicesConfiguration();
 builder.Services.AddInfrastructureDataDependecyInjections(builder.Configuration);
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 

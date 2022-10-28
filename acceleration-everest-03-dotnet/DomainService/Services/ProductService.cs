@@ -42,13 +42,10 @@ public class ProductService : IProductService
     public async Task<IEnumerable<Product>> GetAllProductsAsync()
     {
         var repository = _repositoryFactory.Repository<Product>();
-        var query = repository.MultipleResultQuery()
-            .Include(product => product.Include(order => order.Orders)
-            .Include(portfolio => portfolio.Portfolios)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts));
+        var query = repository.MultipleResultQuery();
         var products = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (products.Count == 0)
+        if (!products.Any())
             throw new ArgumentNullException($"No product found");
 
         return products;
@@ -57,16 +54,23 @@ public class ProductService : IProductService
     public async Task<Product> GetProductByIdAsync(long id)
     {
         var repository = _repositoryFactory.Repository<Product>();
-        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id)
-            .Include(product => product.Include(order => order.Orders)
-            .Include(portfolio => portfolio.Portfolios)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts));
+        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
+        var product = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No product found for Id: {id}");
+
+        return product;
+    }
+
+    public async Task<decimal> GetProductUnitPriceByIdAsync(long id)
+    {
+        var repository = _repositoryFactory.Repository<Product>();
+        var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
         var product = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
 
         if (product == null)
             throw new ArgumentNullException($"No product found for Id: {id}");
 
-        return product;
+        return product.UnitPrice;
     }
 
     public void Update(Product productToUpdate)

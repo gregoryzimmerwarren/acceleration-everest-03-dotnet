@@ -55,34 +55,16 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         _unitOfWork.SaveChanges();
     }
 
-    public async Task<IEnumerable<Portfolio>> GetAllPortfoliosAsync()
-    {
-        var repository = _repositoryFactory.Repository<Portfolio>();
-        var query = repository.MultipleResultQuery()
-            .Include(portfolio => portfolio.Include(customer => customer.Customer)
-            .Include(order => order.Orders)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
-            .Include(product => product.Products));
-        var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
-
-        if (portfolios.Count == 0)
-            throw new ArgumentNullException("No portfolio found");
-
-        return portfolios;
-    }
-
     public async Task<Portfolio> GetPortfolioByIdAsync(long portfolioId)
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
         var query = repository.SingleResultQuery().AndFilter(portfolio => portfolio.Id == portfolioId)
             .Include(portfolio => portfolio.Include(customer => customer.Customer)
             .Include(order => order.Orders)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .ThenInclude(product => product.Product)
             .Include(product => product.Products));
-        var portfolio = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (portfolio == null)
-            throw new ArgumentNullException($"No portfolio found for Id: {portfolioId}");
+        var portfolio = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No portfolio found for Id: {portfolioId}");
 
         return portfolio;
     }
@@ -93,17 +75,17 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId)
             .Include(portfolio => portfolio.Include(customer => customer.Customer)
             .Include(order => order.Orders)
-            .Include(portfolioProduct => portfolioProduct.PortfolioProducts)
+            .ThenInclude(product => product.Product)
             .Include(product => product.Products));
         var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (portfolios.Count == 0)
+        if (!portfolios.Any())
             throw new ArgumentNullException($"No portfolio found for Customer with Id: {customerId}");
 
         return portfolios;
     }
 
-    public async Task<bool> InvestAsync(long portfolioId, decimal amount)
+    public async Task InvestAsync(long portfolioId, decimal amount)
     {
         var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
@@ -116,11 +98,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
         _unitOfWork.SaveChanges();
-
-        return true;
     }
 
-    public async Task<bool> RedeemToPortfolioAsync(long portfolioId, decimal amount)
+    public async Task RedeemToPortfolioAsync(long portfolioId, decimal amount)
     {
         var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
@@ -133,11 +113,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
         _unitOfWork.SaveChanges();
-
-        return true;
     }
 
-    public async Task<bool> WithdrawFromPortfolioAsync(long portfolioId, decimal amount)
+    public async Task WithdrawFromPortfolioAsync(long portfolioId, decimal amount)
     {
         var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
@@ -149,7 +127,5 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
         _unitOfWork.SaveChanges();
-
-        return true;
     }
 }

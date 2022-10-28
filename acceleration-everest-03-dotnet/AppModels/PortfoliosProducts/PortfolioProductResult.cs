@@ -10,7 +10,7 @@ public class PortfolioProductResult
     public PortfolioProductResult(
         long id,
         PortfolioResultForOthersDtos portfolio,
-        ProductResultForOthersDtos product)
+        ProductResult product)
     {
         Id = id;
         Portfolio = portfolio;
@@ -19,5 +19,5 @@ public class PortfolioProductResult
 
     public long Id { get; set; }
     public PortfolioResultForOthersDtos Portfolio { get; set; }
-    public ProductResultForOthersDtos Product { get; set; }
+    public ProductResult Product { get; set; }
 }

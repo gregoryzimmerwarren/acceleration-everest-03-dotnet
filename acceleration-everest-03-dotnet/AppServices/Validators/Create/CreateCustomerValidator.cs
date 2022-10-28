@@ -5,11 +5,11 @@ using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Linq;
 
-namespace AppServices.Validators.Update;
+namespace AppServices.Validators.Create;
 
-public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomer>
+public class CreateCustomerValidator : AbstractValidator<CreateCustomer>
 {
-    public UpdateCustomerDtoValidator()
+    public CreateCustomerValidator()
     {
         RuleFor(customer => customer.FullName)
             .NotEmpty()
@@ -116,7 +116,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomer>
             return false;
 
         if (cellphone.Length == 10)
-            cellphone = cellphone.Substring(0, 2) + "9" + cellphone.Substring(3, 8);
+            cellphone = cellphone.Substring(0, 2) + "9" + cellphone.Substring(2, 8);
 
         for (int i = 0; i < 11; i++)
         {

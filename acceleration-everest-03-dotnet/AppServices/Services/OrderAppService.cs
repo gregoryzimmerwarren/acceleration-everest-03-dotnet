@@ -1,7 +1,6 @@
 ﻿using AppModels.Orders;
 using AppServices.Interfaces;
 using AutoMapper;
-using DomainModels.Enums;
 using DomainModels.Models;
 using DomainServices.Interfaces;
 using System.Collections.Generic;
@@ -25,12 +24,9 @@ public class OrderAppService : IOrderAppService
         _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<long> CreateAsync(CreateOrder createOrderDto)
+    public long Create(CreateOrder createOrderDto)
     {
         var mappedOrder = _mapper.Map<Order>(createOrderDto);
-        var produt = await _productAppService.GetProductByIdAsync(mappedOrder.ProductId).ConfigureAwait(false);
-        var unitPrice = produt.UnitPrice;
-        mappedOrder.NetValue = mappedOrder.Quotes * unitPrice;
 
         return _orderService.Create(mappedOrder);
     }
@@ -51,25 +47,9 @@ public class OrderAppService : IOrderAppService
 
     public async Task<int> GetAvailableQuotes(long portfolioId, long productId)
     {
-        var orders = await _orderService.GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
+        var avalilableQuotes = await _orderService.GetAvailableQuotes(portfolioId, productId).ConfigureAwait(false);
 
-        var sellingQuotes = 0;
-        var boughtQuotes = 0;
-
-        foreach (var order in orders)
-        {
-            if (order.Direction == OrderDirection.Buy)
-            {
-                boughtQuotes += order.Quotes;
-            }
-            else
-            {
-                sellingQuotes += order.Quotes;
-            }
-        }
-
-        var totalQuotes = boughtQuotes - sellingQuotes;
-        return totalQuotes;
+        return avalilableQuotes;
     }
 
     public async Task<IEnumerable<OrderResult>> GetOrdersByPortfolioIdAsync(long portfolioId)

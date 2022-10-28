@@ -145,6 +145,10 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INT")
                         .HasColumnName("Quotes");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("DECIMAL(5,2)")
+                        .HasColumnName("UnitPrice");
+
                     b.Property<ulong>("WasExecuted")
                         .HasColumnType("BIT")
                         .HasColumnName("WasExecuted");
@@ -200,10 +204,12 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("PortfolioId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("PortfolioId");
 
                     b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("ProductId");
 
                     b.HasKey("Id");
 
@@ -232,6 +238,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("DATE")
                         .HasColumnName("IssuanceAt");
 
+                    b.Property<long?>("PortfolioId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Symbol")
                         .IsRequired()
                         .HasColumnType("VARCHAR(50)")
@@ -247,6 +256,8 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("UnitPrice");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PortfolioId");
 
                     b.ToTable("Products", (string)null);
                 });
@@ -271,7 +282,7 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("DomainModels.Models.Product", "Product")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -311,6 +322,13 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("DomainModels.Models.Product", b =>
+                {
+                    b.HasOne("DomainModels.Models.Portfolio", null)
+                        .WithMany("Products")
+                        .HasForeignKey("PortfolioId");
+                });
+
             modelBuilder.Entity("DomainModels.Models.Customer", b =>
                 {
                     b.Navigation("CustomerBankInfo");
@@ -323,12 +341,12 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("PortfolioProducts");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("DomainModels.Models.Product", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("PortfolioProducts");
                 });
 #pragma warning restore 612, 618

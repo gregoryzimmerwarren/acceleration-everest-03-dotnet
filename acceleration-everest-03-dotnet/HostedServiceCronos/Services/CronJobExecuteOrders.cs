@@ -21,23 +21,19 @@ public class CronJobExecuteOrders : CronJobService
     {
         try
         {
-            var stopwatch = Stopwatch.StartNew();
-
-            Console.WriteLine(@"
-CronJobExecuteOrders started working.
-");
+            var stopWatch = StopWatch.StartNew();
+            _logger.LogInformation("CronJobExecuteOrders started.");
 
             var scope = _serviceScopeFactory.CreateScope();
             var repository = scope.ServiceProvider.GetRequiredService<IPortfolioAppService>();
             await repository.ExecuteOrdersOfTheDayAsync().ConfigureAwait(false);
 
-            Console.WriteLine($"CronJobExecuteOrders finished working. Time taken: {stopwatch.ElapsedMilliseconds}ms.");
+            _logger.LogInformation("CronJobExecuteOrders finished processing. Time taken: {elapsedMilliseconds}", stopWatch.ElapsedMilliseconds);
+            stopWatch.Stop();
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, @"
-CronJobExecuteOrders is't working.
-");
+            _logger.LogError(exception, "Error occurred in CronJobExecuteOrders.");
         }
     }
 }

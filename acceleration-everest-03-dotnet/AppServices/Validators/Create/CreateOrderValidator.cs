@@ -4,13 +4,18 @@ using System;
 
 namespace AppServices.Validators.Create;
 
-public class CreateOrderDtoValidator : AbstractValidator<CreateOrder>
+public class CreateOrderValidator : AbstractValidator<CreateOrder>
 {
-    public CreateOrderDtoValidator()
+    public CreateOrderValidator()
     {
         RuleFor(order => order.Quotes)
             .NotEmpty()
             .GreaterThan(0);
+
+        RuleFor(order => order.UnitPrice)
+                .NotEmpty()
+                .GreaterThan(0)
+                .WithMessage("Unit price must be more than R$0,00.");
 
         RuleFor(order => order.LiquidatedAt)
             .NotEmpty()

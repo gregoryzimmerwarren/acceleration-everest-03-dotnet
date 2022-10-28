@@ -51,11 +51,11 @@ public class CustomerBankInfoController : ControllerBase
     }
 
     [HttpGet("getTotalByCustomerId/{customerId}")]
-    public async Task<IActionResult> GetTotalByCustomerIdAsync(long customerId)
+    public async Task<IActionResult> GetAccountBalanceByCustomerIdAsync(long customerId)
     {
         try
         {
-            var total = await _customerBankInfoAppService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
+            var total = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(customerId).ConfigureAwait(false);
             return Ok(total);
         }
         catch (ArgumentNullException exception)

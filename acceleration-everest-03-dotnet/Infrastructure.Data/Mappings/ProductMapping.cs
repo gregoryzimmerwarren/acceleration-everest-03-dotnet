@@ -12,6 +12,9 @@ public class ProductMapping : IEntityTypeConfiguration<Product>
 
         builder.HasKey(product => product.Id);
 
+        builder.Property(product => product.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(product => product.Symbol)
             .HasColumnType("VARCHAR(50)")
             .IsRequired()
@@ -41,13 +44,5 @@ public class ProductMapping : IEntityTypeConfiguration<Product>
             .HasColumnType("VARCHAR(11)")
             .IsRequired()
             .HasColumnName("Type");
-
-        builder.HasMany(product => product.Portfolios)
-            .WithMany(product => product.Products)
-            .UsingEntity<PortfolioProduct>(
-            joinTable => joinTable
-                    .HasOne(portfolioProduct => portfolioProduct.Product)
-                    .WithMany(product => product.PortfolioProducts)
-                    .HasForeignKey(portfolioProduct => portfolioProduct.ProductId));
     }
 }

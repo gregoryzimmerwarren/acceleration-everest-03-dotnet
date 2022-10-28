@@ -12,6 +12,9 @@ public class CustomerBankInfoMapping : IEntityTypeConfiguration<CustomerBankInfo
         
         builder.HasKey(customerBankInfo => customerBankInfo.Id);
 
+        builder.Property(customerBankInfo => customerBankInfo.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(customerBankInfo => customerBankInfo.AccountBalance)
             .HasColumnType("DECIMAL(14,2)")
             .IsRequired()

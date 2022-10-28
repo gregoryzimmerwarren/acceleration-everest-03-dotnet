@@ -4,9 +4,9 @@ using System;
 
 namespace AppServices.Validators.Update
 {
-    public class UpdateOrderDtoValidator : AbstractValidator<UpdateOrder>
+    public class UpdateOrderValidator : AbstractValidator<UpdateOrder>
     {
-        public UpdateOrderDtoValidator()
+        public UpdateOrderValidator()
         {
             RuleFor(order => order.Quotes)
             .NotEmpty()
@@ -15,6 +15,11 @@ namespace AppServices.Validators.Update
             RuleFor(order => order.LiquidatedAt)
                 .NotEmpty()
                 .GreaterThanOrEqualTo(DateTime.Now.Date);
+
+            RuleFor(order => order.UnitPrice)
+                .NotEmpty()
+                .GreaterThan(0)
+                .WithMessage("Unit price must be more than R$0,00.");
 
             RuleFor(order => order.Direction)
                 .NotNull()

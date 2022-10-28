@@ -42,16 +42,9 @@ public class CustomerBankInfoAppService : ICustomerBankInfoAppService
         return _mapper.Map<IEnumerable<CustomerBankInfoResult>>(customersBankInfo);
     }
 
-    public async Task<CustomerBankInfoResult> GetCustomerBankInfoByCustomerIdAsync(long customerId)
+    public async Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = await _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
-
-        return _mapper.Map<CustomerBankInfoResult>(customerBankInfo);
-    }
-
-    public async Task<decimal> GetTotalByCustomerIdAsync(long customerId)
-    {
-        return await _customerBankInfoService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
+        return await _customerBankInfoService.GetAccountBalanceByCustomerIdAsync(customerId).ConfigureAwait(false);
     }
 
     public async Task<bool> WithdrawAsync(long customerId, decimal amount)

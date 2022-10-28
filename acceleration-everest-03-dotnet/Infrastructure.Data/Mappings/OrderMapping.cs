@@ -12,10 +12,19 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
 
         builder.HasKey(order => order.Id);
 
+        builder.Property(order => order.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(order => order.Quotes)
             .HasColumnType("INT")
             .IsRequired()
             .HasColumnName("Quotes");
+
+
+        builder.Property(order => order.UnitPrice)
+            .HasColumnType("DECIMAL(5,2)")
+            .IsRequired()
+            .HasColumnName("UnitPrice");
 
         builder.Property(order => order.NetValue)
             .HasColumnType("DECIMAL(14,2)")
@@ -50,9 +59,5 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .HasColumnType("BIGINT")
             .IsRequired()
             .HasColumnName("ProductId");
-
-        builder.HasOne(order => order.Product)
-            .WithMany(order => order.Orders)
-            .HasForeignKey(order => order.ProductId);
     }
 }

@@ -24,8 +24,7 @@ public class ProductAppService : IProductAppService
     public long Create(CreateProduct createProductDto)
     {
         var mappedProduct = _mapper.Map<Product>(createProductDto);
-        mappedProduct.DaysToExpire = (mappedProduct.ExpirationAt.Subtract(mappedProduct.IssuanceAt)).Days;
-
+      
         return _productService.Create(mappedProduct);
     }
 
@@ -46,6 +45,11 @@ public class ProductAppService : IProductAppService
         var product = await _productService.GetProductByIdAsync(productId).ConfigureAwait(false);
 
         return _mapper.Map<ProductResult>(product);
+    }
+
+    public async Task<decimal> GetProductUnitPriceByIdAsync(long productId)
+    {
+        return await _productService.GetProductUnitPriceByIdAsync(productId).ConfigureAwait(false);
     }
 
     public void Update(long productId, UpdateProduct updateProductDto)
