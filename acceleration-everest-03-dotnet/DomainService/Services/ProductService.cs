@@ -45,7 +45,7 @@ public class ProductService : IProductService
         var query = repository.MultipleResultQuery();
         var products = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (products.Count == 0)
+        if (!products.Any())
             throw new ArgumentNullException($"No product found");
 
         return products;
