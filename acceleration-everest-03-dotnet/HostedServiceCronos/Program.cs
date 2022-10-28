@@ -18,7 +18,6 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddDomainServicesDependecyInjections();
         services.AddInfrastructureDataDependecyInjections(hostContext.Configuration);
         services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
-
     })
     .Build();
 
