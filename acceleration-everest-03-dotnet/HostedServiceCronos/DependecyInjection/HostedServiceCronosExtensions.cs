@@ -18,7 +18,7 @@ public static class HostedServiceCronosExtensions
 
         if (string.IsNullOrWhiteSpace(config.CronExpression))
         {
-            throw new ArgumentNullException(nameof(ScheduleConfig<T>.CronExpression), @"Empty Cron Expression is not allowed.");
+            throw new ArgumentNullException(nameof(config.CronExpression));
         }
 
         services.AddSingleton<IScheduleConfig<T>>(config);
