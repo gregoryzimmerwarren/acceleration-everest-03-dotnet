@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using DomainModels.Enums;
 using DomainModels.Models;
+using System;
 using System.Collections.Generic;
 
 namespace AppServices.Tests.Fixtures.Orders;
@@ -11,8 +12,8 @@ public class OrderFixture
     {
         var testOrderDto = new Faker<Order>("pt_BR")
             .CustomInstantiator(faker => new Order(
-                quotes: faker.Random.Int(),
-                liquidatedAt: faker.Date.Future(1),
+                quotes: faker.Random.Int(min: 1, max: 10),
+                liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: faker.Random.Bool(),
                 portfolioId: 1,
@@ -26,8 +27,8 @@ public class OrderFixture
     {
         var testListOrderDto = new Faker<Order>("pt_BR")
             .CustomInstantiator(faker => new Order(
-                quotes: faker.Random.Int(),
-                liquidatedAt: faker.Date.Future(1),
+                quotes: faker.Random.Int(min: 1, max: 10),
+                liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: faker.Random.Bool(),
                 portfolioId: 1,

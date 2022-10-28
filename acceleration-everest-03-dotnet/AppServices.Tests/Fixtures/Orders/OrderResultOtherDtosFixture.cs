@@ -1,6 +1,7 @@
 ﻿using AppModels.Orders;
 using Bogus;
 using DomainModels.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace AppServices.Tests.Fixtures.Orders;
@@ -11,10 +12,10 @@ public class OrderResultOtherDtosFixture
     {
         var testOrderResultOtherDtosDto = new Faker<OrderResultOtherDtos>("pt_BR")
             .CustomInstantiator(faker => new OrderResultOtherDtos(
-                id: faker.Random.Long(),
-                quotes: faker.Random.Int(),
-                netValue: faker.Random.Int(),
-                liquidatedAt: faker.Date.Future(1),
+                id: faker.Random.Long(min: 1, max: 10),
+                quotes: faker.Random.Int(min: 1, max: 10),
+                netValue: faker.Random.Decimal(min: 0.1m, max: 10.0m),
+                liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: false));
 
@@ -26,10 +27,10 @@ public class OrderResultOtherDtosFixture
     {
         var testListOrderResultOtherDtosDto = new Faker<OrderResultOtherDtos>("pt_BR")
             .CustomInstantiator(faker => new OrderResultOtherDtos(
-                id: faker.Random.Long(),
-                quotes: faker.Random.Int(),
-                netValue: faker.Random.Int(),
-                liquidatedAt: faker.Date.Future(1),
+                id: faker.Random.Long(min: 1, max: 10),
+                quotes: faker.Random.Int(min: 1, max: 10),
+                netValue: faker.Random.Decimal(min: 0.1m, max: 10.0m),
+                liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: false));
 

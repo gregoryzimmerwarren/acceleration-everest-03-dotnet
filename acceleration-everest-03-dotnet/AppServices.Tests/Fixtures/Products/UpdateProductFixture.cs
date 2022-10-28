@@ -1,5 +1,6 @@
 ﻿using AppModels.Products;
 using Bogus;
+using System;
 
 namespace AppServices.Tests.Fixtures.Products;
 
@@ -11,7 +12,7 @@ public class UpdateProductFixture
             .CustomInstantiator(faker => new UpdateProduct(
                 symbol: faker.Random.String2(5),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
-                expirationAt: faker.Date.Future(1)));
+                expirationAt: DateTime.Now));
 
         var ipdateProductDto = testUpdateProductDto.Generate();
         return ipdateProductDto;

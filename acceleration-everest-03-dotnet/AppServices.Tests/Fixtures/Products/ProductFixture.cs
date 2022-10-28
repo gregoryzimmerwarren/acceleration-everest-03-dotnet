@@ -2,6 +2,7 @@
 using Bogus;
 using DomainModels.Enums;
 using DomainModels.Models;
+using System;
 using System.Collections.Generic;
 
 namespace AppServices.Tests.Fixtures.Products;
@@ -14,8 +15,8 @@ public class ProductFixture
             .CustomInstantiator(faker => new Product(                
                 symbol: faker.Random.String2(5),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
-                issuanceAt: faker.Date.Future(1),
-                expirationAt: faker.Date.Future(1),
+                issuanceAt: DateTime.Now,
+                expirationAt: DateTime.Now,
                 type: faker.PickRandom<ProductType>()));
 
         var product = testProduct.Generate();
@@ -28,8 +29,8 @@ public class ProductFixture
             .CustomInstantiator(faker => new Product(
                 symbol: faker.Random.String2(5),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
-                issuanceAt: faker.Date.Future(1),
-                expirationAt: faker.Date.Future(1),
+                issuanceAt: DateTime.Now,
+                expirationAt: DateTime.Now,
                 type: faker.PickRandom<ProductType>()));
 
         var product = testProduct.Generate(generatedQuantity);

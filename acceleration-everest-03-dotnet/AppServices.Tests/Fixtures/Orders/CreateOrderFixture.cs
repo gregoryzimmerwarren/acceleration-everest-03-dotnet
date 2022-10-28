@@ -1,6 +1,7 @@
 ﻿using AppModels.Customers;
 using AppModels.Orders;
 using Bogus;
+using System;
 
 namespace AppServices.Tests.Fixtures.Orders;
 
@@ -10,8 +11,8 @@ public class CreateOrderFixture
     {
         var testCreateOrderDto = new Faker<CreateOrder>("pt_BR")
             .CustomInstantiator(faker => new CreateOrder(
-                quotes: faker.Random.Int(),
-                liquidatedAt: faker.Date.Future(1),
+                quotes: faker.Random.Int(min: 1, max: 10),
+                liquidatedAt: DateTime.Now,
                 portfolioId: 1,
                 productId: 1));
 

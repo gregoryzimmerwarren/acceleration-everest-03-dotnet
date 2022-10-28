@@ -3,6 +3,7 @@ using AppServices.Tests.Fixtures.Orders;
 using AppServices.Tests.Fixtures.Portfolios;
 using Bogus;
 using DomainModels.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace AppServices.Tests.Fixtures.Products;
@@ -13,11 +14,11 @@ public class ProductResultFixture
     {
         var testProductResult = new Faker<ProductResult>("pt_BR")
             .CustomInstantiator(faker => new ProductResult(
-                id: faker.Random.Long(),
+                id: faker.Random.Long(min: 1, max: 10),
                 symbol: faker.Random.String2(5),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
-                expirationAt: faker.Date.Future(1),
+                expirationAt: DateTime.Now,
                 type: faker.PickRandom<ProductType>(),
                 portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(3),
                 orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
@@ -30,11 +31,11 @@ public class ProductResultFixture
     {
         var testListProductResult = new Faker<ProductResult>("pt_BR")
             .CustomInstantiator(faker => new ProductResult(
-                id: faker.Random.Long(),
+                id: faker.Random.Long(min: 1, max: 10),
                 symbol: faker.Random.String2(5),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
-                expirationAt: faker.Date.Future(1),
+                expirationAt: DateTime.Now,
                 type: faker.PickRandom<ProductType>(),
                 portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(3),
                 orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));

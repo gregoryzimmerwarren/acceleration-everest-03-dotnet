@@ -80,7 +80,7 @@ public class PortfolioAppService : IPortfolioAppService
 
         foreach (var order in orders)
         {
-            if (order.LiquidatedAt == DateTime.Now.Date && order.WasExecuted == false)
+            if (order.LiquidatedAt.Date == DateTime.Now.Date && order.WasExecuted == false)
             {
                 if (order.Direction == "Buy")
                 {
