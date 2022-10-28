@@ -10,7 +10,7 @@ public static class HostedServiceCronosExtensions
     {
         if (options == null)
         {
-            throw new ArgumentNullException(nameof(options), @"Please provide Schedule Configurations.");
+            throw new ArgumentNullException(nameof(options));
         }
 
         var config = new ScheduleConfig<T>();
