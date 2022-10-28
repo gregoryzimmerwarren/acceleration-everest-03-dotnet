@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DomainServices.DependencyInjections;
 
-public static class DomainServicesExtensions
+public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddDomainServicesDependecyInjections(this IServiceCollection services)
+    public static IServiceCollection AddDomainServicesConfiguration(this IServiceCollection services)
     {
         services.AddTransient<ICustomerBankInfoService, CustomerBankInfoService>();
         services.AddTransient<ICustomerService, CustomerService>();

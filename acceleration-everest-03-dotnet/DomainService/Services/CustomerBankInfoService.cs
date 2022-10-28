@@ -73,7 +73,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         return customerBankInfo;
     }
 
-    public async Task<decimal> GetTotalByCustomerIdAsync(long customerId)
+    public async Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId)
     {
         var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 

@@ -87,7 +87,7 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         return portfolios;
     }
 
-    public async Task<bool> InvestAsync(long portfolioId, decimal amount)
+    public async Task InvestAsync(long portfolioId, decimal amount)
     {
         var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
@@ -100,11 +100,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
         _unitOfWork.SaveChanges();
-
-        return true;
     }
 
-    public async Task<bool> RedeemToPortfolioAsync(long portfolioId, decimal amount)
+    public async Task RedeemToPortfolioAsync(long portfolioId, decimal amount)
     {
         var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
@@ -117,11 +115,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
         _unitOfWork.SaveChanges();
-
-        return true;
     }
 
-    public async Task<bool> WithdrawFromPortfolioAsync(long portfolioId, decimal amount)
+    public async Task WithdrawFromPortfolioAsync(long portfolioId, decimal amount)
     {
         var portfolio = await GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
 
@@ -133,7 +129,5 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
         var repository = _unitOfWork.Repository<Portfolio>();
         repository.Update(portfolio);
         _unitOfWork.SaveChanges();
-
-        return true;
     }
 }

@@ -17,5 +17,5 @@ public interface IPortfolioAppService
     Task<IEnumerable<PortfolioResult>> GetPortfoliosByCustomerIdAsync(long customerId);
     Task InvestAsync(CreateOrder createOrderDto);
     Task RedeemToPortfolioAsync(CreateOrder createOrderDto);
-    Task<bool> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount);
+    Task WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount);
 }

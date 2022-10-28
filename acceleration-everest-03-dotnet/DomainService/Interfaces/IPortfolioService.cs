@@ -11,7 +11,7 @@ public interface IPortfolioService
     Task DepositAsync(long portfolioId, decimal amount);
     Task<Portfolio> GetPortfolioByIdAsync(long portfolioId);
     Task<IEnumerable<Portfolio>> GetPortfoliosByCustomerIdAsync(long customerId);
-    Task<bool> InvestAsync(long portfolioId, decimal amount);
-    Task<bool> RedeemToPortfolioAsync(long portfolioId, decimal amount);
-    Task<bool> WithdrawFromPortfolioAsync(long portfolioId, decimal amount);
+    Task InvestAsync(long portfolioId, decimal amount);
+    Task RedeemToPortfolioAsync(long portfolioId, decimal amount);
+    Task WithdrawFromPortfolioAsync(long portfolioId, decimal amount);
 }

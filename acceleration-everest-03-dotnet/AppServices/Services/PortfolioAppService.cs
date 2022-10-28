@@ -50,7 +50,7 @@ public class PortfolioAppService : IPortfolioAppService
 
     public async Task DepositAsync(long customerId, long portfolioId, decimal amount)
     {
-        var totalInBankInfo = await _customerBankInfoAppService.GetTotalByCustomerIdAsync(customerId).ConfigureAwait(false);
+        var totalInBankInfo = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         if (totalInBankInfo < amount)
             throw new ArgumentException($"The customer bank info does not enough value to make this deposit. Current value: {totalInBankInfo}");
@@ -134,7 +134,6 @@ public class PortfolioAppService : IPortfolioAppService
             createOrderDto.WasExecuted = true;
         }
 
-
         _orderAppService.Create(createOrderDto);
     }
 
@@ -155,11 +154,9 @@ public class PortfolioAppService : IPortfolioAppService
         _orderAppService.Create(createOrderDto);
     }
 
-    public async Task<bool> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)
+    public async Task WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)
     {
-        var result = await _portfolioService.WithdrawFromPortfolioAsync(portfolioId, amount).ConfigureAwait(false); ;
+        await _portfolioService.WithdrawFromPortfolioAsync(portfolioId, amount).ConfigureAwait(false); ;
         await _customerBankInfoAppService.DepositAsync(customerId, amount).ConfigureAwait(false); ;
-
-        return result;
     }
 }

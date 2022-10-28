@@ -10,6 +10,6 @@ public interface ICustomerBankInfoAppService
     Task DeleteAsync(long customerId);
     Task DepositAsync(long customerId, decimal amount);
     Task<IEnumerable<CustomerBankInfoResult>> GetAllCustomersBankInfoAsync();
-    Task<decimal> GetTotalByCustomerIdAsync(long customerId);
+    Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId);
     Task<bool> WithdrawAsync(long customerId, decimal amount);
 }

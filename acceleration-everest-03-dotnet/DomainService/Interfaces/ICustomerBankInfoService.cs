@@ -11,6 +11,6 @@ public interface ICustomerBankInfoService
     Task DepositAsync(long customerId, decimal amount);
     Task<IEnumerable<CustomerBankInfo>> GetAllCustomersBankInfoAsync();
     Task<CustomerBankInfo> GetCustomerBankInfoByCustomerIdAsync(long customerId);
-    Task<decimal> GetTotalByCustomerIdAsync(long customerId);
+    Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId);
     Task<bool> WithdrawAsync(long customerId, decimal amount);
 }
