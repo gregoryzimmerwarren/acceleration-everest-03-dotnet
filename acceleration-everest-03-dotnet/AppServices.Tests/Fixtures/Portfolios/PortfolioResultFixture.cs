@@ -19,7 +19,6 @@ public class PortfolioResultFixture
                 totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 customer: CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture(),
-                products: ProductResultForOthersDtosFixture.GenerateListProductResultForOthersDtosFixture(3),
                 orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
 
         var portfolioResultBogus = testPortfolioResultBogus.Generate();
@@ -36,7 +35,6 @@ public class PortfolioResultFixture
                 totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 customer: CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture(),
-                products: ProductResultForOthersDtosFixture.GenerateListProductResultForOthersDtosFixture(3),
                 orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
 
         var listPortfolioResultBogus = testListPortfolioResultBogus.Generate(generatedQuantity);

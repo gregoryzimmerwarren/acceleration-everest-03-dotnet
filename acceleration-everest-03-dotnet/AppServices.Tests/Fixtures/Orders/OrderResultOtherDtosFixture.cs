@@ -1,6 +1,7 @@
-﻿using AppModels.Orders;
+﻿using AppModels.Enums;
+using AppModels.Orders;
+using AppServices.Tests.Fixtures.Products;
 using Bogus;
-using DomainModels.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -14,10 +15,12 @@ public class OrderResultOtherDtosFixture
             .CustomInstantiator(faker => new OrderResultOtherDtos(
                 id: faker.Random.Long(min: 1, max: 10),
                 quotes: faker.Random.Int(min: 1, max: 10),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 netValue: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
-                wasExecuted: false));
+                wasExecuted: false,
+                product: ProductResultFixture.GenerateProductResultFixture()));
 
         var orderResultOtherDtosDto = testOrderResultOtherDtosDto.Generate();
         return orderResultOtherDtosDto;
@@ -29,10 +32,12 @@ public class OrderResultOtherDtosFixture
             .CustomInstantiator(faker => new OrderResultOtherDtos(
                 id: faker.Random.Long(min: 1, max: 10),
                 quotes: faker.Random.Int(min: 1, max: 10),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 netValue: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
-                wasExecuted: false));
+                wasExecuted: false,
+                product: ProductResultFixture.GenerateProductResultFixture()));
 
         var listOrderResultOtherDtosDto = testListOrderResultOtherDtosDto.Generate(generatedQuantity);
         return listOrderResultOtherDtosDto;

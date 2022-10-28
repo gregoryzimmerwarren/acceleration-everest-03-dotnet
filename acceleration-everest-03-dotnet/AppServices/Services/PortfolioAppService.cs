@@ -128,7 +128,7 @@ public class PortfolioAppService : IPortfolioAppService
         createOrderDto.NetValue = amount;
         createOrderDto.Direction = OrderDirection.Buy;
 
-        if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
+        if (createOrderDto.LiquidatedAt.Date <= DateTime.Now.Date)
         {
             await ExecuteBuyOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, amount);
             createOrderDto.WasExecuted = true;
@@ -145,7 +145,7 @@ public class PortfolioAppService : IPortfolioAppService
         createOrderDto.NetValue = amount;
         createOrderDto.Direction = OrderDirection.Sell;
 
-        if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
+        if (createOrderDto.LiquidatedAt.Date <= DateTime.Now.Date)
         {
             await ExecuteSellOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, amount);
             createOrderDto.WasExecuted = true;

@@ -1,7 +1,9 @@
-﻿using AppModels.Orders;
+﻿using AppModels.Customers;
+using AppModels.Orders;
 using AppModels.Products;
 using AppServices.Interfaces;
 using AppServices.Services;
+using AppServices.Tests.Fixtures.Customers;
 using AppServices.Tests.Fixtures.Orders;
 using AppServices.Tests.Fixtures.Portfolios;
 using AppServices.Tests.Fixtures.Products;
@@ -38,24 +40,19 @@ public class OrderAppServiceTests
     }
 
     [Fact]
-    public async void Should_CreateOrderAsync_Successfully()
+    public void Should_CreateOrderAsync_Successfully()
     {
         // Arrange
-        long idTest = 1;
         var createdOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         var orderTest = OrderFixture.GenerateOrderFixture();
-        var productTest = ProductFixture.GenerateProductFixture();
-        var productResultTest = ProductResultFixture.GenerateProductResultFixture();
 
-        _mockProductAppService.Setup(productService => productService.GetProductByIdAsync(It.IsAny<long>())).ReturnsAsync(productResultTest);
-        _mockOrderService.Setup(orderService => orderService.Create(It.IsAny<Order>())).Returns(idTest);
+        _mockOrderService.Setup(orderService => orderService.Create(It.IsAny<Order>())).Returns(It.IsAny<long>());
 
         // Action
-        var resultOrder = await _orderAppService.CreateAsync(createdOrderTest).ConfigureAwait(false);
+        var resultOrder = _orderAppService.Create(createdOrderTest);
 
         // Assert
-        resultOrder.Should().Be(idTest);
-        _mockProductAppService.Verify(productService => productService.GetProductByIdAsync(It.IsAny<long>()), Times.Once);
+        resultOrder.Should().NotBe(null);
         _mockOrderService.Verify(orderService => orderService.Create(It.IsAny<Order>()), Times.Once);
     }
 
@@ -78,21 +75,40 @@ public class OrderAppServiceTests
     }
 
     [Fact]
+    public async void Should_GetOrderByIdAsync_Successfully()
+    {
+        // Arrange
+        long idTest = 1;
+        var orderTest = OrderFixture.GenerateOrderFixture();
+        orderTest.Id = idTest;
+
+        _mockOrderService.Setup(orderService => orderService.GetOrderByIdAsync(It.IsAny<long>())).ReturnsAsync(orderTest);
+        _mapper.Map<OrderResult>(orderTest);
+
+        // Action
+        var result = await _orderAppService.GetOrderByIdAsync(idTest).ConfigureAwait(false);
+
+        // Assert
+        result.Should().NotBeNull();
+        _mockOrderService.Verify(orderService => orderService.GetOrderByIdAsync(idTest), Times.Once);
+    }
+
+    [Fact]
     public async void Should_GetAvailableQuotes_Successfully()
     {
         // Arrange
-        var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
-        var productTest = ProductFixture.GenerateProductFixture();
+        long portfolioIdTest = 1;
+        long productIdTest = 1;
         var listOrderTest = OrderFixture.GenerateListOrderFixture(3);
 
-        _mockOrderService.Setup(orderService => orderService.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(listOrderTest);
+        _mockOrderService.Setup(orderService => orderService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(It.IsAny<int>());
 
         // Action
-        var result = await _orderAppService.GetAvailableQuotes(portfolioTest.Id, productTest.Id).ConfigureAwait(false);
+        var result = await _orderAppService.GetAvailableQuotes(portfolioIdTest, productIdTest).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBe(null);
-        _mockOrderService.Verify(orderService => orderService.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>()), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
@@ -132,7 +148,7 @@ public class OrderAppServiceTests
     }
 
     [Fact]
-    public void Should_UpdateOrderAsync_Successfully()
+    public void Should_UpdateOrder_Successfully()
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();

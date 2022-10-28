@@ -1,5 +1,4 @@
-﻿using AppModels.Customers;
-using AppModels.Orders;
+﻿using AppModels.Orders;
 using Bogus;
 using System;
 

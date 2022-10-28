@@ -4,7 +4,7 @@ using Bogus.Extensions.Brazil;
 
 namespace AppServices.Tests.Fixtures.Customers;
 
-public class UpdadeCustomerFixture
+public class UpdateCustomerFixture
 {
     public static UpdateCustomer GenerateUpdateCustomerFixture()
     {

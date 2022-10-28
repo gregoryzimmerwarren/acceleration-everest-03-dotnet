@@ -13,7 +13,7 @@ public class UpdateOrderFixture
             .CustomInstantiator(faker => new UpdateOrder(
                 id: faker.Random.Long(min: 1, max: 10),
                 quotes: faker.Random.Int(min: 1, max: 10),
-                netValue: faker.Random.Int(min: 1, max: 10),
+                unitPrice: faker.Random.Int(min: 1, max: 10),
                 direction: faker.PickRandom<OrderDirection>().ToString(),
                 wasExecuted: true,
                 liquidatedAt: DateTime.Now,

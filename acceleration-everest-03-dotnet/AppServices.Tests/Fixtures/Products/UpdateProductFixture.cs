@@ -1,4 +1,5 @@
-﻿using AppModels.Products;
+﻿using AppModels.Enums;
+using AppModels.Products;
 using Bogus;
 using System;
 
@@ -12,7 +13,9 @@ public class UpdateProductFixture
             .CustomInstantiator(faker => new UpdateProduct(
                 symbol: faker.Random.String2(5),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
-                expirationAt: DateTime.Now));
+                issuanceAt: DateTime.Now,
+                expirationAt: DateTime.Now,
+                type: (int)faker.PickRandom<ProductType>()));
 
         var ipdateProductDto = testUpdateProductDto.Generate();
         return ipdateProductDto;

@@ -90,29 +90,10 @@ public class CustomerBankInfoAppServiceTests
         // Assert
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetAllCustomersBankInfoAsync(), Times.Once);
     }
+    
 
     [Fact]
-    public async void Should_GetCustomerBankInfoByCustomerIdAsync_Successfully()
-    {
-        // Arrange
-        long idTest = 1;
-        var customerBankInfoResultTest = CustomerBankInfoResultFixture.GenerateCustomerBankInfoResultFixture();
-        var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
-        customerBankInfoTest.CustomerId = idTest;
-
-        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(customerBankInfoTest);
-        _mapper.Map<CustomerBankInfoResult>(customerBankInfoTest);
-
-        // Action
-        var result = await _customerBankInfoAppService.GetCustomerBankInfoByCustomerIdAsync(idTest).ConfigureAwait(false);
-
-        // Assert
-        result.Should().NotBeNull();
-        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(It.IsAny<long>()), Times.Once);
-    }
-
-    [Fact]
-    public async void Should_GetTotalByCustomerIdAsync_Successfully()
+    public async void Should_GetAccountBalanceByCustomerIdAsync_Successfully()
     {
         // Arrange
         long idTest = 1;
@@ -120,14 +101,14 @@ public class CustomerBankInfoAppServiceTests
         customerTest.Id = idTest;
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
-        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetTotalByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
+        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
 
         // Action
-        var result = await _customerBankInfoAppService.GetTotalByCustomerIdAsync(idTest).ConfigureAwait(false);
+        var result = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(idTest).ConfigureAwait(false);
 
         // Assert
         result.Should().BeGreaterThanOrEqualTo(0);
-        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetTotalByCustomerIdAsync(It.IsAny<long>()), Times.Once);
+        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]

@@ -13,6 +13,7 @@ public class OrderFixture
         var testOrderDto = new Faker<Order>("pt_BR")
             .CustomInstantiator(faker => new Order(
                 quotes: faker.Random.Int(min: 1, max: 10),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: faker.Random.Bool(),
@@ -28,6 +29,7 @@ public class OrderFixture
         var testListOrderDto = new Faker<Order>("pt_BR")
             .CustomInstantiator(faker => new Order(
                 quotes: faker.Random.Int(min: 1, max: 10),
+                unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 liquidatedAt: DateTime.Now,
                 direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: faker.Random.Bool(),

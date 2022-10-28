@@ -1,8 +1,8 @@
-﻿using AppModels.Products;
+﻿using AppModels.Enums;
+using AppModels.Products;
 using AppServices.Tests.Fixtures.Orders;
 using AppServices.Tests.Fixtures.Portfolios;
 using Bogus;
-using DomainModels.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -19,9 +19,7 @@ public class ProductResultFixture
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
                 expirationAt: DateTime.Now,
-                type: faker.PickRandom<ProductType>(),
-                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(3),
-                orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
+                type: faker.PickRandom<ProductType>()));
 
         var productResult = testProductResult.Generate();
         return productResult;
@@ -36,9 +34,7 @@ public class ProductResultFixture
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 daysToExpire: faker.Random.Int(0),
                 expirationAt: DateTime.Now,
-                type: faker.PickRandom<ProductType>(),
-                portfolios: PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(3),
-                orders: OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(3)));
+                type: faker.PickRandom<ProductType>()));
 
         var listProductResult = testListProductResult.Generate(generatedQuantity);
         return listProductResult;

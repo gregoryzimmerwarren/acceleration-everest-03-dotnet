@@ -40,18 +40,16 @@ public class CustomerAppServiceTests
     {
         // Arrange  
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        var customerTest = CustomerFixture.GenerateCustomerFixture();
-        long idTest = 1;    
+        var customerTest = CustomerFixture.GenerateCustomerFixture(); 
 
-        _mockCustomerService.Setup(customerService => customerService.CreateAsync(It.IsAny<Customer>())).ReturnsAsync(idTest);
+        _mockCustomerService.Setup(customerService => customerService.CreateAsync(It.IsAny<Customer>())).ReturnsAsync(It.IsAny<long>());
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.Create(It.IsAny<long>()));
 
         // Action
         var result = await _customerAppService.CreateAsync(createCustomerTest).ConfigureAwait(false);
-        _customerBankInfoAppService.Create(idTest);
 
         // Assert
-        result.Should().Be(idTest);
+        result.Should().NotBe(null);
 
         _mockCustomerService.Verify(customerService => customerService.CreateAsync(It.IsAny<Customer>()), Times.Once);
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.Create(It.IsAny<long>()), Times.Once);
@@ -68,7 +66,6 @@ public class CustomerAppServiceTests
 
         // Action
         await _customerAppService.DeleteAsync(idTest).ConfigureAwait(false);
-        await _customerBankInfoAppService.DeleteAsync(idTest).ConfigureAwait(false);
 
         // Assert
         _mockCustomerService.Verify(customerService => customerService.DeleteAsync(It.IsAny<long>()), Times.Once);
@@ -116,7 +113,7 @@ public class CustomerAppServiceTests
     public async void Should_UpdateCustomerAsync_Successfully()
     {
         // Arrange
-        var updateCustomerTest = UpdadeCustomerFixture.GenerateUpdateCustomerFixture();
+        var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         var customerTest = CustomerFixture.GenerateCustomerFixture();
         long idTest = 1;
 
