@@ -34,9 +34,7 @@ public class CronJobExecuteOrders : CronJobService
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, @"
-CronJobExecuteOrders is't working.
-");
+            _logger.LogError(exception, "Error occurred in CronJobExecuteOrders.");
         }
     }
 }
