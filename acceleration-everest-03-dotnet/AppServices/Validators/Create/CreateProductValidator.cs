@@ -26,9 +26,8 @@ namespace AppServices.Validators.Create
                 .GreaterThanOrEqualTo(DateTime.Now.Date);
 
             RuleFor(product => product.Type)
-                .NotNull()
-                .Must(EnunIsValid)
-                .IsInEnum();
+                .NotEmpty()
+                .Must(EnunIsValid);
         }
 
         private bool EnunIsValid(int direction)

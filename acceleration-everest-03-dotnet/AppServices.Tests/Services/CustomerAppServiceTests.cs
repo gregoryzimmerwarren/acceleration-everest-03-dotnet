@@ -47,6 +47,7 @@ public class CustomerAppServiceTests
 
         // Action
         var result = await _customerAppService.CreateAsync(createCustomerTest).ConfigureAwait(false);
+        _customerBankInfoAppService.Create(result);
 
         // Assert
         result.Should().NotBe(null);
@@ -66,6 +67,7 @@ public class CustomerAppServiceTests
 
         // Action
         await _customerAppService.DeleteAsync(idTest).ConfigureAwait(false);
+        await _customerBankInfoAppService.DeleteAsync(idTest).ConfigureAwait(false);
 
         // Assert
         _mockCustomerService.Verify(customerService => customerService.DeleteAsync(It.IsAny<long>()), Times.Once);

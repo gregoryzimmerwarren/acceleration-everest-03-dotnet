@@ -1,6 +1,7 @@
 ﻿using AppModels.Customers;
 using Bogus;
 using Bogus.Extensions.Brazil;
+using System;
 
 namespace AppServices.Tests.Fixtures.Customers;
 
@@ -22,7 +23,10 @@ public class UpdateCustomerFixture
             number: faker.Random.Number(),
             emailSms: faker.Random.Bool(),
             whatsapp: faker.Random.Bool(),
-            dateOfBirth: faker.Date.Past(18)));
+            dateOfBirth: faker.Date.Between(start: DateTime.Now.AddYears(-18),
+            end: DateTime.Now.AddYears(-80))))
+            .RuleFor(customerCreate => customerCreate.EmailConfirmation,
+            (customerCreate, faker) => faker.Email);
 
         var UpdateCustomerDto = testUpdateCustomerDto.Generate();
         return UpdateCustomerDto;

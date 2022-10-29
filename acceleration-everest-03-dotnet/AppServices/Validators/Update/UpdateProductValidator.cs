@@ -4,7 +4,7 @@ using System;
 
 namespace AppServices.Validators.Update
 {
-    internal class UpdateProductValidator : AbstractValidator<CreateProduct>
+    public class UpdateProductValidator : AbstractValidator<UpdateProduct>
     {
         public UpdateProductValidator()
         {
