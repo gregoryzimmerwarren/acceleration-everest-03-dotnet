@@ -40,6 +40,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppServices.Tests", "AppSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostedServiceCronos", "HostedServiceCronos\HostedServiceCronos.csproj", "{21658467-1B8E-404E-8B1E-966E777D109F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainServices.Tests", "DomainServices.Tests\DomainServices.Tests.csproj", "{3B15FAFE-7BBA-45BD-A140-C4C7D987B54A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{21658467-1B8E-404E-8B1E-966E777D109F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21658467-1B8E-404E-8B1E-966E777D109F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21658467-1B8E-404E-8B1E-966E777D109F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B15FAFE-7BBA-45BD-A140-C4C7D987B54A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B15FAFE-7BBA-45BD-A140-C4C7D987B54A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B15FAFE-7BBA-45BD-A140-C4C7D987B54A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B15FAFE-7BBA-45BD-A140-C4C7D987B54A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{B330B5D1-824A-44F2-B67F-AFE474068111} = {DE479CF7-1C53-4E8D-B40D-739518211922}
 		{1F68087E-B499-4B50-B30F-D40314AFCC76} = {DE479CF7-1C53-4E8D-B40D-739518211922}
 		{D1062373-0285-4FC0-97B1-FD0F9A30EAD8} = {1B4C7BDD-049D-4F49-B976-13B74C58C65D}
+		{3B15FAFE-7BBA-45BD-A140-C4C7D987B54A} = {1B4C7BDD-049D-4F49-B976-13B74C58C65D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F055D5D-2088-497B-A1BE-4CEE5B936D13}
