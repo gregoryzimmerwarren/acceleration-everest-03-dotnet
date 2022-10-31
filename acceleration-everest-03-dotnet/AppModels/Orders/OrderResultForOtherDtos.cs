@@ -1,15 +1,15 @@
-﻿using AppModels.Enums;
-using AppModels.Products;
+﻿using AppModels.Products;
+using Infrastructure.CrossCutting.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppModels.Orders;
 
-public class OrderResultOtherDtos
+public class OrderResultForOtherDtos
 {
-    protected OrderResultOtherDtos() { }
+    protected OrderResultForOtherDtos() { }
 
-    public OrderResultOtherDtos(
+    public OrderResultForOtherDtos(
         long id,
         int quotes,
         decimal unitPrice,
@@ -24,7 +24,7 @@ public class OrderResultOtherDtos
         UnitPrice = unitPrice;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
-        Direction = Enum.GetName(direction);
+        Direction = direction;
         WasExecuted = wasExecuted;
         Product = product;
 
@@ -34,7 +34,7 @@ public class OrderResultOtherDtos
     public int Quotes { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal NetValue { get; set; }
-    public string Direction { get; set; }
+    public OrderDirection Direction { get; set; }
     public bool WasExecuted { get; set; }
 
     [DataType(DataType.Date)]

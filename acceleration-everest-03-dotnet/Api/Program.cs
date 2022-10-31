@@ -16,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddAppServicesConfiguration();
 builder.Services.AddDomainServicesConfiguration();
-builder.Services.AddInfrastructureDataDependecyInjections(builder.Configuration);
+builder.Services.AddInfrastructureDataConfiguration(builder.Configuration);
 builder.Services.AddAutoMapper(Assembly.Load(nameof(AppServices)));
 
 var app = builder.Build();

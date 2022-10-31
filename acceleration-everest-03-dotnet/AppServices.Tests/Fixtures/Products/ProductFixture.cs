@@ -1,7 +1,6 @@
-﻿using AppModels.Products;
-using Bogus;
-using DomainModels.Enums;
+﻿using Bogus;
 using DomainModels.Models;
+using Infrastructure.CrossCutting.Enums;
 using System;
 using System.Collections.Generic;
 

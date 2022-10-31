@@ -1,4 +1,4 @@
-﻿using AppModels.Enums;
+﻿using Infrastructure.CrossCutting.Enums;
 using AppModels.Orders;
 using AppModels.Portfolios;
 using AppServices.Interfaces;
@@ -82,7 +82,7 @@ public class PortfolioAppService : IPortfolioAppService
         {
             if (order.LiquidatedAt.Date == DateTime.Now.Date && order.WasExecuted == false)
             {
-                if (order.Direction == "Buy")
+                if (order.Direction == OrderDirection.Buy)
                 {
                     await ExecuteBuyOrderAsync(order.Product.Id, order.Product.Id, order.NetValue).ConfigureAwait(false);
                 }

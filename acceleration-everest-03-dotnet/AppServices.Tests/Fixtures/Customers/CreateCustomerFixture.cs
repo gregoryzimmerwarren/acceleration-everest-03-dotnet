@@ -20,7 +20,7 @@ public class CreateCustomerFixture
             city: faker.Address.City(),
             address: faker.Address.StreetAddress(),
             postalCode: faker.Address.ZipCode(),
-            number: faker.Random.Number(),
+            number: faker.Random.Number(min: 1),
             emailSms: faker.Random.Bool(),
             whatsapp: faker.Random.Bool(),
             dateOfBirth: faker.Date.Between(start: DateTime.Now.AddYears(-18), 

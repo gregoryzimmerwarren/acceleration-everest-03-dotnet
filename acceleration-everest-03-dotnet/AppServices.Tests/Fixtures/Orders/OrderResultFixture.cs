@@ -1,8 +1,8 @@
-﻿using AppModels.Enums;
-using AppModels.Orders;
+﻿using AppModels.Orders;
 using AppServices.Tests.Fixtures.Portfolios;
 using AppServices.Tests.Fixtures.Products;
 using Bogus;
+using Infrastructure.CrossCutting.Enums;
 using System;
 using System.Collections.Generic;
 

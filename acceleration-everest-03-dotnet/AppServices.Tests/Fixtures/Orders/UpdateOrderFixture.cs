@@ -1,6 +1,6 @@
 ﻿using AppModels.Orders;
 using Bogus;
-using DomainModels.Enums;
+using Infrastructure.CrossCutting.Enums;
 using System;
 
 namespace AppServices.Tests.Fixtures.Orders;
@@ -14,7 +14,7 @@ public class UpdateOrderFixture
                 id: faker.Random.Long(min: 1, max: 10),
                 quotes: faker.Random.Int(min: 1, max: 10),
                 unitPrice: faker.Random.Int(min: 1, max: 10),
-                direction: faker.PickRandom<OrderDirection>().ToString(),
+                direction: faker.PickRandom<OrderDirection>(),
                 wasExecuted: true,
                 liquidatedAt: DateTime.Now,
                 portfolioId: 1,

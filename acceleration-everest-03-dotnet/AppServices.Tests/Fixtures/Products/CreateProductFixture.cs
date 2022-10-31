@@ -1,6 +1,6 @@
 ﻿using AppModels.Products;
 using Bogus;
-using DomainModels.Enums;
+using Infrastructure.CrossCutting.Enums;
 using System;
 
 namespace AppServices.Tests.Fixtures.Products;

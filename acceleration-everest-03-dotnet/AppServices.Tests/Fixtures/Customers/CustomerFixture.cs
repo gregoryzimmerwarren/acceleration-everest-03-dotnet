@@ -19,7 +19,7 @@ public class CustomerFixture
                 city: faker.Address.City(),
                 address: faker.Address.StreetAddress(),
                 postalCode: faker.Address.ZipCode(),
-                number: faker.Random.Number(),
+                number: faker.Random.Number(min: 1),
                 emailSms: faker.Random.Bool(),
                 whatsapp: faker.Random.Bool(),
                 dateOfBirth: faker.Date.Past(18)));
@@ -40,7 +40,7 @@ public class CustomerFixture
                 city: faker.Address.City(),
                 address: faker.Address.StreetAddress(),
                 postalCode: faker.Address.ZipCode(),
-                number: faker.Random.Number(),
+                number: faker.Random.Number(min: 1),
                 emailSms: faker.Random.Bool(),
                 whatsapp: faker.Random.Bool(),
                 dateOfBirth: faker.Date.Past(18)));

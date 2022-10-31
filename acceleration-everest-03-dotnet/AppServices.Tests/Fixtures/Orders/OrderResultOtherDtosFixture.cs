@@ -1,7 +1,7 @@
-﻿using AppModels.Enums;
-using AppModels.Orders;
+﻿using AppModels.Orders;
 using AppServices.Tests.Fixtures.Products;
 using Bogus;
+using Infrastructure.CrossCutting.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -9,10 +9,10 @@ namespace AppServices.Tests.Fixtures.Orders;
 
 public class OrderResultOtherDtosFixture
 {
-    public static OrderResultOtherDtos GenerateOrderResultOtherDtosFixture()
+    public static OrderResultForOtherDtos GenerateOrderResultOtherDtosFixture()
     {
-        var testOrderResultOtherDtosDto = new Faker<OrderResultOtherDtos>("pt_BR")
-            .CustomInstantiator(faker => new OrderResultOtherDtos(
+        var testOrderResultOtherDtosDto = new Faker<OrderResultForOtherDtos>("pt_BR")
+            .CustomInstantiator(faker => new OrderResultForOtherDtos(
                 id: faker.Random.Long(min: 1, max: 10),
                 quotes: faker.Random.Int(min: 1, max: 10),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),
@@ -26,10 +26,10 @@ public class OrderResultOtherDtosFixture
         return orderResultOtherDtosDto;
     }
 
-    public static IEnumerable<OrderResultOtherDtos> GenerateListOrderResultOtherDtosFixture(int generatedQuantity)
+    public static IEnumerable<OrderResultForOtherDtos> GenerateListOrderResultOtherDtosFixture(int generatedQuantity)
     {
-        var testListOrderResultOtherDtosDto = new Faker<OrderResultOtherDtos>("pt_BR")
-            .CustomInstantiator(faker => new OrderResultOtherDtos(
+        var testListOrderResultOtherDtosDto = new Faker<OrderResultForOtherDtos>("pt_BR")
+            .CustomInstantiator(faker => new OrderResultForOtherDtos(
                 id: faker.Random.Long(min: 1, max: 10),
                 quotes: faker.Random.Int(min: 1, max: 10),
                 unitPrice: faker.Random.Decimal(min: 0.1m, max: 10.0m),

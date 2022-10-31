@@ -1,6 +1,6 @@
 ﻿using Bogus;
-using DomainModels.Enums;
 using DomainModels.Models;
+using Infrastructure.CrossCutting.Enums;
 using System;
 using System.Collections.Generic;
 

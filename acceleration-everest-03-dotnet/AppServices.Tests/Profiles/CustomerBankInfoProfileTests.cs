@@ -24,14 +24,16 @@ public class CustomerBankInfoProfileTests
     public void Should_MapTo_CustomerBankInfoResult_FromCustomerBankInfo_Successfully()
     {
         // Arrange
+        var customerResultForOtherDtosTest = CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture();
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         var customerBankInfoResultTest = new CustomerBankInfoResult(
             id: customerBankInfoTest.Id,
             accountBalance: customerBankInfoTest.AccountBalance,
-            customer: null);
+            customer: customerResultForOtherDtosTest);
 
         // Action
         var result = _mapper.Map<CustomerBankInfoResult>(customerBankInfoTest);
+        result.Customer = customerResultForOtherDtosTest;
 
         // Assert
         result.Should().BeEquivalentTo(customerBankInfoResultTest);

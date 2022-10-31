@@ -1,7 +1,7 @@
-﻿using DomainModels.Enums;
-using DomainModels.Models;
+﻿using DomainModels.Models;
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
+using Infrastructure.CrossCutting.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;

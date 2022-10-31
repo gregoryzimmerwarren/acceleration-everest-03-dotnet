@@ -74,22 +74,6 @@ public class UpdateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateOrder_Invalid_Direction_Empty_Successfully()
-    {
-        // Arrange
-        var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
-        updateOrderTest.UnitPrice = 1;
-        updateOrderTest.Direction = "";
-        var validUpdateOrder = new UpdateOrderValidator();
-
-        // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-    }
-
-    [Fact]
     public void Should_NotUpdateOrder_Invalid_PortfolioId_LessThan1_Successfully()
     {
         // Arrange

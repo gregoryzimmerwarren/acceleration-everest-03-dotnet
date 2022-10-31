@@ -29,7 +29,7 @@ public class OrderAppServiceTests
         {
             cfg.CreateMap<Product, ProductResult>();
             cfg.CreateMap<Order, OrderResult>();
-            cfg.CreateMap<Order, OrderResultOtherDtos>();
+            cfg.CreateMap<Order, OrderResultForOtherDtos>();
             cfg.CreateMap<CreateOrder, Order>();
             cfg.CreateMap<UpdateOrder, Order>();
         });

@@ -1,6 +1,6 @@
-﻿using AppModels.Enums;
-using AppModels.Portfolios;
+﻿using AppModels.Portfolios;
 using AppModels.Products;
+using Infrastructure.CrossCutting.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,7 +26,7 @@ public class OrderResult
         UnitPrice = unitPrice;
         NetValue = netValue;
         LiquidatedAt = liquidatedAt;
-        Direction = Enum.GetName(direction);
+        Direction = direction;
         WasExecuted = wasExecuted;
         Portfolio = portfolio;
         Product = product;
@@ -36,7 +36,7 @@ public class OrderResult
     public int Quotes { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal NetValue { get; set; }
-    public string Direction { get; set; }
+    public OrderDirection Direction { get; set; }
     public bool WasExecuted { get; set; }
     public PortfolioResultForOthersDtos Portfolio { get; set; }
     public ProductResult Product { get; set; }

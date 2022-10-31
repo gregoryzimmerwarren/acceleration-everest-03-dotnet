@@ -1,4 +1,4 @@
-﻿namespace AppModels.Enums;
+﻿namespace Infrastructure.CrossCutting.Enums;
 
 public enum ProductType
 {
