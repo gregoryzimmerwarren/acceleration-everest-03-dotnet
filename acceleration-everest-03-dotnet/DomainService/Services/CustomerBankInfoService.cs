@@ -77,18 +77,12 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     {
         var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
-        if (customerBankInfo == null)
-            throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
-
         return customerBankInfo.AccountBalance;
     }
 
     public async Task<bool> WithdrawAsync(long customerId, decimal amount)
     {
         var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
-
-        if (customerBankInfo == null)
-            throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
 
         if (customerBankInfo.AccountBalance < amount)
             throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");
