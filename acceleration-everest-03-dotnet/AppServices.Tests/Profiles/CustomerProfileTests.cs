@@ -1,16 +1,15 @@
 ﻿using AppModels.Customers;
-using AppModels.Portfolios;
+using AppServices.Profiles;
 using AppServices.Tests.Fixtures.Customers;
 using AppServices.Tests.Fixtures.CustomersBankInfo;
 using AppServices.Tests.Fixtures.Portfolios;
 using AutoMapper;
 using DomainModels.Models;
 using FluentAssertions;
-using System.Collections.Generic;
 
 namespace AppServices.Tests.Profiles;
 
-public class CustomerProfileTests
+public class CustomerProfileTests : CustomerProfile
 {
     private readonly IMapper _mapper;
     

@@ -1,4 +1,5 @@
 ﻿using AppModels.CustomersBankInfo;
+using AppServices.Profiles;
 using AppServices.Tests.Fixtures.Customers;
 using AppServices.Tests.Fixtures.CustomersBankInfo;
 using AutoMapper;
@@ -7,7 +8,7 @@ using FluentAssertions;
 
 namespace AppServices.Tests.Profiles;
 
-public class CustomerBankInfoProfileTests
+public class CustomerBankInfoProfileTests : CustomerBankInfoProfile
 {    
     private readonly IMapper _mapper;
 

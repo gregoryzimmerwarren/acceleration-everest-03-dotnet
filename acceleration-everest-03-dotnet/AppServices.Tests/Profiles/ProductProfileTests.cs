@@ -1,4 +1,5 @@
 ﻿using AppModels.Products;
+using AppServices.Profiles;
 using AppServices.Tests.Fixtures.Products;
 using AutoMapper;
 using DomainModels.Models;
@@ -7,7 +8,7 @@ using Infrastructure.CrossCutting.Enums;
 
 namespace AppServices.Tests.Profiles;
 
-public class ProductProfileTests
+public class ProductProfileTests : ProductProfile
 {
     private readonly IMapper _mapper;
 

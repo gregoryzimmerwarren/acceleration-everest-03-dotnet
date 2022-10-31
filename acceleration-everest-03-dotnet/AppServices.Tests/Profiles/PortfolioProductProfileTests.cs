@@ -1,4 +1,5 @@
 ﻿using AppModels.PortfoliosProducts;
+using AppServices.Profiles;
 using AppServices.Tests.Fixtures.Portfolios;
 using AppServices.Tests.Fixtures.PortfoliosProducts;
 using AppServices.Tests.Fixtures.Products;
@@ -8,7 +9,7 @@ using FluentAssertions;
 
 namespace AppServices.Tests.Profiles;
 
-public class PortfolioProductProfileTests
+public class PortfolioProductProfileTests : PortfolioProductProfile
 {
     private readonly IMapper _mapper;
 

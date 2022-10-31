@@ -1,4 +1,5 @@
 ﻿using AppModels.Orders;
+using AppServices.Profiles;
 using AppServices.Tests.Fixtures.Orders;
 using AppServices.Tests.Fixtures.Portfolios;
 using AppServices.Tests.Fixtures.Products;
@@ -8,7 +9,7 @@ using FluentAssertions;
 
 namespace AppServices.Tests.Profiles;
 
-public class OrderProfileTests
+public class OrderProfileTests : OrderProfile
 {
     private readonly IMapper _mapper;
 
