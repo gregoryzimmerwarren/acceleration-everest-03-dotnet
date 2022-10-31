@@ -21,7 +21,7 @@ public class CreatePortfolioValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreatePortfolio_Invalid_Name_Empty_Successfully()
+    public void Should_NotCreatePortfolio_When_Name_Empty()
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
@@ -36,7 +36,7 @@ public class CreatePortfolioValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreatePortfolio_Invalid_Description_Empty_Successfully()
+    public void Should_NotCreatePortfolio_When_Description_Empty()
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
@@ -51,7 +51,7 @@ public class CreatePortfolioValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreatePortfolio_Invalid_Description_LessThan5Characters_Successfully()
+    public void Should_NotCreatePortfolio_When_Description_LessThan5Characters()
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
@@ -66,7 +66,7 @@ public class CreatePortfolioValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreatePortfolio_Invalid_CustomerId_LessThan1_Successfully()
+    public void Should_NotCreatePortfolio_When_CustomerId_LessThan1()
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();

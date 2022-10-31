@@ -18,7 +18,7 @@ public class CustomerBankInfoFixture
         return customerBankInfoDto;
     }
 
-    public static IEnumerable<CustomerBankInfo> GenerateListCustomerBankInfoFixture(int generatedQuantity)
+    public static IList<CustomerBankInfo> GenerateListCustomerBankInfoFixture(int generatedQuantity)
     {
         var testListCustomerBankInfoDto = new Faker<CustomerBankInfo>("pt_BR")
             .CustomInstantiator(faker => new CustomerBankInfo(

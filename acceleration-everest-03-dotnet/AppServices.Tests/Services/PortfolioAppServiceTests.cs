@@ -155,7 +155,7 @@ public class PortfolioAppServiceTests
     }
 
     [Fact]
-    public async void Should_ExecuteBuyOrderAsync_WithNoRelation_Between_PortfolioAndProduct_Successfully_Throwing_ArgumentException()
+    public async void Should_ExecuteBuyOrderAsync_WithNoRelation_Between_PortfolioAndProduct_Throwing_ArgumentException_Successfully()
     {
         // Arrange
         long portfolioIdTest = 1;

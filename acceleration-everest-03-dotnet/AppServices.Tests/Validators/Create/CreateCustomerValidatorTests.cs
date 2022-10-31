@@ -22,7 +22,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_FullName_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_FullName_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -37,7 +37,7 @@ public class CreateCustomerValidatorTests
     }
     
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_FullName_LessThan5Characters_Successfully()
+    public void Should_NotCreateCustomer_When_FullName_LessThan5Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -52,7 +52,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Email_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_Email_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -67,7 +67,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Email_Format_Successfully()
+    public void Should_NotCreateCustomer_When_Email_Format()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -82,7 +82,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_EmailConfirmation_DifferentFromEmail_Successfully()
+    public void Should_NotCreateCustomer_When_EmailConfirmation_DifferentFromEmail()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -97,7 +97,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cpf_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_Cpf_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -112,7 +112,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cpf_Size_Successfully()
+    public void Should_NotCreateCustomer_When_Cpf_Size()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -127,7 +127,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cpf_IdenticalDigits_Successfully()
+    public void Should_NotCreateCustomer_When_Cpf_IdenticalDigits()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -142,7 +142,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cellphone_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_Cellphone_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -157,7 +157,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cellphone_MoreThan14Characters_Successfully()
+    public void Should_NotCreateCustomer_When_Cellphone_MoreThan14Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -172,7 +172,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cellphone_Size_Successfully()
+    public void Should_NotCreateCustomer_When_Cellphone_Size()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -187,7 +187,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cellphone_DigitDifferentThen9_Successfully()
+    public void Should_NotCreateCustomer_When_Cellphone_DigitDifferentThen9()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -202,7 +202,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Cellphone_DigitDifferentThenNumber_Successfully()
+    public void Should_NotCreateCustomer_When_Cellphone_DigitDifferentThenNumber()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -217,7 +217,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Country_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_Country_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -232,7 +232,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Country_LessThan3Characters_Successfully()
+    public void Should_NotCreateCustomer_When_Country_LessThan3Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -247,7 +247,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_City_Successfully()
+    public void Should_NotCreateCustomer_When_City()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -262,7 +262,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Address_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_Address_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -277,7 +277,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_Address_LessThan4Characters_Successfully()
+    public void Should_NotCreateCustomer_When_Address_LessThan4Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -292,7 +292,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_PostalCode_Empty_Successfully()
+    public void Should_NotCreateCustomer_When_PostalCode_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -307,7 +307,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_PostalCode_MoreThan9Characters_Successfully()
+    public void Should_NotCreateCustomer_When_PostalCode_MoreThan9Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -322,7 +322,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_PostalCode_Size_Successfully()
+    public void Should_NotCreateCustomer_When_PostalCode_Size()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -337,7 +337,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_PostalCode_DigitDifferentThenNumber_Successfully()
+    public void Should_NotCreateCustomer_When_PostalCode_DigitDifferentThenNumber()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -352,7 +352,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_Invalid_DateOfBirth_LessThan18YearsOld_Successfully()
+    public void Should_NotCreateCustomer_When_DateOfBirth_LessThan18YearsOld()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();

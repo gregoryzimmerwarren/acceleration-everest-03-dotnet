@@ -100,7 +100,7 @@ public class ProductAppServiceTests
     }
 
     [Fact]
-    public async void Should_GetProductUnitPriceByIdAsync_Successfully()
+    public void Should_GetProductUnitPriceByIdAsync_Successfully()
     {
         // Arrange
         long productIdTest = 1;
