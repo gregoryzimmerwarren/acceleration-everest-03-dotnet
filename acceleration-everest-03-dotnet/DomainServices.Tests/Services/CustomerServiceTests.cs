@@ -7,6 +7,8 @@ using FluentAssertions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DomainServices.Tests.Services;
@@ -29,6 +31,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(false);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(false);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Add(It.IsAny<Customer>()));
@@ -48,6 +51,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(true);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery()
         .AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())).Returns(It.IsAny<IQuery<Customer>>());
@@ -68,6 +72,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(false);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(true);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery()
@@ -90,6 +95,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default)).ReturnsAsync(customerTest);
@@ -110,6 +116,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var listcustomerTest = CustomerFixture.GenerateListCustomerFixture(3);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Customer>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
@@ -131,6 +138,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var listcustomerTest = CustomerFixture.GenerateListCustomerFixture(0);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Customer>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
@@ -152,6 +160,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
@@ -172,6 +181,7 @@ public class CustomerServiceTests
     {
         // Arrange
         long idTest = 1;
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
@@ -192,6 +202,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Any(It.IsAny<Expression<Func<Customer, bool>>>())).Returns(true);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(false);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(false);
@@ -212,6 +223,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Any(It.IsAny<Expression<Func<Customer, bool>>>())).Returns(false);
 
         // Action
@@ -227,6 +239,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Any(It.IsAny<Expression<Func<Customer, bool>>>())).Returns(true);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(true);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery()
@@ -249,6 +262,7 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Any(It.IsAny<Expression<Func<Customer, bool>>>())).Returns(true);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(false);
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default)).ReturnsAsync(true);

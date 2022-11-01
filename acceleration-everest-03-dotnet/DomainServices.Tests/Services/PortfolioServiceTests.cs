@@ -1,5 +1,4 @@
 ﻿using DomainModels.Models;
-using DomainServices.Interfaces;
 using DomainServices.Services;
 using DomainServices.Tests.Fixtures;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
@@ -8,6 +7,8 @@ using FluentAssertions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DomainServices.Tests.Services;
@@ -30,6 +31,7 @@ public class PortfolioServiceTests
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Add(It.IsAny<Portfolio>()));
 
         // Action
@@ -47,6 +49,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.TotalBalance = 0;
         portfolioTest.AccountBalance = 0;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -68,6 +71,7 @@ public class PortfolioServiceTests
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 0;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -88,6 +92,7 @@ public class PortfolioServiceTests
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.TotalBalance = 0;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -108,6 +113,7 @@ public class PortfolioServiceTests
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         decimal amountTest = 17.05m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -128,6 +134,7 @@ public class PortfolioServiceTests
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -146,6 +153,7 @@ public class PortfolioServiceTests
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().
@@ -167,6 +175,7 @@ public class PortfolioServiceTests
         // Arrange
         long customerIdTest = 1;
         var listportfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(3);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SearchAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(listportfoliosTest);
@@ -186,6 +195,7 @@ public class PortfolioServiceTests
         // Arrange
         long customerIdTest = 1;
         var listportfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(0);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -208,6 +218,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 20m;
         decimal amountTest = 17.05m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -230,6 +241,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 17.05m;
         decimal amountTest = 20m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -251,6 +263,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.TotalBalance = 20m;
         decimal amountTest = 17.05m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -273,6 +286,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.TotalBalance = 17.05m;
         decimal amountTest = 20m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -294,6 +308,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 20m;
         decimal amountTest = 17.05m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
@@ -316,6 +331,7 @@ public class PortfolioServiceTests
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 17.05m;
         decimal amountTest = 20m;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>())).Returns(It.IsAny<IQuery<Portfolio>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);

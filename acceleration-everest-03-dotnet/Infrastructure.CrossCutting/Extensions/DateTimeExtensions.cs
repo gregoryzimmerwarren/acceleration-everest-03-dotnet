@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.CrossCutting.Extensions;
+﻿using System;
+
+namespace Infrastructure.CrossCutting.Extensions;
 
 public static class DateTimeExtensions
 {

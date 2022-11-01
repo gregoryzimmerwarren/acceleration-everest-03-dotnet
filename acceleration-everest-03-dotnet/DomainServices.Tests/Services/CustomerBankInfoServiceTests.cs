@@ -7,6 +7,8 @@ using FluentAssertions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DomainServices.Tests.Services;
@@ -29,6 +31,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange
         long customerIdTest = 1;
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Add(It.IsAny<CustomerBankInfo>()));
 
         // Action
@@ -43,6 +46,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange        
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
@@ -66,6 +70,7 @@ public class CustomerBankInfoServiceTests
         // Arrange
         decimal amountTest = 17.05m;
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
@@ -88,6 +93,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange
         var listcustomerBankInfoTest = CustomerBankInfoFixture.GenerateListCustomerBankInfoFixture(3);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
@@ -109,6 +115,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange
         var listcustomerBankInfoTest = CustomerBankInfoFixture.GenerateListCustomerBankInfoFixture(0);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
@@ -130,6 +137,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
@@ -150,6 +158,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange
         long idTest = 1;
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
@@ -171,6 +180,7 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
@@ -193,6 +203,7 @@ public class CustomerBankInfoServiceTests
         decimal amountTest = 17.05m;
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         customerBankInfoTest.AccountBalance = 20m;
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
@@ -217,6 +228,7 @@ public class CustomerBankInfoServiceTests
         decimal amountTest = 20m;
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         customerBankInfoTest.AccountBalance = 17.05m;
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());

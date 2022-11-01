@@ -1,5 +1,4 @@
 ﻿using DomainModels.Models;
-using DomainServices.Interfaces;
 using DomainServices.Services;
 using DomainServices.Tests.Fixtures;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
@@ -8,6 +7,8 @@ using FluentAssertions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DomainServices.Tests.Services;
@@ -30,6 +31,7 @@ public class PortfolioProductServiceTests
     {
         // Arrange
         var portfolioProductTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<PortfolioProduct>().Add(It.IsAny<PortfolioProduct>()));
 
         // Action
@@ -44,6 +46,7 @@ public class PortfolioProductServiceTests
     {
         // Arrange        
         var portfolioProductBankInfoTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
         .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>())).Returns(It.IsAny<IQuery<PortfolioProduct>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
@@ -65,6 +68,7 @@ public class PortfolioProductServiceTests
     {
         // Arrange        
         var portfolioProductBankInfoTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
         .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>())).Returns(It.IsAny<IQuery<PortfolioProduct>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
@@ -85,6 +89,7 @@ public class PortfolioProductServiceTests
         // Arrange        
         long portfolioIdTest = 1;
         long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
         .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>())).Returns(It.IsAny<IQuery<PortfolioProduct>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()

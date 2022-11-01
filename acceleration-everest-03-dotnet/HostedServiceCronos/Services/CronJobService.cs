@@ -1,4 +1,8 @@
 ﻿using Cronos;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HostedServiceCronos.Services;
 
@@ -37,7 +41,7 @@ public class CronJobService : IHostedService, IDisposable
 
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    DoWork(cancellationToken);
+                    await DoWork(cancellationToken);
                 }
 
                 if (!cancellationToken.IsCancellationRequested)

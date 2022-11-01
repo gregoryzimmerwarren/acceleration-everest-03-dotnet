@@ -1,7 +1,7 @@
 ﻿using HostedServiceCronos.Interfaces;
 using HostedServiceCronos.Services;
-
-namespace HostedServiceCronos.DependecyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 public static class HostedServiceCronosExtensions
 {

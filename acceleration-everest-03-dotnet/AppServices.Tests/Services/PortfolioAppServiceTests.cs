@@ -1,40 +1,28 @@
-﻿using AppModels.Customers;
-using AppModels.Orders;
+﻿using AppModels.Orders;
 using AppModels.Portfolios;
-using AppModels.PortfoliosProducts;
 using AppServices.Interfaces;
 using AppServices.Services;
-using AppServices.Tests.Fixtures.Customers;
 using AppServices.Tests.Fixtures.Orders;
 using AppServices.Tests.Fixtures.Portfolios;
 using AppServices.Tests.Fixtures.PortfoliosProducts;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
-using DomainServices.Services;
-using EntityFrameworkCore.UnitOfWork.Interfaces;
 using FluentAssertions;
-using Infrastructure.Data;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace AppServices.Tests.Services;
 
 public class PortfolioAppServiceTests
 {
-    private readonly Mock<IRepositoryFactory<WarrenEverestDotnetDbContext>> _mockrepositoryFactory;
     private readonly Mock<ICustomerBankInfoAppService> _mockCustomerBankInfoAppService;
-    private readonly Mock<IUnitOfWork<WarrenEverestDotnetDbContext>> _mockUnitOfWork;
     private readonly Mock<IPortfolioProductService> _mockPortfolioProductService;
-    private readonly PortfolioProductService _portfolioProductService;
     private readonly Mock<IProductAppService> _mockProductAppService;
     private readonly Mock<IPortfolioService> _mockPortfolioService;
     private readonly Mock<IOrderAppService> _mockOrderAppService;
     private readonly PortfolioAppService _portfolioAppService;
-    private readonly Mock<IOrderService> _mockOrderService;
-    private readonly OrderAppService _orderAppService;
     private readonly IMapper _mapper;
 
     public PortfolioAppServiceTests()
@@ -46,16 +34,11 @@ public class PortfolioAppServiceTests
             cfg.CreateMap<CreatePortfolio, Portfolio>();
         });
         _mapper = config.CreateMapper();
-        _mockOrderService = new Mock<IOrderService>();
         _mockOrderAppService = new Mock<IOrderAppService>();
         _mockPortfolioService = new Mock<IPortfolioService>();
         _mockProductAppService = new Mock<IProductAppService>();
         _mockPortfolioProductService = new Mock<IPortfolioProductService>();
-        _mockUnitOfWork = new Mock<IUnitOfWork<WarrenEverestDotnetDbContext>>();
         _mockCustomerBankInfoAppService = new Mock<ICustomerBankInfoAppService>();
-        _mockrepositoryFactory = new Mock<IRepositoryFactory<WarrenEverestDotnetDbContext>>();
-        _orderAppService = new OrderAppService(_mockProductAppService.Object, _mockOrderService.Object, _mapper);
-        _portfolioProductService = new PortfolioProductService(_mockUnitOfWork.Object, _mockrepositoryFactory.Object);
         _portfolioAppService = new PortfolioAppService(_mockCustomerBankInfoAppService.Object, _mockPortfolioProductService.Object,
             _mockProductAppService.Object, _mockPortfolioService.Object, _mockOrderAppService.Object, _mapper);
     }
@@ -279,7 +262,6 @@ public class PortfolioAppServiceTests
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
-        decimal amount = 17.05m;
 
         _mockProductAppService.Setup(productAppService => productAppService.GetProductUnitPriceByIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
         _mockOrderAppService.Setup(orderAppService => orderAppService.Create(It.IsAny<CreateOrder>())).Returns(It.IsAny<long>());
@@ -298,7 +280,6 @@ public class PortfolioAppServiceTests
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         createOrderTest.LiquidatedAt = DateTime.Now.Date.AddDays(1);
-        decimal amount = 17.05m;
 
         _mockProductAppService.Setup(productAppService => productAppService.GetProductUnitPriceByIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
         _mockOrderAppService.Setup(orderAppService => orderAppService.Create(It.IsAny<CreateOrder>())).Returns(It.IsAny<long>());
@@ -316,7 +297,6 @@ public class PortfolioAppServiceTests
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
-        decimal amount = 17.05m;
 
         _mockProductAppService.Setup(productAppService => productAppService.GetProductUnitPriceByIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
         _mockOrderAppService.Setup(orderAppService => orderAppService.Create(It.IsAny<CreateOrder>())).Returns(It.IsAny<long>());
@@ -335,7 +315,6 @@ public class PortfolioAppServiceTests
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         createOrderTest.LiquidatedAt = DateTime.Now.Date.AddDays(1);
-        decimal amount = 17.05m;
 
         _mockProductAppService.Setup(productAppService => productAppService.GetProductUnitPriceByIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
         _mockOrderAppService.Setup(orderAppService => orderAppService.Create(It.IsAny<CreateOrder>())).Returns(It.IsAny<long>());

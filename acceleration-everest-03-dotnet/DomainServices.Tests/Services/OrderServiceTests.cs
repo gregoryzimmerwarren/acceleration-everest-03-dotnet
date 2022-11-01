@@ -8,6 +8,8 @@ using Infrastructure.CrossCutting.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DomainServices.Tests.Services;
@@ -30,6 +32,7 @@ public class OrderServiceTests
     {
         // Arrange
         var orderTest = OrderFixture.GenerateOrderFixture();
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Order>().Add(It.IsAny<Order>()));
 
         // Action
@@ -45,6 +48,7 @@ public class OrderServiceTests
     {
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(3);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -66,6 +70,7 @@ public class OrderServiceTests
     {
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -93,6 +98,7 @@ public class OrderServiceTests
         listorderTest[1].Quotes = 1;
         long portfolioIdTest = 1;
         long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -114,6 +120,7 @@ public class OrderServiceTests
     {
         // Arrange
         var orderTest = OrderFixture.GenerateOrderFixture();
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default))
@@ -134,6 +141,7 @@ public class OrderServiceTests
     {
         // Arrange
         long idTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default))
@@ -156,6 +164,7 @@ public class OrderServiceTests
         var listorderTest = OrderFixture.GenerateListOrderFixture(2);
         long portfolioIdTest = 1;
         long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -179,6 +188,7 @@ public class OrderServiceTests
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
         long portfolioIdTest = 1;
         long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -201,6 +211,7 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(3);
         long porftolioIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -223,6 +234,7 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
         long porftolioIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -245,6 +257,7 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(3);
         long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -267,6 +280,7 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
         long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
@@ -287,7 +301,8 @@ public class OrderServiceTests
     public void Should_Update_Successfully()
     {
         // Arrange
-        var orderTest = OrderFixture.GenerateOrderFixture();      
+        var orderTest = OrderFixture.GenerateOrderFixture();  
+        
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Order>().Update(It.IsAny<Order>()));
 
         // Action

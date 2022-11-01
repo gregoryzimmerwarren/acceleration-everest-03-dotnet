@@ -13,8 +13,8 @@ namespace AppServices.Tests.Services;
 
 public class ProductAppServiceTests
 {
-    private readonly ProductAppService _productAppService;
     private readonly Mock<IProductService> _mockProductService;
+    private readonly ProductAppService _productAppService;
     private readonly IMapper _mapper;
 
     public ProductAppServiceTests()
