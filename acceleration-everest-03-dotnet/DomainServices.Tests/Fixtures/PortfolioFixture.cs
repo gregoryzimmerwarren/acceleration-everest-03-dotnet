@@ -13,7 +13,8 @@ public class PortfolioFixture
                 description: faker.Lorem.Random.Words(10),
                 totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
-                customerId: 1));
+                customerId: 1))
+                .RuleFor(portfolio => portfolio.Id, 1);
 
         var portfolio = testPortfolio.Generate();
         return portfolio;
@@ -27,7 +28,8 @@ public class PortfolioFixture
                 description: faker.Lorem.Random.Words(10),
                 totalBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
                 accountBalance: faker.Random.Decimal(min: 0.1m, max: 10.0m),
-                customerId: 1));
+                customerId: 1))
+                .RuleFor(portfolio => portfolio.Id, 1);
 
         var portfolio = testPortfolio.Generate(generatedQuantity);
         return portfolio;
