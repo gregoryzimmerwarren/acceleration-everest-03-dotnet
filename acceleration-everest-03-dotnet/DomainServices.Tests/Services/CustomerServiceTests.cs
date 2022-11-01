@@ -90,12 +90,10 @@ public class CustomerServiceTests
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
-        customerTest.CustomerBankInfo = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
-        customerTest.Portfolios = PortfolioFixture.GenerateListPortfolioFixture(2);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default)).ReturnsAsync(customerTest);
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Remove(It.IsAny<Customer>()));
+        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Remove(customerTest));
 
         // Action
         await _customerService.DeleteAsync(customerTest.Id).ConfigureAwait(false);
@@ -108,7 +106,7 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void Should_GelAllCustomersAsync_Successfully()
+    public async void Should_GetAllCustomersAsync_Successfully()
     {
         // Arrange
         var listcustomerTest = CustomerFixture.GenerateListCustomerFixture(3);
@@ -136,7 +134,7 @@ public class CustomerServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Customer>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Customer>>(), default)).ReturnsAsync(It.IsAny<IList<Customer>>());
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Customer>>(), default)).ReturnsAsync(listcustomerTest);
 
         // Action
         var action = () => _customerService.GetAllCustomersAsync();
@@ -170,7 +168,7 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void Should_GetCustomerByIdAsync_Throwing_ArgumentNullException()
+    public async void Should_NotGetCustomerByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
         long idTest = 1;

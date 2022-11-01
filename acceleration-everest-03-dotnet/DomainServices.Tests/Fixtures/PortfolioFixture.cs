@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using DomainModels.Models;
-using System.Collections.Generic;
 
 namespace DomainServices.Tests.Fixtures;
 

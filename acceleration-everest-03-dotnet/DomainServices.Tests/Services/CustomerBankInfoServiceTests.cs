@@ -43,13 +43,12 @@ public class CustomerBankInfoServiceTests
     {
         // Arrange        
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
-        customerBankInfoTest.Customer = CustomerFixture.GenerateCustomerFixture();
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default)).ReturnsAsync(customerBankInfoTest);
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Remove(It.IsAny<CustomerBankInfo>()));
+        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Remove(customerBankInfoTest));
 
         // Action
         await _customerBankInfoService.DeleteAsync(customerBankInfoTest.CustomerId).ConfigureAwait(false);
@@ -113,7 +112,7 @@ public class CustomerBankInfoServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>(), default)).ReturnsAsync(It.IsAny<IList<CustomerBankInfo>>());
+        .SearchAsync(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>(), default)).ReturnsAsync(listcustomerBankInfoTest);
 
         // Action
         var action = () => _customerBankInfoService.GetAllCustomersBankInfoAsync();

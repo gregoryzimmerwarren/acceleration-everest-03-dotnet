@@ -59,7 +59,7 @@ public class CustomerService : ICustomerService
             .Include(portfolios => portfolios.Portfolios));
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (customers == null)
+        if (customers.Count == 0)
             throw new ArgumentNullException($"No customer found");
 
         return customers;
