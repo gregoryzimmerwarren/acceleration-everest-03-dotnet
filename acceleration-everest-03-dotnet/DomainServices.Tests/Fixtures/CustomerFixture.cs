@@ -28,7 +28,7 @@ public class CustomerFixture
         return customerDto;
     }
 
-    public static IEnumerable<Customer> GenerateListCustomerFixture(int generatedQuantity)
+    public static IList<Customer> GenerateListCustomerFixture(int generatedQuantity)
     {
         var testListCustomerDto = new Faker<Customer>("pt_BR")
             .CustomInstantiator(faker => new Customer(
