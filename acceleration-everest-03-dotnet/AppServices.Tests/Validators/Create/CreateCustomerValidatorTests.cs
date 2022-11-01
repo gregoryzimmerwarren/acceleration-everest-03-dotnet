@@ -352,11 +352,26 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_DateOfBirth_LessThan18YearsOld()
+    public void Should_NotCreateCustomer_When_DateOfBirth_BornLessThan18YearsAgo()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.DateOfBirth = DateTime.Now.AddYears(-10);
+        var validCreateCustomer = new CreateCustomerValidator();
+
+        // Action
+        var result = validCreateCustomer.Validate(createCustomerTest);
+
+        // Assert
+        result.IsValid.Should().BeFalse();
+    }
+    
+    [Fact]
+    public void Should_NotCreateCustomer_When_DateOfBirth_Born18YearsAgo_ButNotTurned18Yet()
+    {
+        // Arrange
+        var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
+        createCustomerTest.DateOfBirth = DateTime.Now.AddDays(1).AddYears(-18);
         var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
