@@ -75,9 +75,10 @@ public class PortfolioProductServiceTests
         .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default)).ReturnsAsync(portfolioProductBankInfoTest);
 
         // Action
-        await _portfolioProductService.GetPortfolioProductByIdsAsync(portfolioProductBankInfoTest.PortfolioId, portfolioProductBankInfoTest.ProductId).ConfigureAwait(false);
+        var result = await _portfolioProductService.GetPortfolioProductByIdsAsync(portfolioProductBankInfoTest.PortfolioId, portfolioProductBankInfoTest.ProductId).ConfigureAwait(false);
 
         // Arrange
+        result.Should().NotBeNull();
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery()
         .AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>()).Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);

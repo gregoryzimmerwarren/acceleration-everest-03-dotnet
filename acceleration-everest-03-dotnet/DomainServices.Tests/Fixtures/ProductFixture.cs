@@ -23,7 +23,7 @@ public class ProductFixture
         return product;
     }
 
-    public static IEnumerable<Product> GenerateListProductFixture(int generatedQuantity)
+    public static IList<Product> GenerateListProductFixture(int generatedQuantity)
     {
         var testProduct = new Faker<Product>("pt_BR")
             .CustomInstantiator(faker => new Product(
