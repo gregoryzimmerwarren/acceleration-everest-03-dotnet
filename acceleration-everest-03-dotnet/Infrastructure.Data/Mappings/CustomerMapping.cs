@@ -1,4 +1,4 @@
-﻿using DomainModels;
+﻿using DomainModels.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,6 +11,9 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
         builder.ToTable("Customers");
 
         builder.HasKey(customer => customer.Id);
+
+        builder.Property(customer => customer.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(customer => customer.FullName)
             .HasColumnType("VARCHAR(250)")
@@ -77,5 +80,9 @@ public class CustomerMapping : IEntityTypeConfiguration<Customer>
             .HasColumnType("DATE")
             .IsRequired()
             .HasColumnName("DateOfBirth");
+
+        builder.HasOne(customer => customer.CustomerBankInfo)
+            .WithOne(customerBankInfo => customerBankInfo.Customer)
+            .HasForeignKey<CustomerBankInfo>(customerBankInfo => customerBankInfo.CustomerId);
     }
 }

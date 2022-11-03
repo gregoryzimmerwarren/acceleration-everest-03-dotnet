@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace DomainModels;
+namespace DomainModels.Models;
 
 public class Customer : IEntity
 {
@@ -32,6 +33,7 @@ public class Customer : IEntity
         DateOfBirth = dateOfBirth;
     }
 
+    public long Id { get; set; }
     public string FullName { get; set; }
     public string Email { get; set; }
     public string Cpf { get; set; }
@@ -44,5 +46,7 @@ public class Customer : IEntity
     public bool EmailSms { get; set; }
     public bool Whatsapp { get; set; }
     public DateTime DateOfBirth { get; set; }
-    public long Id { get; set; }
+
+    public CustomerBankInfo CustomerBankInfo { get; set; }
+    public List<Portfolio> Portfolios { get; set; }
 }

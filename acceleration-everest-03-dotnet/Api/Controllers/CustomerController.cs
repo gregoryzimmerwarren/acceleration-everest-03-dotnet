@@ -1,7 +1,8 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using AppServices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Api.Controllers;
 
@@ -16,71 +17,92 @@ public class CustomerController : ControllerBase
         _customerAppService = appService ?? throw new ArgumentNullException(nameof(appService));
     }
 
-    [HttpDelete]
-    public IActionResult Delete(long id)
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync(CreateCustomer customerToCreate)
     {
         try
         {
-            _customerAppService.Delete(id);
+            var id = await _customerAppService.CreateAsync(customerToCreate).ConfigureAwait(false); ;
+            
+            return Created("Id:", id);
+        }
+        catch (ArgumentException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            
+            return BadRequest(message);
+        }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAsync(long id)
+    {
+        try
+        {
+            await _customerAppService.DeleteAsync(id).ConfigureAwait(false);
+
             return NoContent();
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return NotFound(message);
         }
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAllCustomersAsync()
     {
-        var result = _customerAppService.GetAll();
+        try
+        {
+            var result = await _customerAppService.GetAllCustomersAsync().ConfigureAwait(false);
 
-        return Ok(result);
+            return Ok(result);
+        }
+        catch
+        {
+            return NoContent();
+        }
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(long id)
+    public async Task<IActionResult> GetByCustomerIdAsync(long id)
     {
         try
         {
-            var result = _customerAppService.GetById(id);
+            var result = await _customerAppService.GetCustomerByIdAsync(id).ConfigureAwait(false);
+            
             return Ok(result);
         }
-        catch (ArgumentException exception)
+        catch (ArgumentNullException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
+            
             return NotFound(message);
-        }
-    }
-
-    [HttpPost]
-    public IActionResult Create(CreateCustomerDto customer)
-    {
-        try
-        {
-            var id = _customerAppService.Create(customer);
-            return Created("", id);
-        }
-        catch (ArgumentException exception)
-        {
-            var message = exception.InnerException?.Message ?? exception.Message;
-            return BadRequest(message);
         }
     }
 
     [HttpPut]
-    public IActionResult Update(long id, UpdateCustomerDto customerToUpdate)
+    public async Task<IActionResult> UpdateAsync(long id, UpdateCustomer customerToUpdate)
     {
         try
         {
-            _customerAppService.Update(id, customerToUpdate);
+            await _customerAppService.UpdateAsync(id, customerToUpdate).ConfigureAwait(false);
+            
             return Ok();
+        }
+        catch (ArgumentNullException exception)
+        {
+            var message = exception.InnerException?.Message ?? exception.Message;
+            
+            return NotFound(message);
         }
         catch (ArgumentException exception)
         {
             var message = exception.InnerException?.Message ?? exception.Message;
-            return NotFound(message);
+            
+            return BadRequest(message);
         }
     }
 }

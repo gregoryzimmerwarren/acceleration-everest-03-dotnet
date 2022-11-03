@@ -1,10 +1,10 @@
-﻿namespace AppModels;
+﻿namespace AppModels.Customers;
 
-public class CustomerResult
+public class CustomerResultForOtherDtos
 {
-    protected CustomerResult() {}
+    protected CustomerResultForOtherDtos() { }
 
-    public CustomerResult(
+    public CustomerResultForOtherDtos(
         long id,
         string fullName,
         string email,

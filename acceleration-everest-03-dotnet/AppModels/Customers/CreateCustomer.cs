@@ -1,11 +1,12 @@
 ﻿using Infrastructure.CrossCutting.Extensions;
 using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace AppModels;
+namespace AppModels.Customers;
 
-public class CreateCustomerDto
+public class CreateCustomer
 {
-    public CreateCustomerDto(
+    public CreateCustomer(
         string fullName,
         string email,
         string emailConfirmation,
@@ -47,5 +48,8 @@ public class CreateCustomerDto
     public int Number { get; set; }
     public bool EmailSms { get; set; }
     public bool Whatsapp { get; set; }
+
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime DateOfBirth { get; set; }
 }

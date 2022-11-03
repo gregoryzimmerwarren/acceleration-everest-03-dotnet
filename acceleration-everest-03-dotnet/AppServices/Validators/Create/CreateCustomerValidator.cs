@@ -1,15 +1,15 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using FluentValidation;
 using FluentValidation.Validators;
 using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Linq;
 
-namespace AppServices.Validators;
+namespace AppServices.Validators.Create;
 
-public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
+public class CreateCustomerValidator : AbstractValidator<CreateCustomer>
 {
-    public CreateCustomerDtoValidator()
+    public CreateCustomerValidator()
     {
         RuleFor(customer => customer.FullName)
             .NotEmpty()
@@ -25,7 +25,6 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         RuleFor(customer => customer.Cpf)
             .NotEmpty()
-            .Length(11)
             .Must(IsValidCpf)
             .WithMessage("Cpf must be valid.");
 
@@ -121,7 +120,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         for (int i = 0; i < 11; i++)
         {
-            if (!Char.IsDigit(cellphone[i]))
+            if (!char.IsDigit(cellphone[i]))
             {
                 return false;
             }
@@ -139,7 +138,7 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
 
         for (int i = 0; i < 8; i++)
         {
-            if (!Char.IsDigit(postalCode[i]))
+            if (!char.IsDigit(postalCode[i]))
             {
                 return false;
             }

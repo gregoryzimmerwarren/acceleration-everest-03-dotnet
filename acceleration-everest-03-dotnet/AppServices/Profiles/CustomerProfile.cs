@@ -1,6 +1,6 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using AutoMapper;
-using DomainModels;
+using DomainModels.Models;
 
 namespace AppServices.Profiles;
 
@@ -9,7 +9,8 @@ public class CustomerProfile : Profile
     public CustomerProfile()
     {
         CreateMap<Customer, CustomerResult>();
-        CreateMap<CreateCustomerDto, Customer>();
-        CreateMap<UpdateCustomerDto, Customer>();
+        CreateMap<Customer, CustomerResultForOtherDtos>();
+        CreateMap<CreateCustomer, Customer>();
+        CreateMap<UpdateCustomer, Customer>();
     }
 }

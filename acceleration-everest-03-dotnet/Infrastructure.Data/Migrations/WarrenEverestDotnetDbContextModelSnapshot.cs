@@ -19,7 +19,7 @@ namespace Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("DomainModels.Customer", b =>
+            modelBuilder.Entity("DomainModels.Models.Customer", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,6 +90,264 @@ namespace Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers", (string)null);
+                });
+
+            modelBuilder.Entity("DomainModels.Models.CustomerBankInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("AccountBalance")
+                        .HasColumnType("DECIMAL(14,2)")
+                        .HasColumnName("AccountBalance");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("CustomerId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("CustomersBankInfo", (string)null);
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Order", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Direction")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(4)")
+                        .HasColumnName("Direction");
+
+                    b.Property<DateTime>("LiquidatedAt")
+                        .HasColumnType("DATE")
+                        .HasColumnName("LiquidatedAt");
+
+                    b.Property<decimal>("NetValue")
+                        .HasColumnType("DECIMAL(14,2)")
+                        .HasColumnName("NetValue");
+
+                    b.Property<long>("PortfolioId")
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("PortfolioId");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("ProductId");
+
+                    b.Property<int>("Quotes")
+                        .HasColumnType("INT")
+                        .HasColumnName("Quotes");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("DECIMAL(5,2)")
+                        .HasColumnName("UnitPrice");
+
+                    b.Property<ulong>("WasExecuted")
+                        .HasColumnType("BIT")
+                        .HasColumnName("WasExecuted");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PortfolioId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Portfolio", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("AccountBalance")
+                        .HasColumnType("DECIMAL(14,2)")
+                        .HasColumnName("AccountBalance");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("CustomerId");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(250)")
+                        .HasColumnName("Description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<decimal>("TotalBalance")
+                        .HasColumnType("DECIMAL(14,2)")
+                        .HasColumnName("TotalBalance");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Portfolios", (string)null);
+                });
+
+            modelBuilder.Entity("DomainModels.Models.PortfolioProduct", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PortfolioId")
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("PortfolioId");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("BIGINT")
+                        .HasColumnName("ProductId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PortfolioId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("PortfolioProduct");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Product", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("DaysToExpire")
+                        .HasColumnType("INT")
+                        .HasColumnName("DaysToExpire");
+
+                    b.Property<DateTime>("ExpirationAt")
+                        .HasColumnType("DATE")
+                        .HasColumnName("ExpirationAt");
+
+                    b.Property<DateTime>("IssuanceAt")
+                        .HasColumnType("DATE")
+                        .HasColumnName("IssuanceAt");
+
+                    b.Property<long?>("PortfolioId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(50)")
+                        .HasColumnName("Symbol");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(11)")
+                        .HasColumnName("Type");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("DECIMAL(5,2)")
+                        .HasColumnName("UnitPrice");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PortfolioId");
+
+                    b.ToTable("Products", (string)null);
+                });
+
+            modelBuilder.Entity("DomainModels.Models.CustomerBankInfo", b =>
+                {
+                    b.HasOne("DomainModels.Models.Customer", "Customer")
+                        .WithOne("CustomerBankInfo")
+                        .HasForeignKey("DomainModels.Models.CustomerBankInfo", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Order", b =>
+                {
+                    b.HasOne("DomainModels.Models.Portfolio", "Portfolio")
+                        .WithMany("Orders")
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainModels.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Portfolio");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Portfolio", b =>
+                {
+                    b.HasOne("DomainModels.Models.Customer", "Customer")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.PortfolioProduct", b =>
+                {
+                    b.HasOne("DomainModels.Models.Portfolio", "Portfolio")
+                        .WithMany("PortfolioProducts")
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainModels.Models.Product", "Product")
+                        .WithMany("PortfolioProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Portfolio");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Product", b =>
+                {
+                    b.HasOne("DomainModels.Models.Portfolio", null)
+                        .WithMany("Products")
+                        .HasForeignKey("PortfolioId");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Customer", b =>
+                {
+                    b.Navigation("CustomerBankInfo");
+
+                    b.Navigation("Portfolios");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Portfolio", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("PortfolioProducts");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DomainModels.Models.Product", b =>
+                {
+                    b.Navigation("PortfolioProducts");
                 });
 #pragma warning restore 612, 618
         }

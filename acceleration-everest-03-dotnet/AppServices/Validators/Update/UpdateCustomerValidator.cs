@@ -1,15 +1,15 @@
-﻿using AppModels;
+﻿using AppModels.Customers;
 using FluentValidation;
 using FluentValidation.Validators;
 using Infrastructure.CrossCutting.Extensions;
 using System;
 using System.Linq;
 
-namespace AppServices.Validators;
+namespace AppServices.Validators.Update;
 
-public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
+public class UpdateCustomerValidator : AbstractValidator<UpdateCustomer>
 {
-    public UpdateCustomerDtoValidator()
+    public UpdateCustomerValidator()
     {
         RuleFor(customer => customer.FullName)
             .NotEmpty()
@@ -120,7 +120,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
 
         for (int i = 0; i < 11; i++)
         {
-            if (!Char.IsDigit(cellphone[i]))
+            if (!char.IsDigit(cellphone[i]))
             {
                 return false;
             }
@@ -138,7 +138,7 @@ public class UpdateCustomerDtoValidator : AbstractValidator<UpdateCustomerDto>
 
         for (int i = 0; i < 8; i++)
         {
-            if (!Char.IsDigit(postalCode[i]))
+            if (!char.IsDigit(postalCode[i]))
             {
                 return false;
             }
