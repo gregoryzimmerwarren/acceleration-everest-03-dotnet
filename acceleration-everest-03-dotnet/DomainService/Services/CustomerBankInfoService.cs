@@ -62,7 +62,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
 
     public async Task<CustomerBankInfo> GetCustomerBankInfoByCustomerIdAsync(long customerId)
     {
-        var repository = _unitOfWork.Repository<CustomerBankInfo>();
+        var repository = _repositoryFactory.Repository<CustomerBankInfo>();
         var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId)
             .Include(bankInfo => bankInfo.Include(customer => customer.Customer));
         var customerBankInfo = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);

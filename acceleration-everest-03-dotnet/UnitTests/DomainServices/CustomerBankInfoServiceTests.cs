@@ -45,10 +45,10 @@ public class CustomerBankInfoServiceTests
         // Arrange        
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default)).ReturnsAsync(customerBankInfoTest);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Remove(customerBankInfoTest));
 
@@ -56,9 +56,9 @@ public class CustomerBankInfoServiceTests
         await _customerBankInfoService.DeleteAsync(customerBankInfoTest.CustomerId).ConfigureAwait(false);
 
         // Arrange
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Remove(It.IsAny<CustomerBankInfo>()), Times.Once);
     }
 
@@ -69,10 +69,10 @@ public class CustomerBankInfoServiceTests
         decimal amountTest = 17.05m;
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default)).ReturnsAsync(customerBankInfoTest);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Update(It.IsAny<CustomerBankInfo>()));
 
@@ -80,9 +80,9 @@ public class CustomerBankInfoServiceTests
         await _customerBankInfoService.DepositAsync(customerBankInfoTest.CustomerId, amountTest).ConfigureAwait(false);
 
         // Arrange
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Update(It.IsAny<CustomerBankInfo>()), Times.Once);
     }
 
@@ -136,9 +136,9 @@ public class CustomerBankInfoServiceTests
         // Arrange
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
             .ReturnsAsync(customerBankInfoTest);
 
         // Action
@@ -146,9 +146,9 @@ public class CustomerBankInfoServiceTests
 
         // Arrange
         result.Should().NotBeNull();
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
     }
 
     [Fact]
@@ -157,9 +157,9 @@ public class CustomerBankInfoServiceTests
         // Arrange
         long idTest = 1;
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
             .ReturnsAsync(It.IsAny<CustomerBankInfo>());
 
         // Action
@@ -167,9 +167,9 @@ public class CustomerBankInfoServiceTests
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
     }
 
 
@@ -179,9 +179,9 @@ public class CustomerBankInfoServiceTests
         // Arrange
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default))
             .ReturnsAsync(customerBankInfoTest);
 
         // Action
@@ -189,9 +189,9 @@ public class CustomerBankInfoServiceTests
 
         // Arrange
         result.Should().Be(customerBankInfoTest.AccountBalance);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
     }
 
     [Fact]
@@ -202,10 +202,10 @@ public class CustomerBankInfoServiceTests
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         customerBankInfoTest.AccountBalance = 20m;
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default)).ReturnsAsync(customerBankInfoTest);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Update(It.IsAny<CustomerBankInfo>()));
 
@@ -213,9 +213,9 @@ public class CustomerBankInfoServiceTests
         await _customerBankInfoService.WithdrawAsync(customerBankInfoTest.CustomerId, amountTest).ConfigureAwait(false);
 
         // Arrange
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Update(It.IsAny<CustomerBankInfo>()), Times.Once);
     }
 
@@ -227,10 +227,10 @@ public class CustomerBankInfoServiceTests
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         customerBankInfoTest.AccountBalance = 17.05m;
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>())).Returns(It.IsAny<IQuery<CustomerBankInfo>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default)).ReturnsAsync(customerBankInfoTest);
 
         // Action
@@ -238,8 +238,8 @@ public class CustomerBankInfoServiceTests
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentException>();
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
     }
 }
