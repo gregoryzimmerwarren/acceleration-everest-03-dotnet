@@ -1,6 +1,6 @@
 ﻿using AppServices.Interfaces;
-using AppServices.Services;
 using HostedServiceCronos.Interfaces;
+using System.Diagnostics;
 
 namespace HostedServiceCronos.Services;
 
@@ -20,7 +20,7 @@ public class CronJobExecuteOrders : CronJobService
     {
         try
         {
-            var stopWatch = StopWatch.StartNew();
+            var stopWatch = Stopwatch.StartNew();
             _logger.LogInformation("CronJobExecuteOrders started.");
 
             var scope = _serviceScopeFactory.CreateScope();

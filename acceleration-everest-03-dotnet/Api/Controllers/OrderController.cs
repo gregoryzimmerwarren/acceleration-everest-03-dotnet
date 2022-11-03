@@ -32,12 +32,12 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpGet("{orderId}")]
-    public async Task<IActionResult> GetOrderByIdAsync(long orderId)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrderByIdAsync(long id)
     {
         try
         {
-            var result = await _orderAppService.GetOrderByIdAsync(orderId).ConfigureAwait(false);
+            var result = await _orderAppService.GetOrderByIdAsync(id).ConfigureAwait(false);
 
             return Ok(result);
         }

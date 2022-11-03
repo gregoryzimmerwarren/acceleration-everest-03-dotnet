@@ -47,12 +47,12 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpGet("{productId}")]
-    public async Task<IActionResult> GetProductByIdAsync(long productId)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProductByIdAsync(long id)
     {
         try
         {
-            var result = await _productAppService.GetProductByIdAsync(productId).ConfigureAwait(false);
+            var result = await _productAppService.GetProductByIdAsync(id).ConfigureAwait(false);
 
             return Ok(result);
         }
@@ -65,11 +65,11 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(long productId, UpdateProduct productToUpdate)
+    public IActionResult Update(long id, UpdateProduct productToUpdate)
     {
         try
         {
-            _productAppService.Update(productId, productToUpdate);
+            _productAppService.Update(id, productToUpdate);
 
             return Ok();
         }
