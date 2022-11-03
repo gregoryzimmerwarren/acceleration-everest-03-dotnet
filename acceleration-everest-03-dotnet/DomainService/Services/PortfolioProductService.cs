@@ -41,12 +41,10 @@ public class PortfolioProductService : IPortfolioProductService
         var repository = _repositoryFactory.Repository<PortfolioProduct>();
         var query = repository.SingleResultQuery().AndFilter(portfolioProduct => portfolioProduct.PortfolioId == portfolioId
         && portfolioProduct.ProductId == productId)
-            .Include(portfolioProduct => portfolioProduct.Include(portfolio => portfolio.Portfolio)
-            .Include(product => product.Product));
-        var portfolioProduct = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (portfolioProduct == null)
-            throw new ArgumentNullException($"No relationship was found between portfolio Id: {portfolioId} and product Id: {productId}");
+            .Include(portfolioProduct => portfolioProduct.Include(portfolioProduct => portfolioProduct.Portfolio)
+            .Include(portfolioProduct => portfolioProduct.Product));
+        var portfolioProduct = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No relationship was found between portfolio Id: {portfolioId} and product Id: {productId}");
 
         return portfolioProduct;
     }

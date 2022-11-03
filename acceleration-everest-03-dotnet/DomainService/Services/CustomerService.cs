@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DomainServices.Services;
@@ -55,12 +56,12 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.MultipleResultQuery()
-            .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
-            .Include(portfolios => portfolios.Portfolios));
+            .Include(customer => customer.Include(customer => customer.CustomerBankInfo)
+            .Include(customer => customer.Portfolios));
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (customers.Count == 0)
-            throw new ArgumentNullException();
+        if (!customers.Any())
+            throw new ArgumentException();
 
         return customers;
     }
@@ -69,12 +70,10 @@ public class CustomerService : ICustomerService
     {
         var repository = _unitOfWork.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id)
-            .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
-            .Include(portfolios => portfolios.Portfolios));
-        var customer = await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (customer == null)
-            throw new ArgumentNullException($"No customer found for Id: {id}");
+            .Include(customer => customer.Include(customer => customer.CustomerBankInfo)
+            .Include(customer => customer.Portfolios));
+        var customer = await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No customer found for Id: {id}");
 
         return customer;
     }
@@ -104,25 +103,26 @@ public class CustomerService : ICustomerService
 
     private async Task<bool> EmailAlreadyExistsAsync(Customer customerToCheck)
     {
-        var repository = _unitOfWork.Repository<Customer>();
-        var query = await repository.AnyAsync(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id).ConfigureAwait(false);
+        var repository = _repositoryFactory.Repository<Customer>();
+        var result = await repository.AnyAsync(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id).ConfigureAwait(false);
 
-        return query;
+        return result;
     }
 
     private async Task<bool> CpfAlreadyExistsAsync(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = await repository.AnyAsync(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id).ConfigureAwait(false);
+        var result = await repository.AnyAsync(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id).ConfigureAwait(false);
 
-        return query;
+        return result;
     }
 
     private async Task<long> GetIdByCpfAsync(string cpf)
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Cpf == cpf);
-        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
+        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentException($"No customer found for Cpf: {cpf}");
 
         return customer.Id;
     }
@@ -131,7 +131,8 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Email == email);
-        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
+        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentException($"No customer found for Email: {email}");
 
         return customer.Id;
     }

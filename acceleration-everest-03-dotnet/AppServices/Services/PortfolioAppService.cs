@@ -122,15 +122,13 @@ public class PortfolioAppService : IPortfolioAppService
 
     public async Task InvestAsync(CreateOrder createOrderDto)
     {
-        var unitPrice = await _productAppService.GetProductUnitPriceByIdAsync(createOrderDto.ProductId);
-        createOrderDto.UnitPrice = unitPrice;
-        decimal amount = createOrderDto.UnitPrice * createOrderDto.Quotes;
-        createOrderDto.NetValue = amount;
+        createOrderDto.UnitPrice = await _productAppService.GetProductUnitPriceByIdAsync(createOrderDto.ProductId);
+        createOrderDto.NetValue = createOrderDto.UnitPrice * createOrderDto.Quotes;
         createOrderDto.Direction = OrderDirection.Buy;
 
         if (createOrderDto.LiquidatedAt.Date <= DateTime.Now.Date)
         {
-            await ExecuteBuyOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, amount);
+            await ExecuteBuyOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, createOrderDto.NetValue);
             createOrderDto.WasExecuted = true;
         }
 
@@ -139,15 +137,13 @@ public class PortfolioAppService : IPortfolioAppService
 
     public async Task RedeemToPortfolioAsync(CreateOrder createOrderDto)
     {
-        var unitPrice = await _productAppService.GetProductUnitPriceByIdAsync(createOrderDto.ProductId);
-        createOrderDto.UnitPrice = unitPrice;
-        decimal amount = createOrderDto.UnitPrice * createOrderDto.Quotes;
-        createOrderDto.NetValue = amount;
+        createOrderDto.UnitPrice = await _productAppService.GetProductUnitPriceByIdAsync(createOrderDto.ProductId);
+        createOrderDto.NetValue = createOrderDto.UnitPrice * createOrderDto.Quotes;
         createOrderDto.Direction = OrderDirection.Sell;
 
         if (createOrderDto.LiquidatedAt.Date <= DateTime.Now.Date)
         {
-            await ExecuteSellOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, amount);
+            await ExecuteSellOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, createOrderDto.NetValue);
             createOrderDto.WasExecuted = true;
         }
 

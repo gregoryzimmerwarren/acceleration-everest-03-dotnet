@@ -35,11 +35,11 @@ public class CustomerController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteAsync(long customerId)
+    public async Task<IActionResult> DeleteAsync(long id)
     {
         try
         {
-            await _customerAppService.DeleteAsync(customerId).ConfigureAwait(false);
+            await _customerAppService.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -66,12 +66,12 @@ public class CustomerController : ControllerBase
         }
     }
 
-    [HttpGet("{customerId}")]
-    public async Task<IActionResult> GetByCustomerIdAsync(long customerId)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByCustomerIdAsync(long id)
     {
         try
         {
-            var result = await _customerAppService.GetCustomerByIdAsync(customerId).ConfigureAwait(false);
+            var result = await _customerAppService.GetCustomerByIdAsync(id).ConfigureAwait(false);
             
             return Ok(result);
         }
@@ -84,11 +84,11 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateAsync(long customerId, UpdateCustomer customerToUpdate)
+    public async Task<IActionResult> UpdateAsync(long id, UpdateCustomer customerToUpdate)
     {
         try
         {
-            await _customerAppService.UpdateAsync(customerId, customerToUpdate).ConfigureAwait(false);
+            await _customerAppService.UpdateAsync(id, customerToUpdate).ConfigureAwait(false);
             
             return Ok();
         }

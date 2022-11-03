@@ -34,11 +34,11 @@ public class PortfolioController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteAsync(long portfolioId)
+    public async Task<IActionResult> DeleteAsync(long id)
     {
         try
         {
-            await _portifolioAppService.DeleteAsync(portfolioId).ConfigureAwait(false);
+            await _portifolioAppService.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -56,12 +56,12 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpPatch("depositInPortfolio/{customerId}")]
-    public async Task<IActionResult> DepositAsync(long customerId, long portfolioId, decimal amount)
+    [HttpPatch("depositInPortfolio")]
+    public async Task<IActionResult> DepositAsync(long customerId, long id, decimal amount)
     {
         try
         {
-            await _portifolioAppService.DepositAsync(customerId, portfolioId, amount).ConfigureAwait(false);
+            await _portifolioAppService.DepositAsync(customerId, id, amount).ConfigureAwait(false);
 
             return Ok();
         }
@@ -79,12 +79,12 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpGet("{portfolioId}")]
-    public async Task<IActionResult> GetPortfolioByIdAsync(long portfolioId)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetPortfolioByIdAsync(long id)
     {
         try
         {
-            var result = await _portifolioAppService.GetPortfolioByIdAsync(portfolioId).ConfigureAwait(false);
+            var result = await _portifolioAppService.GetPortfolioByIdAsync(id).ConfigureAwait(false);
 
             return Ok(result);
         }
@@ -113,7 +113,7 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpPatch("invest/{customerId}")]
+    [HttpPatch("invest")]
     public async Task<IActionResult> InvestAsync(CreateOrder createOrderDto)
     {
         try
@@ -136,7 +136,7 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpPatch("redeemToPortfolio/{customerId}")]
+    [HttpPatch("redeemToPortfolio")]
     public async Task<IActionResult> RedeemToPortfolioAsync(CreateOrder createOrderDto)
     {
         try
@@ -159,12 +159,12 @@ public class PortfolioController : ControllerBase
         }
     }
 
-    [HttpPatch("withdrawFromPortfolio/{customerId}")]
-    public async Task<IActionResult> WithdrawFromPortfolioAsync(long customerId, long portfolioId, decimal amount)
+    [HttpPatch("withdrawFromPortfolio")]
+    public async Task<IActionResult> WithdrawFromPortfolioAsync(long customerId, long id, decimal amount)
     {
         try
         {
-            await _portifolioAppService.WithdrawFromPortfolioAsync(customerId, portfolioId, amount).ConfigureAwait(false);
+            await _portifolioAppService.WithdrawFromPortfolioAsync(customerId, id, amount).ConfigureAwait(false);
 
             return Ok();
         }

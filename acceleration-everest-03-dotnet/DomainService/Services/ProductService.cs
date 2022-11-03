@@ -46,7 +46,7 @@ public class ProductService : IProductService
         var products = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!products.Any())
-            throw new ArgumentNullException();
+            throw new ArgumentException();
 
         return products;
     }
@@ -65,10 +65,8 @@ public class ProductService : IProductService
     {
         var repository = _repositoryFactory.Repository<Product>();
         var query = repository.SingleResultQuery().AndFilter(product => product.Id == id);
-        var product = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (product == null)
-            throw new ArgumentNullException($"No product found for Id: {id}");
+        var product = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No product found for Id: {id}");
 
         return product.UnitPrice;
     }

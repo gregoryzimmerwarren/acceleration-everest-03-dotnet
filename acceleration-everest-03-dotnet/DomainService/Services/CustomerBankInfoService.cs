@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DomainServices.Services;
@@ -51,11 +52,11 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     {
         var repository = _repositoryFactory.Repository<CustomerBankInfo>();
         var query = repository.MultipleResultQuery()
-            .Include(bankInfo => bankInfo.Include(customer => customer.Customer));
+            .Include(customerBankInfo => customerBankInfo.Include(customerBankInfo => customerBankInfo.Customer));
         var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (customersBankInfos.Count == 0)
-            throw new ArgumentNullException();
+        if (!customersBankInfos.Any())
+            throw new ArgumentException();
 
         return customersBankInfos;
     }
@@ -64,18 +65,17 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     {
         var repository = _repositoryFactory.Repository<CustomerBankInfo>();
         var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId)
-            .Include(bankInfo => bankInfo.Include(customer => customer.Customer));
-        var customerBankInfo = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (customerBankInfo == null)
-            throw new ArgumentNullException($"No customer found for Id: {customerId}");
+            .Include(customerBankInfo => customerBankInfo.Include(customerBankInfo => customerBankInfo.Customer));
+        var customerBankInfo = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No customer found for Id: {customerId}");
 
         return customerBankInfo;
     }
 
     public async Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
 
         return customerBankInfo.AccountBalance;
     }

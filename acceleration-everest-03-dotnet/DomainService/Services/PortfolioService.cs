@@ -60,10 +60,10 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
         var query = repository.SingleResultQuery().AndFilter(portfolio => portfolio.Id == portfolioId)
-            .Include(portfolio => portfolio.Include(customer => customer.Customer)
-            .Include(order => order.Orders)
-            .ThenInclude(product => product.Product)
-            .Include(product => product.Products));
+            .Include(portfolio => portfolio.Include(portfolio => portfolio.Customer)
+            .Include(portfolio => portfolio.Orders)
+            .ThenInclude(order => order.Product)
+            .Include(portfolio => portfolio.Products));
         var portfolio = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
             ?? throw new ArgumentNullException($"No portfolio found for Id: {portfolioId}");
 
@@ -74,9 +74,9 @@ Value available for withdraw: R${portfolio.AccountBalance}.");
     {
         var repository = _repositoryFactory.Repository<Portfolio>();
         var query = repository.MultipleResultQuery().AndFilter(portfolio => portfolio.CustomerId == customerId)
-            .Include(portfolio => portfolio.Include(customer => customer.Customer)
-            .Include(order => order.Orders)
-            .ThenInclude(product => product.Product)
+            .Include(portfolio => portfolio.Include(portfolio => portfolio.Customer)
+            .Include(portfolio => portfolio.Orders)
+            .ThenInclude(order => order.Product)
             .Include(product => product.Products));
         var portfolios = await repository.SearchAsync(query).ConfigureAwait(false);
 
