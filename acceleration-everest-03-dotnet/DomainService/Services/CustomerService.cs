@@ -56,8 +56,8 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.MultipleResultQuery()
-            .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
-            .Include(portfolios => portfolios.Portfolios));
+            .Include(customer => customer.Include(customer => customer.CustomerBankInfo)
+            .Include(customer => customer.Portfolios));
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!customers.Any())
@@ -70,8 +70,8 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id)
-            .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
-            .Include(portfolios => portfolios.Portfolios));
+            .Include(customer => customer.Include(customer => customer.CustomerBankInfo)
+            .Include(customer => customer.Portfolios));
         var customer = await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
             ?? throw new ArgumentNullException($"No customer found for Id: {id}");
 
@@ -104,17 +104,17 @@ public class CustomerService : ICustomerService
     private async Task<bool> EmailAlreadyExistsAsync(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = await repository.AnyAsync(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id).ConfigureAwait(false);
+        var result = await repository.AnyAsync(customer => customer.Email == customerToCheck.Email && customer.Id != customerToCheck.Id).ConfigureAwait(false);
 
-        return query;
+        return result;
     }
 
     private async Task<bool> CpfAlreadyExistsAsync(Customer customerToCheck)
     {
         var repository = _repositoryFactory.Repository<Customer>();
-        var query = await repository.AnyAsync(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id).ConfigureAwait(false);
+        var result = await repository.AnyAsync(customer => customer.Cpf == customerToCheck.Cpf && customer.Id != customerToCheck.Id).ConfigureAwait(false);
 
-        return query;
+        return result;
     }
 
     private async Task<long> GetIdByCpfAsync(string cpf)

@@ -52,7 +52,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     {
         var repository = _repositoryFactory.Repository<CustomerBankInfo>();
         var query = repository.MultipleResultQuery()
-            .Include(bankInfo => bankInfo.Include(bankInfo => bankInfo.Customer));
+            .Include(customerBankInfo => customerBankInfo.Include(customerBankInfo => customerBankInfo.Customer));
         var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!customersBankInfos.Any())
@@ -65,7 +65,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     {
         var repository = _repositoryFactory.Repository<CustomerBankInfo>();
         var query = repository.SingleResultQuery().AndFilter(customerBankInfo => customerBankInfo.CustomerId == customerId)
-            .Include(bankInfo => bankInfo.Include(bankInfo => bankInfo.Customer));
+            .Include(customerBankInfo => customerBankInfo.Include(customerBankInfo => customerBankInfo.Customer));
         var customerBankInfo = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
             ?? throw new ArgumentNullException($"No customer found for Id: {customerId}");
 

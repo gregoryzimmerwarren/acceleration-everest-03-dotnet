@@ -37,8 +37,8 @@ public class OrderService : IOrderService
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.MultipleResultQuery()
-            .Include(order => order.Include(portfolio => portfolio.Portfolio)
-            .Include(product => product.Product));
+            .Include(order => order.Include(order => order.Portfolio)
+            .Include(order => order.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!orders.Any())
@@ -74,8 +74,8 @@ public class OrderService : IOrderService
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.SingleResultQuery().AndFilter(order => order.Id == orderId)
-            .Include(order => order.Include(portfolio => portfolio.Portfolio)
-            .Include(product => product.Product));
+            .Include(order => order.Include(order => order.Portfolio)
+            .Include(order => order.Product));
         var order = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
             ?? throw new ArgumentNullException($"No order found for Id: {orderId}");
 
@@ -86,8 +86,8 @@ public class OrderService : IOrderService
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId)
-            .Include(order => order.Include(portfolio => portfolio.Portfolio)
-            .Include(product => product.Product));
+            .Include(order => order.Include(order => order.Portfolio)
+            .Include(order => order.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!orders.Any())
@@ -100,8 +100,8 @@ public class OrderService : IOrderService
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId)
-            .Include(order => order.Include(portfolio => portfolio.Portfolio)
-            .Include(product => product.Product));
+            .Include(order => order.Include(order => order.Portfolio)
+            .Include(order => order.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!orders.Any())
@@ -114,8 +114,8 @@ public class OrderService : IOrderService
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.MultipleResultQuery().AndFilter(order => order.ProductId == productId)
-            .Include(order => order.Include(portfolio => portfolio.Portfolio)
-            .Include(product => product.Product));
+            .Include(order => order.Include(order => order.Portfolio)
+            .Include(order => order.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!orders.Any())
