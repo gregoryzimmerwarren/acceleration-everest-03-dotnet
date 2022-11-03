@@ -19,7 +19,6 @@ namespace AppServices.Validators.Create
 
             RuleFor(product => product.IssuanceAt)
                 .NotEmpty()
-                .GreaterThanOrEqualTo(DateTime.Now.Date);
             
             RuleFor(product => product.ExpirationAt)
                 .NotEmpty()
