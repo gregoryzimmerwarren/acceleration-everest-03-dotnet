@@ -41,7 +41,7 @@ public class OrderService : IOrderService
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (orders.Count == 0)
-            throw new ArgumentNullException("No order found");
+            throw new ArgumentNullException();
 
         return orders;
     }
