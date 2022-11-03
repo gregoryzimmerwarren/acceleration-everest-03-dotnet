@@ -44,10 +44,8 @@ public class PortfolioProductService : IPortfolioProductService
         && portfolioProduct.ProductId == productId)
             .Include(portfolioProduct => portfolioProduct.Include(portfolio => portfolio.Portfolio)
             .Include(product => product.Product));
-        var portfolioProduct = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (portfolioProduct == null)
-            throw new ArgumentNullException($"No relationship was found between portfolio Id: {portfolioId} and product Id: {productId}");
+        var portfolioProduct = await repository.FirstOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No relationship was found between portfolio Id: {portfolioId} and product Id: {productId}");
 
         return portfolioProduct;
     }

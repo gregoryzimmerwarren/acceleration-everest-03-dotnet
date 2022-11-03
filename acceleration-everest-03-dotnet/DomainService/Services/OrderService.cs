@@ -6,6 +6,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DomainServices.Services;
@@ -40,8 +41,8 @@ public class OrderService : IOrderService
             .Include(product => product.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (orders.Count == 0)
-            throw new ArgumentNullException();
+        if (!orders.Any())
+            throw new ArgumentException();
 
         return orders;
     }
@@ -75,10 +76,8 @@ public class OrderService : IOrderService
         var query = repository.SingleResultQuery().AndFilter(order => order.Id == orderId)
             .Include(order => order.Include(portfolio => portfolio.Portfolio)
             .Include(product => product.Product));
-        var order = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (order == null)
-            throw new ArgumentNullException($"No order found for Id: {orderId}");
+        var order = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No order found for Id: {orderId}");
 
         return order;
     }
@@ -91,7 +90,7 @@ public class OrderService : IOrderService
             .Include(product => product.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (orders.Count == 0)
+        if (!orders.Any())
             throw new ArgumentNullException($"No order was found between portfolio Id: {portfolioId} and product Id: {productId}");
 
         return orders;
@@ -105,7 +104,7 @@ public class OrderService : IOrderService
             .Include(product => product.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (orders.Count == 0)
+        if (!orders.Any())
             throw new ArgumentNullException($"No order found for portfolio Id: {portfolioId}");
 
         return orders;
@@ -119,7 +118,7 @@ public class OrderService : IOrderService
             .Include(product => product.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (orders.Count == 0)
+        if (!orders.Any())
             throw new ArgumentNullException($"No order found for product Id: {productId}");
 
         return orders;

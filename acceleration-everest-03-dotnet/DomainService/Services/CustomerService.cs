@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DomainServices.Services;
@@ -59,8 +60,8 @@ public class CustomerService : ICustomerService
             .Include(portfolios => portfolios.Portfolios));
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (customers.Count == 0)
-            throw new ArgumentNullException();
+        if (!customers.Any())
+            throw new ArgumentException();
 
         return customers;
     }
@@ -71,10 +72,8 @@ public class CustomerService : ICustomerService
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id)
             .Include(customer => customer.Include(customerBankInfo => customerBankInfo.CustomerBankInfo)
             .Include(portfolios => portfolios.Portfolios));
-        var customer = await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (customer == null)
-            throw new ArgumentNullException($"No customer found for Id: {id}");
+        var customer = await  repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentNullException($"No customer found for Id: {id}");
 
         return customer;
     }
@@ -122,10 +121,8 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Cpf == cpf);
-        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (customer == null)
-            throw new ArgumentException($"No customer found for Cpf: {cpf}");
+        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentException($"No customer found for Cpf: {cpf}");
 
         return customer.Id;
     }
@@ -134,10 +131,8 @@ public class CustomerService : ICustomerService
     {
         var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Email == email);
-        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false);
-
-        if (customer == null)
-            throw new ArgumentException($"No customer found for Email: {email}");
+        var customer = await repository.SingleOrDefaultAsync(query).ConfigureAwait(false)
+            ?? throw new ArgumentException($"No customer found for Email: {email}");
 
         return customer.Id;
     }
