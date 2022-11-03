@@ -51,23 +51,21 @@ public class OrderService : IOrderService
     {
         var orders = await GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
 
-        var sellingQuotes = 0;
-        var boughtQuotes = 0;
+        var availableQuotes = 0;
 
         foreach (var order in orders)
         {
             if (order.Direction == OrderDirection.Buy)
             {
-                boughtQuotes += order.Quotes;
+                availableQuotes += order.Quotes;
             }
             else
             {
-                sellingQuotes += order.Quotes;
+                availableQuotes -= order.Quotes;
             }
         }
 
-        var totalQuotes = boughtQuotes - sellingQuotes;
-        return totalQuotes;
+        return availableQuotes ;
     }
 
     public async Task<Order> GetOrderByIdAsync(long orderId)
