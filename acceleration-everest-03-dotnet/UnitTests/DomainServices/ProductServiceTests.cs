@@ -79,7 +79,7 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllProductsAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetAllProductsAsync_Throwing_ArgumentException()
     {
         // Arrange
         var listProductTest = ProductFixture.GenerateListProductFixture(0);
@@ -92,7 +92,7 @@ public class ProductServiceTests
         var action = () => _productService.GetAllProductsAsync();
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentException>();
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery(), Times.Once);
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default), Times.Once);
     }

@@ -67,21 +67,6 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_IssuanceAt_BeforeToday()
-    {
-        // Arrange
-        var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        createProductTest.IssuanceAt = DateTime.Now.AddDays(-1);
-        var validCreateProduct = new CreateProductValidator();
-
-        // Action
-        var result = validCreateProduct.Validate(createProductTest);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-    }
-
-    [Fact]
     public void Should_NotCreateProduct_When_ExpirationAt_BeforeToday()
     {
         // Arrange

@@ -18,7 +18,7 @@ namespace AppServices.Validators.Create
                 .WithMessage("Unit price must be more than R$0,00.");
 
             RuleFor(product => product.IssuanceAt)
-                .NotEmpty()
+                .NotEmpty();
             
             RuleFor(product => product.ExpirationAt)
                 .NotEmpty()

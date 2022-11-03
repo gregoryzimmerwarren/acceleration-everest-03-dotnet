@@ -64,7 +64,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllOrdersAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetAllOrdersAsync_Throwing_ArgumentException()
     {
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
@@ -78,7 +78,7 @@ public class OrderServiceTests
         var action = () => _orderService.GetAllOrdersAsync();
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentException>();
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()

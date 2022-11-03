@@ -67,21 +67,6 @@ public class UpdateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateProduct_When_IssuanceAt_BeforeToday()
-    {
-        // Arrange
-        var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
-        updateProductTest.IssuanceAt = DateTime.Now.AddDays(-1);
-        var validUpdateProduct = new UpdateProductValidator();
-
-        // Action
-        var result = validUpdateProduct.Validate(updateProductTest);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-    }
-
-    [Fact]
     public void Should_NotUpdateProduct_When_ExpirationAt_BeforeToday_Successfully()
     {
         // Arrange

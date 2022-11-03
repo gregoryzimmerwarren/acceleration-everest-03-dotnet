@@ -123,7 +123,7 @@ public class CustomerBankInfoServiceTests
         var action = () => _customerBankInfoService.GetAllCustomersBankInfoAsync();
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentException>();
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>().MultipleResultQuery()
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
