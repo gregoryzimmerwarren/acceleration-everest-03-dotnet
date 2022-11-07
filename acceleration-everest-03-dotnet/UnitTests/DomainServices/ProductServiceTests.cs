@@ -51,7 +51,7 @@ public class ProductServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Product>().Remove(productTest));
 
         // Action
-        await _productService.DeleteAsync(productTest.Id).ConfigureAwait(false);
+        await _productService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
@@ -108,7 +108,7 @@ public class ProductServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(productTest);
 
         // Action
-        var result = await _productService.GetProductByIdAsync(productTest.Id).ConfigureAwait(false);
+        var result = await _productService.GetProductByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
@@ -128,7 +128,7 @@ public class ProductServiceTests
         .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(It.IsAny<Product>());
 
         // Action
-        var action = () => _productService.GetProductByIdAsync(productTest.Id);
+        var action = () => _productService.GetProductByIdAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentNullException>();
@@ -147,7 +147,7 @@ public class ProductServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(productTest);
 
         // Action
-        var result = await _productService.GetProductUnitPriceByIdAsync(productTest.Id).ConfigureAwait(false);
+        var result = await _productService.GetProductUnitPriceByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().BeGreaterThanOrEqualTo(0);
@@ -167,7 +167,7 @@ public class ProductServiceTests
         .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(It.IsAny<Product>());
 
         // Action
-        var action = () => _productService.GetProductUnitPriceByIdAsync(productTest.Id);
+        var action = () => _productService.GetProductUnitPriceByIdAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentNullException>();

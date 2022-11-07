@@ -100,7 +100,7 @@ public class CustomerServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Remove(customerTest));
 
         // Action
-        await _customerService.DeleteAsync(customerTest.Id).ConfigureAwait(false);
+        await _customerService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
@@ -165,7 +165,7 @@ public class CustomerServiceTests
             .ReturnsAsync(customerTest);
 
         // Action
-        var result = await _customerService.GetCustomerByIdAsync(customerTest.Id);
+        var result = await _customerService.GetCustomerByIdAsync(It.IsAny<long>());
 
         // Arrange
         result.Should().NotBeNull();
@@ -178,15 +178,13 @@ public class CustomerServiceTests
     public async void Should_NotGetCustomerByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
-        long idTest = 1;
-
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
             .ReturnsAsync(It.IsAny<Customer>());
 
         // Action
-        var action = () => _customerService.GetCustomerByIdAsync(idTest);
+        var action = () => _customerService.GetCustomerByIdAsync(It.IsAny<long>());
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();

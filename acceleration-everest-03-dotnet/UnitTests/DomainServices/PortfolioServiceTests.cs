@@ -54,7 +54,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Remove(portfolioTest));
 
         // Action
-        await _portfolioService.DeleteAsync(portfolioTest.Id).ConfigureAwait(false);
+        await _portfolioService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -75,7 +75,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.DeleteAsync(portfolioTest.Id);
+        var action = () => _portfolioService.DeleteAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();
@@ -96,7 +96,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.DeleteAsync(portfolioTest.Id);
+        var action = () => _portfolioService.DeleteAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();
@@ -118,7 +118,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.DepositAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
+        await _portfolioService.DepositAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -138,7 +138,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
 
         // Action
-        var result = await _portfolioService.GetPortfolioByIdAsync(portfolioTest.Id).ConfigureAwait(false);
+        var result = await _portfolioService.GetPortfolioByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
@@ -159,7 +159,7 @@ public class PortfolioServiceTests
         SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(It.IsAny<Portfolio>());
 
         // Action
-        var action = () => _portfolioService.GetPortfolioByIdAsync(portfolioTest.Id);
+        var action = () => _portfolioService.GetPortfolioByIdAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentNullException>();
@@ -172,7 +172,6 @@ public class PortfolioServiceTests
     public async void Should_GetPortfoliosByCustomerIdAsync_Successfully()
     {
         // Arrange
-        long customerIdTest = 1;
         var listportfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(3);
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -180,7 +179,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SearchAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(listportfoliosTest);
 
         // Action
-        var result = await _portfolioService.GetPortfoliosByCustomerIdAsync(customerIdTest).ConfigureAwait(false);
+        var result = await _portfolioService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
@@ -193,7 +192,6 @@ public class PortfolioServiceTests
     public async void Should_NotGetPortfoliosByCustomerIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
-        long customerIdTest = 1;
         var listportfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(0);
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -202,7 +200,7 @@ public class PortfolioServiceTests
         .SearchAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(listportfoliosTest);
 
         // Action
-        var action = () => _portfolioService.GetPortfoliosByCustomerIdAsync(customerIdTest);
+        var action = () => _portfolioService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentNullException>();
@@ -225,7 +223,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.InvestAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
+        await _portfolioService.InvestAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -247,7 +245,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.InvestAsync(portfolioTest.Id, amountTest);
+        var action = () => _portfolioService.InvestAsync(It.IsAny<long>(), amountTest);
 
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();
@@ -270,7 +268,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.RedeemToPortfolioAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
+        await _portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -292,7 +290,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.RedeemToPortfolioAsync(portfolioTest.Id, amountTest);
+        var action = () => _portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), amountTest);
 
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();
@@ -315,7 +313,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.WithdrawFromPortfolioAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
+        await _portfolioService.WithdrawFromPortfolioAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -337,7 +335,7 @@ public class PortfolioServiceTests
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>().SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default)).ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.WithdrawFromPortfolioAsync(portfolioTest.Id, amountTest);
+        var action = () => _portfolioService.WithdrawFromPortfolioAsync(It.IsAny<long>(), amountTest);
 
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();

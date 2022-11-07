@@ -5,7 +5,6 @@ using DomainModels.Models;
 using DomainServices.Interfaces;
 using FluentAssertions;
 using Moq;
-using System.Collections.Generic;
 using UnitTests.Fixtures.Customers;
 using UnitTests.Fixtures.CustomersBankInfo;
 
@@ -33,12 +32,10 @@ public class CustomerBankInfoAppServiceTests
     public void Should_CreateCustomerBankInfo_Successfully()
     {
         // Arrange
-        long idTest = 1;
-
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.Create(It.IsAny<long>()));
 
         // Action
-        _customerBankInfoAppService.Create(idTest);
+        _customerBankInfoAppService.Create(It.IsAny<long>());
 
         // Assert
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.Create(It.IsAny<long>()), Times.Once);
@@ -48,12 +45,10 @@ public class CustomerBankInfoAppServiceTests
     public async void Should_DeleteCustomerBankInfo_Successfully()
     {
         // Arrange
-        long idTest = 1;
-
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.DeleteAsync(It.IsAny<long>()));
 
         // Action
-        await _customerBankInfoAppService.DeleteAsync(idTest).ConfigureAwait(false);
+        await _customerBankInfoAppService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.DeleteAsync(It.IsAny<long>()), Times.Once);
@@ -63,13 +58,10 @@ public class CustomerBankInfoAppServiceTests
     public async void Should_DepositCustomerBankInfoAsync_Successfully()
     {
         // Arrage
-        long idTest = 1;
-        decimal amountTest = 17.05m;
-
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.DepositAsync(It.IsAny<long>(), It.IsAny<decimal>()));
 
         // Action
-        await _customerBankInfoAppService.DepositAsync(idTest, amountTest).ConfigureAwait(false);
+        await _customerBankInfoAppService.DepositAsync(It.IsAny<long>(), It.IsAny<decimal>()).ConfigureAwait(false);
 
         // Assert
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.DepositAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
@@ -97,15 +89,13 @@ public class CustomerBankInfoAppServiceTests
     public async void Should_GetAccountBalanceByCustomerIdAsync_Successfully()
     {
         // Arrange
-        long idTest = 1;
         var customerTest = CustomerFixture.GenerateCustomerFixture();
-        customerTest.Id = idTest;
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
 
         // Action
-        var result = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(idTest).ConfigureAwait(false);
+        var result = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().BeGreaterThanOrEqualTo(0);
@@ -116,13 +106,10 @@ public class CustomerBankInfoAppServiceTests
     public async void Should_WithdrawCustomerBankInfoAsync_Successfully()
     {
         // Arrage
-        long idTest = 1;
-        decimal amountTest = 17.05m;
-
         _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.WithdrawAsync(It.IsAny<long>(), It.IsAny<decimal>())).ReturnsAsync(true);
 
         // Action
-        var result = await _customerBankInfoAppService.WithdrawAsync(idTest, amountTest).ConfigureAwait(false);
+        var result = await _customerBankInfoAppService.WithdrawAsync(It.IsAny<long>(), It.IsAny<decimal>()).ConfigureAwait(false);
 
         // Assert
         result.Should().BeTrue();

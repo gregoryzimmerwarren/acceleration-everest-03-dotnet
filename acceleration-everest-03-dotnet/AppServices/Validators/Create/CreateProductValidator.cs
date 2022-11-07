@@ -26,10 +26,10 @@ namespace AppServices.Validators.Create
 
             RuleFor(product => product.Type)
                 .NotEmpty()
-                .Must(EnunIsValid);
+                .Must(IsValidEnum);
         }
 
-        private bool EnunIsValid(int direction)
+        private bool IsValidEnum(int direction)
         {
             if (direction < 1 || direction > 5)
                 return false;

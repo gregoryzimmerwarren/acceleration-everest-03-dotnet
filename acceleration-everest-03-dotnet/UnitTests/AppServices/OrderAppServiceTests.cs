@@ -43,13 +43,13 @@ public class OrderAppServiceTests
         var createdOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         var orderTest = OrderFixture.GenerateOrderFixture();
 
-        _mockOrderService.Setup(orderService => orderService.Create(It.IsAny<Order>())).Returns(It.IsAny<long>());
+        _mockOrderService.Setup(orderService => orderService.Create(It.IsAny<Order>())).Returns(orderTest.Id);
 
         // Action
         var resultOrder = _orderAppService.Create(createdOrderTest);
 
         // Assert
-        resultOrder.Should().NotBe(null);
+        resultOrder.Should().NotBe(0);
         _mockOrderService.Verify(orderService => orderService.Create(It.IsAny<Order>()), Times.Once);
     }
 
@@ -75,33 +75,29 @@ public class OrderAppServiceTests
     public async void Should_GetOrderByIdAsync_Successfully()
     {
         // Arrange
-        long idTest = 1;
         var orderTest = OrderFixture.GenerateOrderFixture();
-        orderTest.Id = idTest;
 
         _mockOrderService.Setup(orderService => orderService.GetOrderByIdAsync(It.IsAny<long>())).ReturnsAsync(orderTest);
         _mapper.Map<OrderResult>(orderTest);
 
         // Action
-        var result = await _orderAppService.GetOrderByIdAsync(idTest).ConfigureAwait(false);
+        var result = await _orderAppService.GetOrderByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
-        _mockOrderService.Verify(orderService => orderService.GetOrderByIdAsync(idTest), Times.Once);
+        _mockOrderService.Verify(orderService => orderService.GetOrderByIdAsync(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
     public async void Should_GetAvailableQuotes_Successfully()
     {
         // Arrange
-        long portfolioIdTest = 1;
-        long productIdTest = 1;
         var listOrderTest = OrderFixture.GenerateListOrderFixture(3);
 
         _mockOrderService.Setup(orderService => orderService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(It.IsAny<int>());
 
         // Action
-        var result = await _orderAppService.GetAvailableQuotes(portfolioIdTest, productIdTest).ConfigureAwait(false);
+        var result = await _orderAppService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBe(null);
@@ -119,7 +115,7 @@ public class OrderAppServiceTests
         _mapper.Map<IEnumerable<OrderResult>>(orderListTest);
 
         // Action
-        var result = await _orderAppService.GetOrdersByPortfolioIdAsync(portfolioTest.Id).ConfigureAwait(false);
+        var result = await _orderAppService.GetOrdersByPortfolioIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
@@ -137,7 +133,7 @@ public class OrderAppServiceTests
         _mapper.Map<IEnumerable<OrderResult>>(orderListTest);
 
         // Action
-        var result = await _orderAppService.GetOrdersByProductIdAsync(productTest.Id).ConfigureAwait(false);
+        var result = await _orderAppService.GetOrdersByProductIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();

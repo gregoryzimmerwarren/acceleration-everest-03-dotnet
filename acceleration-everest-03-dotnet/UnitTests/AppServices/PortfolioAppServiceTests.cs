@@ -50,13 +50,13 @@ public class PortfolioAppServiceTests
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
 
-        _mockPortfolioService.Setup(portfolioService => portfolioService.Create(It.IsAny<Portfolio>())).Returns(It.IsAny<long>());
+        _mockPortfolioService.Setup(portfolioService => portfolioService.Create(It.IsAny<Portfolio>())).Returns(portfolioTest.Id);
 
         // Action
         var result = _portfolioAppService.Create(createPortfolioTest);
 
         // Assert
-        result.Should().NotBe(null);
+        result.Should().NotBe(0);
 
         _mockPortfolioService.Verify(portfolioService => portfolioService.Create(It.IsAny<Portfolio>()), Times.Once);
     }
@@ -65,12 +65,10 @@ public class PortfolioAppServiceTests
     public async void Should_DeleteCustomer_Successfully()
     {
         // Arrange  
-        long idTest = 1;
-
         _mockPortfolioService.Setup(portfolioService => portfolioService.DeleteAsync(It.IsAny<long>()));
 
         // Action
-        await _portfolioAppService.DeleteAsync(idTest).ConfigureAwait(false);
+        await _portfolioAppService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         _mockPortfolioService.Verify(portfolioService => portfolioService.DeleteAsync(It.IsAny<long>()), Times.Once);
@@ -80,8 +78,6 @@ public class PortfolioAppServiceTests
     public async void Should_DepositPortfolioAsync_Successfully()
     {
         // Arrage
-        long customerIdTest = 1;
-        long portfolioIdTest = 1;
         decimal amountTest = 17.05m;
         decimal totalBankInfo = 20m;
 
@@ -90,7 +86,7 @@ public class PortfolioAppServiceTests
         _mockPortfolioService.Setup(portfolioService => portfolioService.DepositAsync(It.IsAny<long>(), It.IsAny<decimal>()));
 
         // Action
-        await _portfolioAppService.DepositAsync(customerIdTest, portfolioIdTest, amountTest).ConfigureAwait(false);
+        await _portfolioAppService.DepositAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockCustomerBankInfoAppService.Verify(customerBankInfoAppService => customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>()), Times.Once);
@@ -102,15 +98,13 @@ public class PortfolioAppServiceTests
     public async void Should_Not_DepositPortfolioAsync_Throwing_ArgumentException()
     {
         // Arrage
-        long customerIdTest = 1;
-        long portfolioIdTest = 1;
         decimal amountTest = 20m;
         decimal totalBankInfo = 17.05m;
 
         _mockCustomerBankInfoAppService.Setup(customerBankInfoAppService => customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(totalBankInfo);
 
         // Action
-        var action = () => _portfolioAppService.DepositAsync(customerIdTest, portfolioIdTest, amountTest);
+        var action = () => _portfolioAppService.DepositAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest);
 
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();
@@ -121,8 +115,6 @@ public class PortfolioAppServiceTests
     public async void Should_ExecuteBuyOrderAsync_WithRelation_Between_PortfolioAndProduct_Successfully()
     {
         // Arrange
-        long portfolioIdTest = 1;
-        long productIdTest = 1;
         decimal amountTest = 17.05m;
         var portfolioProductTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
 
@@ -130,7 +122,7 @@ public class PortfolioAppServiceTests
         _mockPortfolioProductService.Setup(portfolioProductAppService => portfolioProductAppService.GetPortfolioProductByIdsAsync(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(portfolioProductTest);
 
         // Action
-        await _portfolioAppService.ExecuteBuyOrderAsync(portfolioIdTest, productIdTest, amountTest).ConfigureAwait(false);
+        await _portfolioAppService.ExecuteBuyOrderAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockPortfolioService.Verify(portfolioService => portfolioService.InvestAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
@@ -141,8 +133,6 @@ public class PortfolioAppServiceTests
     public async void Should_ExecuteBuyOrderAsync_WithNoRelation_Between_PortfolioAndProduct_Throwing_ArgumentException_Successfully()
     {
         // Arrange
-        long portfolioIdTest = 1;
-        long productIdTest = 1;
         decimal amountTest = 17.05m;
         var portfolioProductTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
 
@@ -151,7 +141,7 @@ public class PortfolioAppServiceTests
         _mockPortfolioProductService.Setup(portfolioProductAppService => portfolioProductAppService.Create(It.IsAny<PortfolioProduct>()));
 
         // Action
-        await _portfolioAppService.ExecuteBuyOrderAsync(portfolioIdTest, productIdTest, amountTest).ConfigureAwait(false);
+        await _portfolioAppService.ExecuteBuyOrderAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert       
         _mockPortfolioService.Verify(portfolioService => portfolioService.InvestAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
@@ -183,15 +173,13 @@ public class PortfolioAppServiceTests
         // Arrange
         int availableQuotesTest = 0;
         decimal amountTest = 17.05m;
-        long portfolioIdTest = 1;
-        long prodcutIdTest = 1;
 
         _mockPortfolioService.Setup(portfolioService => portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), It.IsAny<decimal>()));
         _mockOrderAppService.Setup(orderAppService => orderAppService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(availableQuotesTest);
         _mockPortfolioProductService.Setup(portfolioProductAppService => portfolioProductAppService.DeleteAsync(It.IsAny<long>(), It.IsAny<long>()));
 
         // Action
-        await _portfolioAppService.ExecuteSellOrderAsync(portfolioIdTest, prodcutIdTest, amountTest).ConfigureAwait(false);
+        await _portfolioAppService.ExecuteSellOrderAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockPortfolioService.Verify(portfolioService => portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
@@ -205,14 +193,12 @@ public class PortfolioAppServiceTests
         // Arrange
         int availableQuotesTest = 1;
         decimal amountTest = 17.05m;
-        long portfolioIdTest = 1;
-        long prodcutIdTest = 1;
 
         _mockPortfolioService.Setup(portfolioService => portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), It.IsAny<decimal>()));
         _mockOrderAppService.Setup(orderAppService => orderAppService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(availableQuotesTest);
 
         // Action
-        await _portfolioAppService.ExecuteSellOrderAsync(portfolioIdTest, prodcutIdTest, amountTest).ConfigureAwait(false);
+        await _portfolioAppService.ExecuteSellOrderAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockPortfolioService.Verify(portfolioService => portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
@@ -223,19 +209,17 @@ public class PortfolioAppServiceTests
     public async void Should_GetPortfolioByIdAsync_Successfully()
     {
         // Arrange
-        long idTest = 1;
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
-        portfolioTest.Id = idTest;
 
         _mockPortfolioService.Setup(portfolioService => portfolioService.GetPortfolioByIdAsync(It.IsAny<long>())).ReturnsAsync(portfolioTest);
         _mapper.Map<PortfolioResult>(portfolioTest);
 
         // Action
-        var result = await _portfolioAppService.GetPortfolioByIdAsync(idTest).ConfigureAwait(false);
+        var result = await _portfolioAppService.GetPortfolioByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
-        _mockPortfolioService.Verify(portfolioService => portfolioService.GetPortfolioByIdAsync(idTest), Times.Once);
+        _mockPortfolioService.Verify(portfolioService => portfolioService.GetPortfolioByIdAsync(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
@@ -244,17 +228,16 @@ public class PortfolioAppServiceTests
         // Arrange
         var listPortfoliosResultTest = PortfolioResultFixture.GenerateListPortfolioResultFixture(3);
         var listPortfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(3);
-        long customerIdTest = 1;
 
         _mockPortfolioService.Setup(portfolioService => portfolioService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(listPortfoliosTest);
         _mapper.Map<IEnumerable<PortfolioResult>>(listPortfoliosTest);
 
         // Action
-        var result = await _portfolioAppService.GetPortfoliosByCustomerIdAsync(customerIdTest).ConfigureAwait(false);
+        var result = await _portfolioAppService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().HaveCountGreaterThanOrEqualTo(3);
-        _mockPortfolioService.Verify(portfolioService => portfolioService.GetPortfoliosByCustomerIdAsync(customerIdTest), Times.Once);
+        _mockPortfolioService.Verify(portfolioService => portfolioService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>()), Times.Once);
     }
 
     [Fact]
@@ -331,15 +314,13 @@ public class PortfolioAppServiceTests
     public async void Should_WithdrawFromPortfolioAsync_Succedssfully()
     {
         // Arrange
-        long customerIdTest = 1;
-        long portfolioIdTest = 1;
         decimal amountTest = 17.05m;
 
         _mockPortfolioService.Setup(productAppService => productAppService.WithdrawFromPortfolioAsync(It.IsAny<long>(), It.IsAny<decimal>()));
         _mockCustomerBankInfoAppService.Setup(customerBankInfoAppService => customerBankInfoAppService.DepositAsync(It.IsAny<long>(), It.IsAny<decimal>()));
 
         // Action
-        await _portfolioAppService.WithdrawFromPortfolioAsync(customerIdTest, portfolioIdTest, amountTest).ConfigureAwait(false);
+        await _portfolioAppService.WithdrawFromPortfolioAsync(It.IsAny<long>(), It.IsAny<long>(), amountTest).ConfigureAwait(false);
 
         // Assert
         _mockPortfolioService.Verify(productAppService => productAppService.WithdrawFromPortfolioAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
