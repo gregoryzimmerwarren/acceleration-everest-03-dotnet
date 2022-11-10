@@ -68,7 +68,7 @@ public class CustomerService : ICustomerService
 
     public async Task<Customer> GetCustomerByIdAsync(long id)
     {
-        var repository = _unitOfWork.Repository<Customer>();
+        var repository = _repositoryFactory.Repository<Customer>();
         var query = repository.SingleResultQuery().AndFilter(customer => customer.Id == id)
             .Include(customer => customer.Include(customer => customer.CustomerBankInfo)
             .Include(customer => customer.Portfolios));

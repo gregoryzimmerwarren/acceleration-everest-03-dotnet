@@ -1,4 +1,4 @@
-﻿    namespace DomainModels.Models;
+﻿namespace DomainModels.Models;
 
 public class CustomerBankInfo : IEntity
 {

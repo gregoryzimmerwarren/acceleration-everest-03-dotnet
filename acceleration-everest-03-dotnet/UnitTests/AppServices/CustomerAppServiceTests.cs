@@ -1,5 +1,6 @@
 ﻿using AppModels.Customers;
 using AppServices.Interfaces;
+using AppServices.Profiles;
 using AppServices.Services;
 using AutoMapper;
 using DomainModels.Models;

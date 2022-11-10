@@ -94,18 +94,18 @@ public class CustomerServiceTests
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default)).ReturnsAsync(customerTest);
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default)).ReturnsAsync(customerTest);
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Remove(customerTest));
 
         // Action
         await _customerService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().Remove(It.IsAny<Customer>()), Times.Once);
     }
 
@@ -159,9 +159,9 @@ public class CustomerServiceTests
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
 
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
             .ReturnsAsync(customerTest);
 
         // Action
@@ -169,18 +169,18 @@ public class CustomerServiceTests
 
         // Arrange
         result.Should().NotBeNull();
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
     }
 
     [Fact]
     public async void Should_NotGetCustomerByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>())).Returns(It.IsAny<IQuery<Customer>>());
-        _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
             .ReturnsAsync(It.IsAny<Customer>());
 
         // Action
@@ -188,9 +188,9 @@ public class CustomerServiceTests
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()), Times.Once);
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>().SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
     }
 
     [Fact]

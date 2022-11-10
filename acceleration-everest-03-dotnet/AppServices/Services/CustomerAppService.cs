@@ -32,7 +32,7 @@ public class CustomerAppService : ICustomerAppService
         _customerBankInfoAppService.Create(newCustomerId);
 
         return newCustomerId;
-    }   
+    }
 
     public async Task DeleteAsync(long customerId)
     {
