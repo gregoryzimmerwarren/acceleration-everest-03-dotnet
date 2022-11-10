@@ -1,20 +1,27 @@
 ﻿using AppServices.Validators.Create;
 using FluentAssertions;
+using FluentValidation.TestHelper;
 using UnitTests.Fixtures.Portfolios;
 
 namespace UnitTests.Validators.Create;
 
 public class CreatePortfolioValidatorTests
 {
+    private readonly CreatePortfolioValidator _validCreatePortfolio;
+
+    public CreatePortfolioValidatorTests()
+    {
+        _validCreatePortfolio = new CreatePortfolioValidator();
+    }
+
     [Fact]
     public void Should_CreatePortfolio_Valid_Successfully()
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
-        var validCreatePortfolio = new CreatePortfolioValidator();
 
         // Action
-        var result = validCreatePortfolio.Validate(createPortfolioTest);
+        var result = _validCreatePortfolio.Validate(createPortfolioTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -25,14 +32,13 @@ public class CreatePortfolioValidatorTests
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
-        createPortfolioTest.Name = "";
-        var validCreatePortfolio = new CreatePortfolioValidator();
+        createPortfolioTest.Name = string.Empty;
 
         // Action
-        var result = validCreatePortfolio.Validate(createPortfolioTest);
+        var result = _validCreatePortfolio.TestValidate(createPortfolioTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createPortfolio => createPortfolio.Name);
     }
 
     [Fact]
@@ -40,14 +46,13 @@ public class CreatePortfolioValidatorTests
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
-        createPortfolioTest.Description = "";
-        var validCreatePortfolio = new CreatePortfolioValidator();
+        createPortfolioTest.Description = string.Empty;
 
         // Action
-        var result = validCreatePortfolio.Validate(createPortfolioTest);
+        var result = _validCreatePortfolio.TestValidate(createPortfolioTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createPortfolio => createPortfolio.Description);
     }
 
     [Fact]
@@ -56,13 +61,12 @@ public class CreatePortfolioValidatorTests
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
         createPortfolioTest.Description = "Test";
-        var validCreatePortfolio = new CreatePortfolioValidator();
 
         // Action
-        var result = validCreatePortfolio.Validate(createPortfolioTest);
+        var result = _validCreatePortfolio.TestValidate(createPortfolioTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createPortfolio => createPortfolio.Description);
     }
 
     [Fact]
@@ -71,12 +75,11 @@ public class CreatePortfolioValidatorTests
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
         createPortfolioTest.CustomerId = 0;
-        var validCreatePortfolio = new CreatePortfolioValidator();
 
         // Action
-        var result = validCreatePortfolio.Validate(createPortfolioTest);
+        var result = _validCreatePortfolio.TestValidate(createPortfolioTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createPortfolio => createPortfolio.CustomerId);
     }
 }

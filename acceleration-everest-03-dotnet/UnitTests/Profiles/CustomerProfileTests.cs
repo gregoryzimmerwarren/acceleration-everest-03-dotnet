@@ -30,8 +30,11 @@ public class CustomerProfileTests : CustomerProfile
     {
         // Arrange
         var customerBankInfoResultForCustomerDtosTest = CustomerBankInfoResultForCustomerDtosFixture.GenerateCustomerBankInfoResultForCustomerDtosFixture();
+
         var portfolioResultForOthersDtosTest = PortfolioResultForOthersDtosFixture.GenerateListPortfolioResultForOthersDtosFixture(2);
+
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         var customerResultTest = new CustomerResult(
             id: customerTest.Id,
             fullName: customerTest.FullName,
@@ -45,7 +48,9 @@ public class CustomerProfileTests : CustomerProfile
 
         // Action
         var result = _mapper.Map<CustomerResult>(customerTest);
+
         result.CustomerBankInfo = customerBankInfoResultForCustomerDtosTest;
+
         result.Portfolios = portfolioResultForOthersDtosTest;
 
         // Assert
@@ -57,6 +62,7 @@ public class CustomerProfileTests : CustomerProfile
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         var customerResultTest = new CustomerResultForOtherDtos(
             id: customerTest.Id,
             fullName: customerTest.FullName,
@@ -78,6 +84,7 @@ public class CustomerProfileTests : CustomerProfile
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
+
         var customerTest = new Customer(
             fullName: createCustomerTest.FullName,
             email: createCustomerTest.Email,
@@ -104,6 +111,7 @@ public class CustomerProfileTests : CustomerProfile
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
+
         var customerTest = new Customer(
             fullName: updateCustomerTest.FullName,
             email: updateCustomerTest.Email,

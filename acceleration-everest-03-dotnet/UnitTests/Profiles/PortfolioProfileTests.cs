@@ -29,8 +29,11 @@ public class PortfolioProfileTests : PortfolioProfile
     {
         // Arrange
         var customerResultForOtherDtosTest = CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture();
+
         var listOrderResultForOtherDtosTest = OrderResultOtherDtosFixture.GenerateListOrderResultOtherDtosFixture(2);
+
         var porfolioTest = PortfolioFixture.GeneratePortfolioFixture();
+
         var portfolioResultTest = new PortfolioResult(
             id: porfolioTest.Id,
             name: porfolioTest.Name,
@@ -42,7 +45,9 @@ public class PortfolioProfileTests : PortfolioProfile
 
         // Action
         var result = _mapper.Map<PortfolioResult>(porfolioTest);
+
         result.Customer = customerResultForOtherDtosTest;
+
         result.Orders = listOrderResultForOtherDtosTest;
 
         // Assert
@@ -54,6 +59,7 @@ public class PortfolioProfileTests : PortfolioProfile
     {
         // Arrange
         var porfolioTest = PortfolioFixture.GeneratePortfolioFixture();
+
         var portfolioResultForOtherDtosTest = new PortfolioResultForOthersDtos(
             id: porfolioTest.Id,
             name: porfolioTest.Name,
@@ -71,6 +77,7 @@ public class PortfolioProfileTests : PortfolioProfile
     {
         // Arrange
         var createPorfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
+
         var portfolioTest = new Portfolio(
             name: createPorfolioTest.Name,
             description: createPorfolioTest.Description,

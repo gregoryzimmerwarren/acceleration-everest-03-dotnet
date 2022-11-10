@@ -1,21 +1,27 @@
 ﻿using AppServices.Validators.Create;
 using FluentAssertions;
-using System;
+using FluentValidation.TestHelper;
 using UnitTests.Fixtures.Customers;
 
 namespace UnitTests.Validators.Create;
 
 public class CreateCustomerValidatorTests
 {
+    private readonly CreateCustomerValidator _validCreateCustomer;
+
+    public CreateCustomerValidatorTests()
+    {
+        _validCreateCustomer = new CreateCustomerValidator();
+    }
+
     [Fact]
     public void Should_CreateCustomer_Valid_Successfully()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.Validate(createCustomerTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -26,14 +32,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.FullName = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.FullName = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.FullName);
     }
 
     [Fact]
@@ -42,13 +47,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.FullName = "Ruth";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.FullName);
     }
 
     [Fact]
@@ -56,14 +60,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.Email = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.Email = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Email);
     }
 
     [Fact]
@@ -71,14 +74,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.Email = "wrongemail.com";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.Email = "wrongEmail.com";
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Email);
     }
 
     [Fact]
@@ -87,13 +89,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.EmailConfirmation = "other@email.com";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer);
     }
 
     [Fact]
@@ -101,14 +102,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.Cpf = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.Cpf = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cpf);
     }
 
     [Fact]
@@ -117,13 +117,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Cpf = "085";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cpf);
     }
 
     [Fact]
@@ -132,13 +131,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Cpf = "11111111111";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cpf);
     }
 
     [Fact]
@@ -146,14 +144,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.Cellphone = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.Cellphone = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cellphone);
     }
 
     [Fact]
@@ -162,13 +159,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Cellphone = "(47)99999-99999";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cellphone);
     }
 
     [Fact]
@@ -177,13 +173,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Cellphone = "(47)999-9999";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cellphone);
     }
 
     [Fact]
@@ -192,13 +187,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Cellphone = "(47)89999-9999";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cellphone);
     }
 
     [Fact]
@@ -207,13 +201,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Cellphone = "(47)9a999-9999";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Cellphone);
     }
 
     [Fact]
@@ -221,14 +214,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.Country = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.Country = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Country);
     }
 
     [Fact]
@@ -237,13 +229,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Country = "Ab";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Country);
     }
 
     [Fact]
@@ -251,14 +242,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.City = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.City = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.City);
     }
 
     [Fact]
@@ -266,14 +256,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.Address = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.Address = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Address);
     }
 
     [Fact]
@@ -282,13 +271,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.Address = "Rua";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.Address);
     }
 
     [Fact]
@@ -296,14 +284,13 @@ public class CreateCustomerValidatorTests
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
-        createCustomerTest.PostalCode = "";
-        var validCreateCustomer = new CreateCustomerValidator();
+        createCustomerTest.PostalCode = string.Empty;
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.PostalCode);
     }
 
     [Fact]
@@ -312,13 +299,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.PostalCode = "11111-1111";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.PostalCode);
     }
 
     [Fact]
@@ -327,13 +313,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.PostalCode = "111-11";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.PostalCode);
     }
 
     [Fact]
@@ -342,13 +327,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.PostalCode = "1a111-111";
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.PostalCode);
     }
 
     [Fact]
@@ -357,13 +341,12 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.DateOfBirth = DateTime.Now.AddYears(-10);
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.DateOfBirth);
     }
 
     [Fact]
@@ -372,12 +355,11 @@ public class CreateCustomerValidatorTests
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
         createCustomerTest.DateOfBirth = DateTime.Now.AddDays(1).AddYears(-18);
-        var validCreateCustomer = new CreateCustomerValidator();
 
         // Action
-        var result = validCreateCustomer.Validate(createCustomerTest);
+        var result = _validCreateCustomer.TestValidate(createCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createCustomer => createCustomer.DateOfBirth);
     }
 }

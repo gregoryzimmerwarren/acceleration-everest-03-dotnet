@@ -72,47 +72,56 @@ public class CustomerBankInfoAppServiceTests
     {
         // Arrange
         var listCustomerBankInfoResultTest = CustomerBankInfoResultFixture.GenerateListCustomerBankInfoResultFixture(3);
+
         var listCustomerBankInfoTest = CustomerBankInfoFixture.GenerateListCustomerBankInfoFixture(3);
 
-        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetAllCustomersBankInfoAsync()).ReturnsAsync(listCustomerBankInfoTest);
+        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetAllCustomersBankInfoAsync())
+            .ReturnsAsync(listCustomerBankInfoTest);
+
         _mapper.Map<IEnumerable<CustomerBankInfoResult>>(listCustomerBankInfoTest);
 
         // Action
-        await _customerBankInfoAppService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
+        var result = await _customerBankInfoAppService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
 
         // Assert
+        result.Should().HaveCountGreaterThanOrEqualTo(3);
+
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetAllCustomersBankInfoAsync(), Times.Once);
     }
-
 
     [Fact]
     public async void Should_GetAccountBalanceByCustomerIdAsync_Successfully()
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
-        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
+        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(customerTest.Id))
+            .ReturnsAsync(customerBankInfoTest.AccountBalance);
 
         // Action
-        var result = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _customerBankInfoAppService.GetAccountBalanceByCustomerIdAsync(customerTest.Id).ConfigureAwait(false);
 
         // Assert
-        result.Should().BeGreaterThanOrEqualTo(0);
-        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>()), Times.Once);
+        result.Should().Be(customerBankInfoTest.AccountBalance);
+
+        _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.GetAccountBalanceByCustomerIdAsync(customerTest.Id), Times.Once);
     }
 
     [Fact]
     public async void Should_WithdrawCustomerBankInfoAsync_Successfully()
     {
         // Arrage
-        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.WithdrawAsync(It.IsAny<long>(), It.IsAny<decimal>())).ReturnsAsync(true);
+        _mockCustomerBankInfoService.Setup(customerBankInfoService => customerBankInfoService.WithdrawAsync(It.IsAny<long>(), It.IsAny<decimal>()))
+            .ReturnsAsync(true);
 
         // Action
         var result = await _customerBankInfoAppService.WithdrawAsync(It.IsAny<long>(), It.IsAny<decimal>()).ConfigureAwait(false);
 
         // Assert
         result.Should().BeTrue();
+
         _mockCustomerBankInfoService.Verify(customerBankInfoService => customerBankInfoService.WithdrawAsync(It.IsAny<long>(), It.IsAny<decimal>()), Times.Once);
     }
 }

@@ -1,21 +1,27 @@
 ﻿using AppServices.Validators.Create;
 using FluentAssertions;
-using System;
+using FluentValidation.TestHelper;
 using UnitTests.Fixtures.Products;
 
 namespace UnitTests.Validators.Create;
 
 public class CreateProductValidatorTests
 {
+    private readonly CreateProductValidator _validCreateProduct;
+
+    public CreateProductValidatorTests()
+    {
+        _validCreateProduct = new CreateProductValidator();
+    }
+
     [Fact]
     public void Should_CreateProduct_Valid_Successfully()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        var validCreateProduct = new CreateProductValidator();
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.Validate(createProductTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -26,14 +32,13 @@ public class CreateProductValidatorTests
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        createProductTest.Symbol = "";
-        var validCreateProduct = new CreateProductValidator();
+        createProductTest.Symbol = string.Empty;
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.TestValidate(createProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createProduct => createProduct.Symbol);
     }
 
     [Fact]
@@ -42,13 +47,12 @@ public class CreateProductValidatorTests
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
         createProductTest.Symbol = "ab";
-        var validCreateProduct = new CreateProductValidator();
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.TestValidate(createProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createProduct => createProduct.Symbol);
     }
 
     [Fact]
@@ -57,13 +61,12 @@ public class CreateProductValidatorTests
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
         createProductTest.UnitPrice = 0;
-        var validCreateProduct = new CreateProductValidator();
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.TestValidate(createProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createProduct => createProduct.UnitPrice);
     }
 
     [Fact]
@@ -72,13 +75,12 @@ public class CreateProductValidatorTests
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
         createProductTest.ExpirationAt = DateTime.Now.AddDays(-1);
-        var validCreateProduct = new CreateProductValidator();
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.TestValidate(createProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createProduct => createProduct.ExpirationAt);
     }
 
     [Fact]
@@ -87,13 +89,12 @@ public class CreateProductValidatorTests
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
         createProductTest.Type = 0;
-        var validCreateProduct = new CreateProductValidator();
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.TestValidate(createProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createProduct => createProduct.Type);
     }
 
     [Fact]
@@ -102,12 +103,11 @@ public class CreateProductValidatorTests
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
         createProductTest.Type = 6;
-        var validCreateProduct = new CreateProductValidator();
 
         // Action
-        var result = validCreateProduct.Validate(createProductTest);
+        var result = _validCreateProduct.TestValidate(createProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createProduct => createProduct.Type);
     }
 }

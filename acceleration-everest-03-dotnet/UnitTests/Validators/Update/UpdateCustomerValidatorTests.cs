@@ -1,21 +1,27 @@
 ﻿using AppServices.Validators.Update;
 using FluentAssertions;
-using System;
+using FluentValidation.TestHelper;
 using UnitTests.Fixtures.Customers;
 
 namespace UnitTests.Validators.Update;
 
 public class UpdateCustomerValidatorTests
 {
+    private readonly UpdateCustomerValidator _validUpdateCustomer;
+
+    public UpdateCustomerValidatorTests()
+    {
+        _validUpdateCustomer = new UpdateCustomerValidator();
+    }
+
     [Fact]
     public void Should_UpdateCustomer_Valid_Successfully()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.Validate(updateCustomerTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -26,14 +32,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.FullName = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.FullName = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.FullName);
     }
 
     [Fact]
@@ -42,13 +47,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.FullName = "Ruth";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.FullName);
     }
 
     [Fact]
@@ -56,14 +60,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.Email = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.Email = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Email);
     }
 
     [Fact]
@@ -72,13 +75,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Email = "wrongemail.com";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Email);
     }
 
     [Fact]
@@ -87,13 +89,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.EmailConfirmation = "other@email.com";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer);
     }
 
     [Fact]
@@ -101,14 +102,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.Cpf = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.Cpf = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cpf);
     }
 
     [Fact]
@@ -117,13 +117,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Cpf = "085";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cpf);
     }
 
     [Fact]
@@ -132,13 +131,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Cpf = "11111111111";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cpf);
     }
 
     [Fact]
@@ -146,14 +144,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.Cellphone = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.Cellphone = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cellphone);
     }
 
     [Fact]
@@ -162,13 +159,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Cellphone = "(47)99999-99999";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cellphone);
     }
 
     [Fact]
@@ -177,13 +173,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Cellphone = "(47)999-9999";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cellphone);
     }
 
     [Fact]
@@ -192,13 +187,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Cellphone = "(47)89999-9999";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cellphone);
     }
 
     [Fact]
@@ -207,13 +201,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Cellphone = "(47)9a999-9999";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Cellphone);
     }
 
     [Fact]
@@ -221,14 +214,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.Country = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.Country = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Country);
     }
 
     [Fact]
@@ -237,13 +229,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Country = "Ab";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Country);
     }
 
     [Fact]
@@ -251,14 +242,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.City = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.City = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.City);
     }
 
     [Fact]
@@ -266,14 +256,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.Address = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.Address = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Address);
     }
 
     [Fact]
@@ -282,13 +271,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.Address = "Rua";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.Address);
     }
 
     [Fact]
@@ -296,14 +284,13 @@ public class UpdateCustomerValidatorTests
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
-        updateCustomerTest.PostalCode = "";
-        var validUpdateCustomer = new UpdateCustomerValidator();
+        updateCustomerTest.PostalCode = string.Empty;
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.PostalCode);
     }
 
     [Fact]
@@ -312,13 +299,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.PostalCode = "11111-1111";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.PostalCode);
     }
 
     [Fact]
@@ -327,13 +313,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.PostalCode = "111-11";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.PostalCode);
     }
 
     [Fact]
@@ -342,13 +327,12 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.PostalCode = "1a111-111";
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.PostalCode);
     }
 
     [Fact]
@@ -357,12 +341,11 @@ public class UpdateCustomerValidatorTests
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
         updateCustomerTest.DateOfBirth = DateTime.Now.AddYears(-10);
-        var validUpdateCustomer = new UpdateCustomerValidator();
 
         // Action
-        var result = validUpdateCustomer.Validate(updateCustomerTest);
+        var result = _validUpdateCustomer.TestValidate(updateCustomerTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateCustomer => updateCustomer.DateOfBirth);
     }
 }

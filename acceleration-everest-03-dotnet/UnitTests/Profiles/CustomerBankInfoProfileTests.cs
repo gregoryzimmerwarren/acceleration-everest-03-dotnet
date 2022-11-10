@@ -27,14 +27,17 @@ public class CustomerBankInfoProfileTests : CustomerBankInfoProfile
     {
         // Arrange
         var customerResultForOtherDtosTest = CustomerResultForOtherDtosFixture.GenerateCustomerResultForOtherDtosFixture();
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
+
         var customerBankInfoResultTest = new CustomerBankInfoResult(
             id: customerBankInfoTest.Id,
             accountBalance: customerBankInfoTest.AccountBalance,
             customer: customerResultForOtherDtosTest);
-
+        
         // Action
         var result = _mapper.Map<CustomerBankInfoResult>(customerBankInfoTest);
+
         result.Customer = customerResultForOtherDtosTest;
 
         // Assert
@@ -46,6 +49,7 @@ public class CustomerBankInfoProfileTests : CustomerBankInfoProfile
     {
         // Arrange
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
+
         var customerBankInfoResultForCustomerDtosTest = new CustomerBankInfoResultForCustomerDtos(
             id: customerBankInfoTest.Id,
             accountBalance: customerBankInfoTest.AccountBalance);

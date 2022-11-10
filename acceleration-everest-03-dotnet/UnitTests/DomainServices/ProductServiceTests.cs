@@ -36,6 +36,7 @@ public class ProductServiceTests
 
         // Arrange
         result.Should().Be(1);
+
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Product>().Add(It.IsAny<Product>()), Times.Once);
     }
 
@@ -45,17 +46,26 @@ public class ProductServiceTests
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<Product, bool>>>())).Returns(It.IsAny<IQuery<Product>>());
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(productTest);
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()))
+            .Returns(It.IsAny<IQuery<Product>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default))
+            .ReturnsAsync(productTest);
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Product>().Remove(productTest));
 
         // Action
         await _productService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
+
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Product>().Remove(It.IsAny<Product>()), Times.Once);
     }
 
@@ -65,17 +75,24 @@ public class ProductServiceTests
         // Arrange
         var listProductTest = ProductFixture.GenerateListProductFixture(3);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery()).Returns(It.IsAny<IMultipleResultQuery<Product>>());
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery())
+            .Returns(It.IsAny<IMultipleResultQuery<Product>>());
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default)).ReturnsAsync(listProductTest);
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default))
+            .ReturnsAsync(listProductTest);
 
         // Action
         var result = await _productService.GetAllProductsAsync().ConfigureAwait(false);
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery(), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .MultipleResultQuery(), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default), Times.Once);
     }
 
     [Fact]
@@ -84,17 +101,24 @@ public class ProductServiceTests
         // Arrange
         var listProductTest = ProductFixture.GenerateListProductFixture(0);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery()).Returns(It.IsAny<IMultipleResultQuery<Product>>());
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery())
+            .Returns(It.IsAny<IMultipleResultQuery<Product>>());
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default)).ReturnsAsync(listProductTest);
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default))
+            .ReturnsAsync(listProductTest);
 
         // Action
         var action = () => _productService.GetAllProductsAsync();
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery(), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .MultipleResultQuery(), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default), Times.Once);
     }
 
     [Fact]
@@ -103,17 +127,25 @@ public class ProductServiceTests
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<Product, bool>>>())).Returns(It.IsAny<IQuery<Product>>());
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(productTest);
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()))
+            .Returns(It.IsAny<IQuery<Product>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default))
+            .ReturnsAsync(productTest);
 
         // Action
         var result = await _productService.GetProductByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
     }
 
     [Fact]
@@ -122,18 +154,25 @@ public class ProductServiceTests
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<Product, bool>>>())).Returns(It.IsAny<IQuery<Product>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
-        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(It.IsAny<Product>());
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()))
+            .Returns(It.IsAny<IQuery<Product>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default))
+            .ReturnsAsync(It.IsAny<Product>());
 
         // Action
         var action = () => _productService.GetProductByIdAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
     }
 
     [Fact]
@@ -142,17 +181,25 @@ public class ProductServiceTests
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<Product, bool>>>())).Returns(It.IsAny<IQuery<Product>>());
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(productTest);
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()))
+            .Returns(It.IsAny<IQuery<Product>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default))
+            .ReturnsAsync(productTest);
 
         // Action
         var result = await _productService.GetProductUnitPriceByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Assert
         result.Should().BeGreaterThanOrEqualTo(0);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
     }
 
     [Fact]
@@ -161,18 +208,25 @@ public class ProductServiceTests
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<Product, bool>>>())).Returns(It.IsAny<IQuery<Product>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
-        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default)).ReturnsAsync(It.IsAny<Product>());
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()))
+            .Returns(It.IsAny<IQuery<Product>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default))
+            .ReturnsAsync(It.IsAny<Product>());
 
         // Action
         var action = () => _productService.GetProductUnitPriceByIdAsync(It.IsAny<long>());
 
         // Assert
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>().SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Product>>(), default), Times.Once);
     }
 
     [Fact]

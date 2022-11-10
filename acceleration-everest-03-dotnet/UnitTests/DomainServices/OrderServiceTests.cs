@@ -38,6 +38,7 @@ public class OrderServiceTests
 
         // Arrange
         result.Should().BeGreaterThanOrEqualTo(1);
+
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Order>().Add(It.IsAny<Order>()), Times.Once);
     }
 
@@ -47,18 +48,23 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(3);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var result = await _orderService.GetAllOrdersAsync().ConfigureAwait(false);
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -69,18 +75,23 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var action = () => _orderService.GetAllOrdersAsync();
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery()
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -95,18 +106,25 @@ public class OrderServiceTests
         listorderTest[1].Direction = OrderDirection.Sell;
         listorderTest[1].Quotes = 1;
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var result = await _orderService.GetAvailableQuotes(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
         result.Should().BeGreaterThanOrEqualTo(0);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -117,9 +135,13 @@ public class OrderServiceTests
         // Arrange
         var orderTest = OrderFixture.GenerateOrderFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IQuery<Order>>());
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default))
             .ReturnsAsync(orderTest);
 
         // Action
@@ -127,18 +149,26 @@ public class OrderServiceTests
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default), Times.Once);
     }
 
     [Fact]
     public async void Should_NotGetOrderByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IQuery<Order>>());
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default))
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default))
             .ReturnsAsync(It.IsAny<Order>());
 
         // Action
@@ -146,9 +176,13 @@ public class OrderServiceTests
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SingleOrDefaultAsync(It.IsAny<IQuery<Order>>(), default), Times.Once);
     }
 
     [Fact]
@@ -157,18 +191,25 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(2);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var result = await _orderService.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -179,18 +220,25 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var action = () => _orderService.GetOrderByPorfolioIdAndProductIdAsync(It.IsAny<long>(), It.IsAny<long>());
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -201,18 +249,25 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(3);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var result = await _orderService.GetOrdersByPortfolioIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -223,18 +278,25 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var action = () => _orderService.GetOrdersByPortfolioIdAsync(It.IsAny<long>());
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -245,18 +307,25 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(3);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var result = await _orderService.GetOrdersByProductIdAsync(It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }
@@ -267,18 +336,25 @@ public class OrderServiceTests
         // Arrange
         var listorderTest = OrderFixture.GenerateListOrderFixture(0);
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>())).Returns(It.IsAny<IMultipleResultQuery<Order>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default)).ReturnsAsync(listorderTest);
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
+            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
+        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
+            .ReturnsAsync(listorderTest);
 
         // Action
         var action = () => _orderService.GetOrdersByProductIdAsync(It.IsAny<long>());
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>().MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
+        .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Order, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
         .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
     }

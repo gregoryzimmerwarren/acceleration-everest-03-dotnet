@@ -27,8 +27,11 @@ public class PortfolioProductProfileTests : PortfolioProductProfile
     {
         // Arrange
         var portfolioResultForOthersDtosTest = PortfolioResultForOthersDtosFixture.GeneratePortfolioResultForOthersDtosFixture();
+
         var productResultTest = ProductResultFixture.GenerateProductResultFixture();
+
         var portfolioProductTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
+
         var portfolioProductResultTest = new PortfolioProductResult(
             id: portfolioProductTest.Id,
             portfolio: portfolioResultForOthersDtosTest,
@@ -36,7 +39,9 @@ public class PortfolioProductProfileTests : PortfolioProductProfile
 
         // Action
         var result = _mapper.Map<PortfolioProductResult>(portfolioProductTest);
+
         result.Portfolio = portfolioResultForOthersDtosTest;
+
         result.Product = productResultTest;
 
         // Assert

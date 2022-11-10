@@ -35,15 +35,17 @@ public class ProductAppServiceTests
     {
         // Arrange  
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
+
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockProductService.Setup(productService => productService.Create(It.IsAny<Product>())).Returns(productTest.Id);
+        _mockProductService.Setup(productService => productService.Create(It.IsAny<Product>()))
+            .Returns(productTest.Id);
 
         // Action
         var result = _productAppService.Create(createProductTest);
 
         // Assert
-        result.Should().NotBe(0);
+        result.Should().Be(productTest.Id);
 
         _mockProductService.Verify(productService => productService.Create(It.IsAny<Product>()), Times.Once);
     }
@@ -66,9 +68,12 @@ public class ProductAppServiceTests
     {
         // Arrange        
         var listProductsResultTest = ProductResultFixture.GenerateListProductResultFixture(3);
+
         var listProductTest = ProductFixture.GenerateListProductFixture(3);
 
-        _mockProductService.Setup(productService => productService.GetAllProductsAsync()).ReturnsAsync(listProductTest);
+        _mockProductService.Setup(productService => productService.GetAllProductsAsync())
+            .ReturnsAsync(listProductTest);
+
         _mapper.Map<IEnumerable<ProductResult>>(listProductTest);
 
         // Action
@@ -76,6 +81,7 @@ public class ProductAppServiceTests
 
         // Assert
         result.Should().HaveCountGreaterThanOrEqualTo(3);
+
         _mockProductService.Verify(productService => productService.GetAllProductsAsync(), Times.Once);
     }
 
@@ -85,29 +91,36 @@ public class ProductAppServiceTests
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
 
-        _mockProductService.Setup(productService => productService.GetProductByIdAsync(It.IsAny<long>())).ReturnsAsync(productTest);
+        _mockProductService.Setup(productService => productService.GetProductByIdAsync(productTest.Id))
+            .ReturnsAsync(productTest);
+
         _mapper.Map<ProductResult>(productTest);
 
         // Action
-        var result = await _productAppService.GetProductByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _productAppService.GetProductByIdAsync(productTest.Id).ConfigureAwait(false);
 
         // Assert
         result.Should().NotBeNull();
-        _mockProductService.Verify(productService => productService.GetProductByIdAsync(It.IsAny<long>()), Times.Once);
+
+        _mockProductService.Verify(productService => productService.GetProductByIdAsync(productTest.Id), Times.Once);
     }
 
     [Fact]
-    public void Should_GetProductUnitPriceByIdAsync_Successfully()
+    public async void Should_GetProductUnitPriceByIdAsync_Successfully()
     {
         // Arrange
-        _mockProductService.Setup(productService => productService.GetProductUnitPriceByIdAsync(It.IsAny<long>())).ReturnsAsync(It.IsAny<decimal>());
+        var productTest = ProductFixture.GenerateProductFixture();
+
+        _mockProductService.Setup(productService => productService.GetProductUnitPriceByIdAsync(productTest.Id))
+            .ReturnsAsync(productTest.UnitPrice);
 
         // Action
-        var result = _productAppService.GetProductUnitPriceByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _productAppService.GetProductUnitPriceByIdAsync(productTest.Id).ConfigureAwait(false);
 
         // Assert
-        result.Should().NotBeNull();
-        _mockProductService.Verify(productService => productService.GetProductUnitPriceByIdAsync(It.IsAny<long>()), Times.Once);
+        result.Should().Be(productTest.UnitPrice);
+
+        _mockProductService.Verify(productService => productService.GetProductUnitPriceByIdAsync(productTest.Id), Times.Once);
     }
 
     [Fact]
@@ -115,6 +128,7 @@ public class ProductAppServiceTests
     {
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
+
         var productTest = ProductFixture.GenerateProductFixture();
 
         _mockProductService.Setup(productService => productService.Update(It.IsAny<Product>()));

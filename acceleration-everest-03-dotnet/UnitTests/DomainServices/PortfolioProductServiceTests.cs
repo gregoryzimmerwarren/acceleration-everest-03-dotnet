@@ -45,19 +45,28 @@ public class PortfolioProductServiceTests
         // Arrange        
         var portfolioProductBankInfoTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>())).Returns(It.IsAny<IQuery<PortfolioProduct>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
-        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default)).ReturnsAsync(portfolioProductBankInfoTest);
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()))
+            .Returns(It.IsAny<IQuery<PortfolioProduct>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default))
+            .ReturnsAsync(portfolioProductBankInfoTest);
+
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<PortfolioProduct>().Remove(It.IsAny<PortfolioProduct>()));
 
         // Action
         await _portfolioProductService.DeleteAsync(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>()).Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);
+
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<PortfolioProduct>().Remove(It.IsAny<PortfolioProduct>()), Times.Once);
     }
 
@@ -67,37 +76,53 @@ public class PortfolioProductServiceTests
         // Arrange        
         var portfolioProductBankInfoTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
 
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>())).Returns(It.IsAny<IQuery<PortfolioProduct>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
-        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default)).ReturnsAsync(portfolioProductBankInfoTest);
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()))
+            .Returns(It.IsAny<IQuery<PortfolioProduct>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default))
+            .ReturnsAsync(portfolioProductBankInfoTest);
 
         // Action
         var result = await _portfolioProductService.GetPortfolioProductByIdsAsync(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
 
         // Arrange
         result.Should().NotBeNull();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>()).Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);
     }
 
     [Fact]
     public async void Should_NotGetPortfolioProductByIdsAsync__Throwing_ArgumentNullException()
     {
         // Arrange        
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>())).Returns(It.IsAny<IQuery<PortfolioProduct>>());
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
-        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default)).ReturnsAsync(It.IsAny<PortfolioProduct>());
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()))
+            .Returns(It.IsAny<IQuery<PortfolioProduct>>());
+
+        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default))
+            .ReturnsAsync(It.IsAny<PortfolioProduct>());
 
         // Action
         var action = () => _portfolioProductService.GetPortfolioProductByIdsAsync(It.IsAny<long>(), It.IsAny<long>());
 
         // Arrange
         await action.Should().ThrowAsync<ArgumentNullException>();
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().SingleResultQuery()
-        .AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>()).Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>().FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
+        .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
+        .FirstOrDefaultAsync(It.IsAny<IQuery<PortfolioProduct>>(), default), Times.Once);
     }
 }

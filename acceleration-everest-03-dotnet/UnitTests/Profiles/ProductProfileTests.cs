@@ -28,6 +28,7 @@ public class ProductProfileTests : ProductProfile
     {
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
+
         var productResultTest = new ProductResult(
             id: productTest.Id,
             symbol: productTest.Symbol,
@@ -48,6 +49,7 @@ public class ProductProfileTests : ProductProfile
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
+
         var productResultTest = new Product(
             symbol: createProductTest.Symbol,
             unitPrice: createProductTest.UnitPrice,
@@ -67,6 +69,7 @@ public class ProductProfileTests : ProductProfile
     {
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
+
         var productResultTest = new Product(
             symbol: updateProductTest.Symbol,
             unitPrice: updateProductTest.UnitPrice,

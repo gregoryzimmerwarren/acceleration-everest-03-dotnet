@@ -1,12 +1,19 @@
 ﻿using AppServices.Validators.Update;
 using FluentAssertions;
-using System;
+using FluentValidation.TestHelper;
 using UnitTests.Fixtures.Orders;
 
 namespace UnitTests.Validators.Update;
 
 public class UpdateOrderValidatorTests
 {
+    private readonly UpdateOrderValidator _validUpdateOrder;
+
+    public UpdateOrderValidatorTests()
+    {
+        _validUpdateOrder = new UpdateOrderValidator();
+    }
+
     [Fact]
     public void Should_UpdateOrder_Valid_Successfully()
     {
@@ -14,10 +21,8 @@ public class UpdateOrderValidatorTests
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         updateOrderTest.UnitPrice = 1;
 
-        var validUpdateOrder = new UpdateOrderValidator();
-
         // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
+        var result = _validUpdateOrder.Validate(updateOrderTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -29,15 +34,13 @@ public class UpdateOrderValidatorTests
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         updateOrderTest.UnitPrice = 1;
-
         updateOrderTest.Quotes = 0;
-        var validUpdateOrder = new UpdateOrderValidator();
 
         // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
+        var result = _validUpdateOrder.TestValidate(updateOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateOrder => updateOrder.Quotes);
     }
 
     [Fact]
@@ -47,13 +50,11 @@ public class UpdateOrderValidatorTests
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         updateOrderTest.UnitPrice = 0;
 
-        var validUpdateOrder = new UpdateOrderValidator();
-
         // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
+        var result = _validUpdateOrder.TestValidate(updateOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateOrder => updateOrder.UnitPrice);
     }
 
     [Fact]
@@ -62,15 +63,13 @@ public class UpdateOrderValidatorTests
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         updateOrderTest.UnitPrice = 1;
-
         updateOrderTest.LiquidatedAt = DateTime.Now.AddDays(-1);
-        var validUpdateOrder = new UpdateOrderValidator();
 
         // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
+        var result = _validUpdateOrder.TestValidate(updateOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateOrder => updateOrder.LiquidatedAt);
     }
 
     [Fact]
@@ -80,13 +79,12 @@ public class UpdateOrderValidatorTests
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         updateOrderTest.UnitPrice = 1;
         updateOrderTest.PortfolioId = 0;
-        var validUpdateOrder = new UpdateOrderValidator();
 
         // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
+        var result = _validUpdateOrder.TestValidate(updateOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateOrder => updateOrder.PortfolioId);
     }
 
     [Fact]
@@ -96,12 +94,11 @@ public class UpdateOrderValidatorTests
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
         updateOrderTest.UnitPrice = 1;
         updateOrderTest.ProductId = 0;
-        var validUpdateOrder = new UpdateOrderValidator();
 
         // Action
-        var result = validUpdateOrder.Validate(updateOrderTest);
+        var result = _validUpdateOrder.TestValidate(updateOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateOrder => updateOrder.ProductId);
     }
 }

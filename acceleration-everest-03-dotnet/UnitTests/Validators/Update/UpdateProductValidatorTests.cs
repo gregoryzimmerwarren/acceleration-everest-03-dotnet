@@ -1,21 +1,27 @@
 ﻿using AppServices.Validators.Update;
 using FluentAssertions;
-using System;
+using FluentValidation.TestHelper;
 using UnitTests.Fixtures.Products;
 
 namespace UnitTests.Validators.Update;
 
 public class UpdateProductValidatorTests
 {
+    private readonly UpdateProductValidator _validUpdateProduct;
+
+    public UpdateProductValidatorTests()
+    {
+        _validUpdateProduct = new UpdateProductValidator();
+    }
+
     [Fact]
     public void Should_UpdateProduct_Valid_Successfully()
     {
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
-        var validUpdateProduct = new UpdateProductValidator();
 
         // Action
-        var result = validUpdateProduct.Validate(updateProductTest);
+        var result = _validUpdateProduct.Validate(updateProductTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -26,14 +32,13 @@ public class UpdateProductValidatorTests
     {
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
-        updateProductTest.Symbol = "";
-        var validUpdateProduct = new UpdateProductValidator();
+        updateProductTest.Symbol = string.Empty;
 
         // Action
-        var result = validUpdateProduct.Validate(updateProductTest);
+        var result = _validUpdateProduct.TestValidate(updateProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.Symbol);
     }
 
     [Fact]
@@ -42,13 +47,12 @@ public class UpdateProductValidatorTests
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
         updateProductTest.Symbol = "ab";
-        var validUpdateProduct = new UpdateProductValidator();
 
         // Action
-        var result = validUpdateProduct.Validate(updateProductTest);
+        var result = _validUpdateProduct.TestValidate(updateProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.Symbol);
     }
 
     [Fact]
@@ -57,13 +61,12 @@ public class UpdateProductValidatorTests
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
         updateProductTest.UnitPrice = 0;
-        var validUpdateProduct = new UpdateProductValidator();
 
         // Action
-        var result = validUpdateProduct.Validate(updateProductTest);
+        var result = _validUpdateProduct.TestValidate(updateProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.UnitPrice);
     }
 
     [Fact]
@@ -72,12 +75,11 @@ public class UpdateProductValidatorTests
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
         updateProductTest.ExpirationAt = DateTime.Now.AddDays(-1);
-        var validUpdateProduct = new UpdateProductValidator();
 
         // Action
-        var result = validUpdateProduct.Validate(updateProductTest);
+        var result = _validUpdateProduct.TestValidate(updateProductTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.ExpirationAt);
     }
 }

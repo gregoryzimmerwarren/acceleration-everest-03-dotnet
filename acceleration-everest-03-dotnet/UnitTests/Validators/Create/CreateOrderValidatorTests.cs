@@ -1,13 +1,20 @@
 ﻿using AppServices.Validators.Create;
 using FluentAssertions;
+using FluentValidation.TestHelper;
 using Infrastructure.CrossCutting.Enums;
-using System;
 using UnitTests.Fixtures.Orders;
 
 namespace UnitTests.Validators.Create;
 
 public class CreateOrderValidatorTests
 {
+    private readonly CreateOrderValidator _validCreateOrder;
+
+    public CreateOrderValidatorTests()
+    {
+        _validCreateOrder = new CreateOrderValidator();
+    }
+
     [Fact]
     public void Should_CreateOrder_Valid_Successfully()
     {
@@ -15,10 +22,9 @@ public class CreateOrderValidatorTests
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         createOrderTest.UnitPrice = 1;
         createOrderTest.Direction = OrderDirection.Buy;
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.Validate(createOrderTest);
 
         // Assert
         result.IsValid.Should().BeTrue();
@@ -32,13 +38,12 @@ public class CreateOrderValidatorTests
         createOrderTest.UnitPrice = 1;
         createOrderTest.Direction = OrderDirection.Buy;
         createOrderTest.Quotes = 0;
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.TestValidate(createOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createOrder => createOrder.Quotes);
     }
 
     [Fact]
@@ -48,13 +53,12 @@ public class CreateOrderValidatorTests
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         createOrderTest.UnitPrice = 0;
         createOrderTest.Direction = OrderDirection.Buy;
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.TestValidate(createOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createOrder => createOrder.UnitPrice);
     }
 
     [Fact]
@@ -65,13 +69,12 @@ public class CreateOrderValidatorTests
         createOrderTest.UnitPrice = 1;
         createOrderTest.Direction = OrderDirection.Buy;
         createOrderTest.LiquidatedAt = DateTime.Now.AddDays(-1);
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.TestValidate(createOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createOrder => createOrder.LiquidatedAt);
     }
 
     [Fact]
@@ -81,13 +84,12 @@ public class CreateOrderValidatorTests
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
         createOrderTest.UnitPrice = 1;
         createOrderTest.Direction = 0;
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.TestValidate(createOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createOrder => createOrder.Direction);
     }
 
     [Fact]
@@ -98,13 +100,12 @@ public class CreateOrderValidatorTests
         createOrderTest.UnitPrice = 1;
         createOrderTest.Direction = OrderDirection.Sell;
         createOrderTest.PortfolioId = 0;
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.TestValidate(createOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createOrder => createOrder.PortfolioId);
     }
 
     [Fact]
@@ -115,12 +116,11 @@ public class CreateOrderValidatorTests
         createOrderTest.UnitPrice = 1;
         createOrderTest.Direction = OrderDirection.Sell;
         createOrderTest.ProductId = 0;
-        var validCreateOrder = new CreateOrderValidator();
 
         // Action
-        var result = validCreateOrder.Validate(createOrderTest);
+        var result = _validCreateOrder.TestValidate(createOrderTest);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.ShouldHaveValidationErrorFor(createOrder => createOrder.ProductId);
     }
 }

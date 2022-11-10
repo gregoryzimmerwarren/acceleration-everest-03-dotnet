@@ -31,8 +31,11 @@ public class OrderProfileTests : OrderProfile
     {
         // Arrange
         var portfolioResultForOthersDtosTest = PortfolioResultForOthersDtosFixture.GeneratePortfolioResultForOthersDtosFixture();
+
         var productResultTest = ProductResultFixture.GenerateProductResultFixture();
+
         var orderTest = OrderFixture.GenerateOrderFixture();
+
         var orderResultTest = new OrderResult(
             id: orderTest.Id,
             quotes: orderTest.Quotes,
@@ -46,7 +49,9 @@ public class OrderProfileTests : OrderProfile
 
         // Action
         var result = _mapper.Map<OrderResult>(orderTest);
+
         result.Portfolio = portfolioResultForOthersDtosTest;
+
         result.Product = productResultTest;
 
         // Assert
@@ -58,7 +63,9 @@ public class OrderProfileTests : OrderProfile
     {
         // Arrange
         var productResultTest = ProductResultFixture.GenerateProductResultFixture();
+
         var orderTest = OrderFixture.GenerateOrderFixture();
+
         var orderResultTest = new OrderResultForOtherDtos(
             id: orderTest.Id,
             quotes: orderTest.Quotes,
@@ -71,6 +78,7 @@ public class OrderProfileTests : OrderProfile
 
         // Action
         var result = _mapper.Map<OrderResultForOtherDtos>(orderTest);
+
         result.Product = productResultTest;
 
         // Assert
@@ -82,6 +90,7 @@ public class OrderProfileTests : OrderProfile
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
+
         var orderTest = new Order(
             quotes: createOrderTest.Quotes,
             unitPrice: createOrderTest.UnitPrice,
@@ -103,6 +112,7 @@ public class OrderProfileTests : OrderProfile
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
+
         var orderTest = new Order(
             quotes: updateOrderTest.Quotes,
             unitPrice: updateOrderTest.UnitPrice,
@@ -114,7 +124,9 @@ public class OrderProfileTests : OrderProfile
 
         // Action
         var result = _mapper.Map<Order>(updateOrderTest);
+
         result.NetValue = result.UnitPrice * result.Quotes;
+
         result.Id = 0;
 
         // Assert
