@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using System.Linq.Expressions;
 using UnitTests.Fixtures.Customers;
+using Z.Expressions;
 
 namespace UnitTests.DomainServices;
 
@@ -40,7 +41,7 @@ public class CustomerServiceTests
         var result = await _customerService.CreateAsync(customerTest).ConfigureAwait(false);
 
         // Arrange
-        result.Should().BeGreaterThanOrEqualTo(1);
+        result.Should().Be(1);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default), Times.Exactly(2));
@@ -49,7 +50,7 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void Should_NotCreateAsync_Throwing_ArgumentException_When_EmailAlreadyExist()
+    public async void ShouldNot_CreateAsync_Throwing_ArgumentException_When_EmailAlreadyExist()
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
@@ -70,9 +71,10 @@ public class CustomerServiceTests
         var action = () => _customerService.CreateAsync(customerTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Email: {customerTest.Email} is already registered for Id: {customerTest.Id}");
+
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default), Times.Once);
+        .AnyAsync(customer => customer.Email == customerTest.Email && customer.Id != customerTest.Id, default), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
@@ -82,7 +84,7 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void Should_NotCreateAsync_Throwing_ArgumentException_When_CpfAlreadyExist()
+    public async void ShouldNot_CreateAsync_Throwing_ArgumentException_When_CpfAlreadyExist()
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
@@ -107,10 +109,13 @@ public class CustomerServiceTests
         var action = () => _customerService.CreateAsync(customerTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Cpf: {customerTest.Cpf} is already registered for Id: {customerTest.Id}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default), Times.Exactly(2));
+        .AnyAsync(customer => customer.Email == customerTest.Email && customer.Id != customerTest.Id, default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
+        .AnyAsync(customer => customer.Cpf == customerTest.Cpf && customer.Id != customerTest.Id, default), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
@@ -137,7 +142,7 @@ public class CustomerServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>().Remove(customerTest));
 
         // Action
-        await _customerService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
+        await _customerService.DeleteAsync(customerTest.Id).ConfigureAwait(false);
 
         // Arrange
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
@@ -147,7 +152,7 @@ public class CustomerServiceTests
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
 
-        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().Remove(It.IsAny<Customer>()), Times.Once);
+        _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>().Remove(customerTest), Times.Once);
     }
 
     [Fact]
@@ -168,7 +173,7 @@ public class CustomerServiceTests
         var result = await _customerService.GetAllCustomersAsync().ConfigureAwait(false);
 
         // Arrange
-        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(listcustomerTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()), Times.Once);
@@ -195,7 +200,7 @@ public class CustomerServiceTests
         var action = () => _customerService.GetAllCustomersAsync();
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>("No customer found.");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()), Times.Once);
@@ -220,10 +225,10 @@ public class CustomerServiceTests
             .ReturnsAsync(customerTest);
 
         // Action
-        var result = await _customerService.GetCustomerByIdAsync(It.IsAny<long>());
+        var result = await _customerService.GetCustomerByIdAsync(customerTest.Id);
 
         // Arrange
-        result.Should().NotBeNull();
+        result.Should().Be(customerTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
@@ -234,9 +239,11 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void Should_NotGetCustomerByIdAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetCustomerByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
+        long customerIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
         .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()))
@@ -247,10 +254,10 @@ public class CustomerServiceTests
             .ReturnsAsync(It.IsAny<Customer>());
 
         // Action
-        var action = () => _customerService.GetCustomerByIdAsync(It.IsAny<long>());
+        var action = () => _customerService.GetCustomerByIdAsync(customerIdTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No customer found for Id: {customerIdTest}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>())
@@ -290,7 +297,7 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void Should_NotUpdateAsync_Throwing_ArgumentNullException_When_NoCustomerFound_ForThatId()
+    public async void ShouldNot_UpdateAsync_Throwing_ArgumentNullException_When_NoCustomerFound_ForThatId()
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
@@ -303,17 +310,19 @@ public class CustomerServiceTests
         var action = () => _customerService.UpdateAsync(customerTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No customer found for Id: {customerTest.Id}");
 
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>()
         .Any(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
     }
 
     [Fact]
-    public async void Should_NotUpdateAsync_Throwing_ArgumentException_When_EmailAlreadyExist()
+    public async void ShouldNot_UpdateAsync_Throwing_ArgumentException_When_EmailAlreadyExist()
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
+        var email = customerTest.Email;
 
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>()
         .Any(It.IsAny<Expression<Func<Customer, bool>>>()))
@@ -324,37 +333,39 @@ public class CustomerServiceTests
             .ReturnsAsync(true);
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>()))
+        .SingleResultQuery().AndFilter(customer => customer.Email == email))
             .Returns(It.IsAny<IQuery<Customer>>());
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
-            .ReturnsAsync(It.IsAny<Customer>());
+            .ReturnsAsync(customerTest);
 
         // Action
         var action = () => _customerService.UpdateAsync(customerTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Email: {customerTest.Email} is already registered for Id: {customerTest.Id}");
 
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>()
         .Any(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default), Times.Once);
+        .AnyAsync(customer => customer.Email == customerTest.Email && customer.Id != customerTest.Id, default), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
+        .SingleResultQuery().AndFilter(customer => customer.Email == email), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);
     }
 
     [Fact]
-    public async void Should_NotUpdateAsync_Throwing_ArgumentException_When_CpfAlreadyExist()
+    public async void ShouldNot_UpdateAsync_Throwing_ArgumentException_When_CpfAlreadyExist()
     {
         // Arrange
         var customerTest = CustomerFixture.GenerateCustomerFixture();
+
+        var cpf = customerTest.Cpf;
 
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Customer>()
         .Any(It.IsAny<Expression<Func<Customer, bool>>>()))
@@ -369,27 +380,30 @@ public class CustomerServiceTests
             .ReturnsAsync(true);
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>()))
+        .SingleResultQuery().AndFilter(customer => customer.Cpf == cpf))
             .Returns(It.IsAny<IQuery<Customer>>());
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default))
-            .ReturnsAsync(It.IsAny<Customer>());
+            .ReturnsAsync(customerTest);
 
         // Action
         var action = () => _customerService.UpdateAsync(customerTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Cpf: {customerTest.Cpf} is already registered for Id: {customerTest.Id}");
 
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Customer>()
         .Any(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .AnyAsync(It.IsAny<Expression<Func<Customer, bool>>>(), default), Times.Exactly(2));
+        .AnyAsync(customer => customer.Email == customerTest.Email && customer.Id != customerTest.Id, default), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Customer, bool>>>()), Times.Once);
+        .AnyAsync(customer => customer.Cpf == customerTest.Cpf && customer.Id != customerTest.Id, default), Times.Once);
+
+        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
+        .SingleResultQuery().AndFilter(customer => customer.Cpf == cpf), Times.Once);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
         .SingleOrDefaultAsync(It.IsAny<IQuery<Customer>>(), default), Times.Once);

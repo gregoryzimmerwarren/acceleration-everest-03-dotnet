@@ -1,6 +1,5 @@
 ﻿using AppModels.Portfolios;
 using Bogus;
-using System.Collections.Generic;
 
 namespace UnitTests.Fixtures.Portfolios;
 

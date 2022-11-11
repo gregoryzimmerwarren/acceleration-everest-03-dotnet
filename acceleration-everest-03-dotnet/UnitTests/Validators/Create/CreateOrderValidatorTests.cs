@@ -31,7 +31,7 @@ public class CreateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateOrder_When_Quotes_LessThan1()
+    public void ShouldNot_CreateOrder_When_Quotes_LessThan1()
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
@@ -47,7 +47,7 @@ public class CreateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateOrder_When_UnitPrice_EqualOrLessThan0()
+    public void ShouldNot_CreateOrder_When_UnitPrice_EqualOrLessThan0()
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
@@ -62,7 +62,7 @@ public class CreateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateOrder_When_LiquidatedAt_BeforeToday()
+    public void ShouldNot_CreateOrder_When_LiquidatedAt_BeforeToday()
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
@@ -78,7 +78,7 @@ public class CreateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateOrder_When_Direction()
+    public void ShouldNot_CreateOrder_When_Direction()
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
@@ -93,7 +93,7 @@ public class CreateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateOrder_When_PortfolioId_LessThan1()
+    public void ShouldNot_CreateOrder_When_PortfolioId_LessThan1()
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();
@@ -109,7 +109,7 @@ public class CreateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateOrder_When_ProductId_LessThan1()
+    public void ShouldNot_CreateOrder_When_ProductId_LessThan1()
     {
         // Arrange
         var createOrderTest = CreateOrderFixture.GenerateCreateOrderFixture();

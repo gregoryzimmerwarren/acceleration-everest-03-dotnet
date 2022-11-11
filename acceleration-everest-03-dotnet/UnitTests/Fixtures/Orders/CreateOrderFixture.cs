@@ -1,6 +1,5 @@
 ﻿using AppModels.Orders;
 using Bogus;
-using System;
 
 namespace UnitTests.Fixtures.Orders;
 

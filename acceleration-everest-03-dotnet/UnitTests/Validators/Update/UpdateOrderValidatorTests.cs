@@ -29,7 +29,7 @@ public class UpdateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateOrder_When_Quotes_LessThan1()
+    public void ShouldNot_UpdateOrder_When_Quotes_LessThan1()
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
@@ -44,7 +44,7 @@ public class UpdateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateOrder_When_UnitPrice_EqualOrLessThan0()
+    public void ShouldNot_UpdateOrder_When_UnitPrice_EqualOrLessThan0()
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
@@ -58,7 +58,7 @@ public class UpdateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateOrder_When_LiquidatedAt_BeforeToday()
+    public void ShouldNot_UpdateOrder_When_LiquidatedAt_BeforeToday()
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
@@ -73,7 +73,7 @@ public class UpdateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateOrder_When_PortfolioId_LessThan1()
+    public void ShouldNot_UpdateOrder_When_PortfolioId_LessThan1()
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();
@@ -88,7 +88,7 @@ public class UpdateOrderValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateOrder_When_ProductId_LessThan1()
+    public void ShouldNot_UpdateOrder_When_ProductId_LessThan1()
     {
         // Arrange
         var updateOrderTest = UpdateOrderFixture.GenerateUpdateOrderFixture();

@@ -1,7 +1,6 @@
 ﻿using AppModels.Customers;
 using Bogus;
 using Bogus.Extensions.Brazil;
-using System;
 
 namespace UnitTests.Fixtures.Customers;
 

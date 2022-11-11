@@ -46,7 +46,7 @@ public class ProductService : IProductService
         var products = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!products.Any())
-            throw new ArgumentException();
+            throw new ArgumentException("No product found");
 
         return products;
     }

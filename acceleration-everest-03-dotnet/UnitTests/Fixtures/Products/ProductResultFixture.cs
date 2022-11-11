@@ -1,8 +1,6 @@
 ﻿using AppModels.Products;
 using Bogus;
 using Infrastructure.CrossCutting.Enums;
-using System;
-using System.Collections.Generic;
 
 namespace UnitTests.Fixtures.Products;
 

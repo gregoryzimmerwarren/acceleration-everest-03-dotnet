@@ -61,7 +61,7 @@ public class CustomerService : ICustomerService
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!customers.Any())
-            throw new ArgumentException();
+            throw new ArgumentException("No customer found");
 
         return customers;
     }

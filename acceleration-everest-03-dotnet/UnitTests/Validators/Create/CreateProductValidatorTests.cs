@@ -28,7 +28,7 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_Symbol_Empty()
+    public void ShouldNot_CreateProduct_When_Symbol_Empty()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
@@ -42,7 +42,7 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_Symbol_LessThan3Characters()
+    public void ShouldNot_CreateProduct_When_Symbol_LessThan3Characters()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
@@ -56,7 +56,7 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_UnitPrice_EqualOrLessThan0()
+    public void ShouldNot_CreateProduct_When_UnitPrice_EqualOrLessThan0()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
@@ -70,7 +70,7 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_ExpirationAt_BeforeToday()
+    public void ShouldNot_CreateProduct_When_ExpirationAt_BeforeToday()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
@@ -84,7 +84,7 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_Type_LessThan1()
+    public void ShouldNot_CreateProduct_When_Type_LessThan1()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
@@ -98,7 +98,7 @@ public class CreateProductValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateProduct_When_Type_GreaterThan5()
+    public void ShouldNot_CreateProduct_When_Type_GreaterThan5()
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();

@@ -57,7 +57,7 @@ public class ProductServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Product>().Remove(productTest));
 
         // Action
-        await _productService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
+        await _productService.DeleteAsync(productTest.Id).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
@@ -86,7 +86,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllProductsAsync().ConfigureAwait(false);
 
         // Arrange
-        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(listProductTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
         .MultipleResultQuery(), Times.Once);
@@ -112,7 +112,7 @@ public class ProductServiceTests
         var action = () => _productService.GetAllProductsAsync();
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>("No product found");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
         .MultipleResultQuery(), Times.Once);
@@ -136,10 +136,10 @@ public class ProductServiceTests
             .ReturnsAsync(productTest);
 
         // Action
-        var result = await _productService.GetProductByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _productService.GetProductByIdAsync(productTest.Id).ConfigureAwait(false);
 
         // Assert
-        result.Should().NotBeNull();
+        result.Should().Be(productTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
@@ -149,7 +149,7 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public async void Should_GetProductByIdAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetProductByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
@@ -163,10 +163,10 @@ public class ProductServiceTests
             .ReturnsAsync(It.IsAny<Product>());
 
         // Action
-        var action = () => _productService.GetProductByIdAsync(It.IsAny<long>());
+        var action = () => _productService.GetProductByIdAsync(productTest.Id);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No product found for Id: {productTest.Id}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
@@ -190,10 +190,10 @@ public class ProductServiceTests
             .ReturnsAsync(productTest);
 
         // Action
-        var result = await _productService.GetProductUnitPriceByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _productService.GetProductUnitPriceByIdAsync(productTest.Id).ConfigureAwait(false);
 
         // Assert
-        result.Should().BeGreaterThanOrEqualTo(0);
+        result.Should().Be(productTest.UnitPrice);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);
@@ -203,7 +203,7 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public async void Should_GetProductUnitPriceByIdAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetProductUnitPriceByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
         var productTest = ProductFixture.GenerateProductFixture();
@@ -217,10 +217,10 @@ public class ProductServiceTests
             .ReturnsAsync(It.IsAny<Product>());
 
         // Action
-        var action = () => _productService.GetProductUnitPriceByIdAsync(It.IsAny<long>());
+        var action = () => _productService.GetProductUnitPriceByIdAsync(productTest.Id);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No product found for Id: {productTest.Id}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Product, bool>>>()), Times.Once);

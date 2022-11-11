@@ -28,7 +28,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_FullName_Empty()
+    public void ShouldNot_UpdateCustomer_When_FullName_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -42,7 +42,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_FullName_LessThan5Characters()
+    public void ShouldNot_UpdateCustomer_When_FullName_LessThan5Characters()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -56,7 +56,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Email_Empty()
+    public void ShouldNot_UpdateCustomer_When_Email_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -70,7 +70,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Email_Format()
+    public void ShouldNot_UpdateCustomer_When_Email_Format()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -84,7 +84,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_EmailConfirmation_DifferentFromEmail()
+    public void ShouldNot_UpdateCustomer_When_EmailConfirmation_DifferentFromEmail()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -98,7 +98,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cpf_Empty()
+    public void ShouldNot_UpdateCustomer_When_Cpf_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -112,7 +112,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cpf_Size()
+    public void ShouldNot_UpdateCustomer_When_Cpf_Size()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -126,7 +126,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cpf_IdenticalDigits()
+    public void ShouldNot_UpdateCustomer_When_Cpf_IdenticalDigits()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -140,7 +140,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cellphone_Empty()
+    public void ShouldNot_UpdateCustomer_When_Cellphone_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -154,7 +154,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cellphone_MoreThan14Characters()
+    public void ShouldNot_UpdateCustomer_When_Cellphone_MoreThan14Characters()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -168,7 +168,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cellphone_Size()
+    public void ShouldNot_UpdateCustomer_When_Cellphone_Size()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -182,7 +182,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cellphone_DigitDifferentThen9()
+    public void ShouldNot_UpdateCustomer_When_Cellphone_DigitDifferentThen9()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -196,7 +196,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Cellphone_DigitDifferentThenNumber()
+    public void ShouldNot_UpdateCustomer_When_Cellphone_DigitDifferentThenNumber()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -210,7 +210,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Country_Empty()
+    public void ShouldNot_UpdateCustomer_When_Country_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -224,7 +224,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Country_LessThan3Characters()
+    public void ShouldNot_UpdateCustomer_When_Country_LessThan3Characters()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -238,7 +238,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_City()
+    public void ShouldNot_UpdateCustomer_When_City()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -252,7 +252,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Address_Empty()
+    public void ShouldNot_UpdateCustomer_When_Address_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -266,7 +266,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_Address_LessThan4Characters()
+    public void ShouldNot_UpdateCustomer_When_Address_LessThan4Characters()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -280,7 +280,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_PostalCode_Empty()
+    public void ShouldNot_UpdateCustomer_When_PostalCode_Empty()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -294,7 +294,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_PostalCode_MoreThan9Characters()
+    public void ShouldNot_UpdateCustomer_When_PostalCode_MoreThan9Characters()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -308,7 +308,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_PostalCode_Size()
+    public void ShouldNot_UpdateCustomer_When_PostalCode_Size()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -322,7 +322,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_PostalCode_DigitDifferentThenNumber()
+    public void ShouldNot_UpdateCustomer_When_PostalCode_DigitDifferentThenNumber()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();
@@ -336,7 +336,7 @@ public class UpdateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotUpdateCustomer_When_DateOfBirth_LessThan18YearsOld()
+    public void ShouldNot_UpdateCustomer_When_DateOfBirth_LessThan18YearsOld()
     {
         // Arrange
         var updateCustomerTest = UpdateCustomerFixture.GenerateUpdateCustomerFixture();

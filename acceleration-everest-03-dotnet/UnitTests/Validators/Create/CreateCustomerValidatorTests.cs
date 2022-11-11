@@ -28,7 +28,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_FullName_Empty()
+    public void ShouldNot_CreateCustomer_When_FullName_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -42,7 +42,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_FullName_LessThan5Characters()
+    public void ShouldNot_CreateCustomer_When_FullName_LessThan5Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -56,7 +56,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Email_Empty()
+    public void ShouldNot_CreateCustomer_When_Email_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -70,7 +70,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Email_Format()
+    public void ShouldNot_CreateCustomer_When_Email_Format()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -84,7 +84,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_EmailConfirmation_DifferentFromEmail()
+    public void ShouldNot_CreateCustomer_When_EmailConfirmation_DifferentFromEmail()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -98,7 +98,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cpf_Empty()
+    public void ShouldNot_CreateCustomer_When_Cpf_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -112,7 +112,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cpf_Size()
+    public void ShouldNot_CreateCustomer_When_Cpf_Size()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -126,7 +126,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cpf_IdenticalDigits()
+    public void ShouldNot_CreateCustomer_When_Cpf_IdenticalDigits()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -140,7 +140,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cellphone_Empty()
+    public void ShouldNot_CreateCustomer_When_Cellphone_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -154,7 +154,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cellphone_MoreThan14Characters()
+    public void ShouldNot_CreateCustomer_When_Cellphone_MoreThan14Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -168,7 +168,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cellphone_Size()
+    public void ShouldNot_CreateCustomer_When_Cellphone_Size()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -182,7 +182,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cellphone_DigitDifferentThen9()
+    public void ShouldNot_CreateCustomer_When_Cellphone_DigitDifferentThen9()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -196,7 +196,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Cellphone_DigitDifferentThenNumber()
+    public void ShouldNot_CreateCustomer_When_Cellphone_DigitDifferentThenNumber()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -210,7 +210,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Country_Empty()
+    public void ShouldNot_CreateCustomer_When_Country_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -224,7 +224,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Country_LessThan3Characters()
+    public void ShouldNot_CreateCustomer_When_Country_LessThan3Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -238,7 +238,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_City()
+    public void ShouldNot_CreateCustomer_When_City()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -252,7 +252,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Address_Empty()
+    public void ShouldNot_CreateCustomer_When_Address_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -266,7 +266,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_Address_LessThan4Characters()
+    public void ShouldNot_CreateCustomer_When_Address_LessThan4Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -280,7 +280,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_PostalCode_Empty()
+    public void ShouldNot_CreateCustomer_When_PostalCode_Empty()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -294,7 +294,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_PostalCode_MoreThan9Characters()
+    public void ShouldNot_CreateCustomer_When_PostalCode_MoreThan9Characters()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -308,7 +308,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_PostalCode_Size()
+    public void ShouldNot_CreateCustomer_When_PostalCode_Size()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -322,7 +322,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_PostalCode_DigitDifferentThenNumber()
+    public void ShouldNot_CreateCustomer_When_PostalCode_DigitDifferentThenNumber()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -336,7 +336,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_DateOfBirth_BornLessThan18YearsAgo()
+    public void ShouldNot_CreateCustomer_When_DateOfBirth_BornLessThan18YearsAgo()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();
@@ -350,7 +350,7 @@ public class CreateCustomerValidatorTests
     }
 
     [Fact]
-    public void Should_NotCreateCustomer_When_DateOfBirth_Born18YearsAgo_ButNotTurned18Yet()
+    public void ShouldNot_CreateCustomer_When_DateOfBirth_Born18YearsAgo_ButNotTurned18Yet()
     {
         // Arrange
         var createCustomerTest = CreateCustomerFixture.GenerateCreateCustomerFixture();

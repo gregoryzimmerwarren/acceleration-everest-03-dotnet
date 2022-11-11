@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using Castle.Core.Resource;
+using DomainModels.Models;
 using DomainServices.Services;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
@@ -55,7 +56,7 @@ public class CustomerBankInfoServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Remove(customerBankInfoTest));
 
         // Action
-        await _customerBankInfoService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
+        await _customerBankInfoService.DeleteAsync(customerBankInfoTest.Id).ConfigureAwait(false);
 
         // Arrange
         _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
@@ -72,7 +73,10 @@ public class CustomerBankInfoServiceTests
     public async void Should_DepositAsync_Successfully()
     {
         // Arrange
+        long customerIdTest = 1;
+
         decimal amountTest = 17.05m;
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
@@ -87,7 +91,7 @@ public class CustomerBankInfoServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Update(It.IsAny<CustomerBankInfo>()));
 
         // Action
-        await _customerBankInfoService.DepositAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
+        await _customerBankInfoService.DepositAsync(customerIdTest, amountTest).ConfigureAwait(false);
 
         // Arrange
         _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
@@ -118,7 +122,7 @@ public class CustomerBankInfoServiceTests
         var result = await _customerBankInfoService.GetAllCustomersBankInfoAsync().ConfigureAwait(false);
 
         // Arrange
-        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(listcustomerBankInfoTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
@@ -128,7 +132,7 @@ public class CustomerBankInfoServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllCustomersBankInfoAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetAllCustomersBankInfoAsync_Throwing_ArgumentException()
     {
         // Arrange
         var listcustomerBankInfoTest = CustomerBankInfoFixture.GenerateListCustomerBankInfoFixture(0);
@@ -144,7 +148,7 @@ public class CustomerBankInfoServiceTests
         var action = () => _customerBankInfoService.GetAllCustomersBankInfoAsync();
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>("No bank information found");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
@@ -157,6 +161,8 @@ public class CustomerBankInfoServiceTests
     public async void Should_GetCustomerBankInfoByCustomerIdAsync_Successfully()
     {
         // Arrange
+        long customerIdTest = 1;
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
@@ -169,10 +175,10 @@ public class CustomerBankInfoServiceTests
             .ReturnsAsync(customerBankInfoTest);
 
         // Action
-        var result = await _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(It.IsAny<long>());
+        var result = await _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(customerIdTest);
 
         // Arrange
-        result.Should().NotBeNull();
+        result.Should().Be(customerBankInfoTest);
 
         _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
@@ -183,9 +189,11 @@ public class CustomerBankInfoServiceTests
     }
 
     [Fact]
-    public async void Should_GetCustomerBankInfoByCustomerIdAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetCustomerBankInfoByCustomerIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
+        long customerIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
         .Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()))
@@ -196,10 +204,10 @@ public class CustomerBankInfoServiceTests
             .ReturnsAsync(It.IsAny<CustomerBankInfo>());
 
         // Action
-        var action = () => _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(It.IsAny<long>());
+        var action = () => _customerBankInfoService.GetCustomerBankInfoByCustomerIdAsync(customerIdTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No customer found for Id: {customerIdTest}");
 
         _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())
@@ -209,11 +217,12 @@ public class CustomerBankInfoServiceTests
         .SingleOrDefaultAsync(It.IsAny<IQuery<CustomerBankInfo>>(), default), Times.Once);
     }
 
-
     [Fact]
     public async void Should_GetAccountBalanceByCustomerIdAsync_Successfully()
     {
         // Arrange
+        long customerIdTest = 1;
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
@@ -226,7 +235,7 @@ public class CustomerBankInfoServiceTests
             .ReturnsAsync(customerBankInfoTest);
 
         // Action
-        var result = await _customerBankInfoService.GetAccountBalanceByCustomerIdAsync(It.IsAny<long>());
+        var result = await _customerBankInfoService.GetAccountBalanceByCustomerIdAsync(customerIdTest);
 
         // Arrange
         result.Should().Be(customerBankInfoTest.AccountBalance);
@@ -243,7 +252,10 @@ public class CustomerBankInfoServiceTests
     public async void Should_WithdrawAsync_Successfully()
     {
         // Arrange
+        long customerIdTest = 1;
+
         decimal amountTest = 17.05m;
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         customerBankInfoTest.AccountBalance = 20m;
 
@@ -259,7 +271,7 @@ public class CustomerBankInfoServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<CustomerBankInfo>().Update(It.IsAny<CustomerBankInfo>()));
 
         // Action
-        await _customerBankInfoService.WithdrawAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
+        await _customerBankInfoService.WithdrawAsync(customerIdTest, amountTest).ConfigureAwait(false);
 
         // Arrange
         _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
@@ -273,10 +285,13 @@ public class CustomerBankInfoServiceTests
     }
 
     [Fact]
-    public async void Should_WithdrawAsync_Throwing_ArgumentException_When_Amount_BiggerThan_AccountBalance()
+    public async void ShouldNot_WithdrawAsync_Throwing_ArgumentException_When_Amount_BiggerThan_AccountBalance()
     {
         // Arrange
+        long customerIdTest = 1;
+
         decimal amountTest = 20m;
+
         var customerBankInfoTest = CustomerBankInfoFixture.GenerateCustomerBankInfoFixture();
         customerBankInfoTest.AccountBalance = 17.05m;
 
@@ -290,10 +305,10 @@ public class CustomerBankInfoServiceTests
             .ReturnsAsync(customerBankInfoTest);
 
         // Action
-        var action = () => _customerBankInfoService.WithdrawAsync(It.IsAny<long>(), amountTest);
+        var action = () => _customerBankInfoService.WithdrawAsync(customerIdTest, amountTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfoTest.AccountBalance}");
 
         _mockRepositoryFactory.Verify(unitOfWork => unitOfWork.Repository<CustomerBankInfo>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<CustomerBankInfo, bool>>>())

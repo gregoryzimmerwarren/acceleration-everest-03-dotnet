@@ -42,7 +42,7 @@ public class PortfolioProductServiceTests
     [Fact]
     public async void Should_DeleteAsync_Successfully()
     {
-        // Arrange        
+        // Arrange
         var portfolioProductBankInfoTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
@@ -57,7 +57,7 @@ public class PortfolioProductServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<PortfolioProduct>().Remove(It.IsAny<PortfolioProduct>()));
 
         // Action
-        await _portfolioProductService.DeleteAsync(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
+        await _portfolioProductService.DeleteAsync(portfolioProductBankInfoTest.PortfolioId, portfolioProductBankInfoTest.ProductId).ConfigureAwait(false);
 
         // Arrange
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
@@ -73,7 +73,7 @@ public class PortfolioProductServiceTests
     [Fact]
     public async void Should_GetPortfolioProductByIdsAsync_Successfully()
     {
-        // Arrange        
+        // Arrange
         var portfolioProductBankInfoTest = PortfolioProductFixture.GeneratePortfolioProductFixture();
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
@@ -86,10 +86,10 @@ public class PortfolioProductServiceTests
             .ReturnsAsync(portfolioProductBankInfoTest);
 
         // Action
-        var result = await _portfolioProductService.GetPortfolioProductByIdsAsync(It.IsAny<long>(), It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _portfolioProductService.GetPortfolioProductByIdsAsync(portfolioProductBankInfoTest.PortfolioId, portfolioProductBankInfoTest.ProductId).ConfigureAwait(false);
 
         // Arrange
-        result.Should().NotBeNull();
+        result.Should().Be(portfolioProductBankInfoTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
@@ -100,9 +100,13 @@ public class PortfolioProductServiceTests
     }
 
     [Fact]
-    public async void Should_NotGetPortfolioProductByIdsAsync__Throwing_ArgumentNullException()
+    public async void ShouldNot_GetPortfolioProductByIdsAsync__Throwing_ArgumentNullException()
     {
-        // Arrange        
+        // Arrange
+        long portfolioIdTest = 1;
+
+        long productIdTest = 1;
+
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())
         .Include(It.IsAny<Func<IQueryable<PortfolioProduct>, IIncludableQueryable<PortfolioProduct, object>>>()))
@@ -113,10 +117,10 @@ public class PortfolioProductServiceTests
             .ReturnsAsync(It.IsAny<PortfolioProduct>());
 
         // Action
-        var action = () => _portfolioProductService.GetPortfolioProductByIdsAsync(It.IsAny<long>(), It.IsAny<long>());
+        var action = () => _portfolioProductService.GetPortfolioProductByIdsAsync(portfolioIdTest, productIdTest);
 
         // Arrange
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No relationship was found between portfolio Id: {portfolioIdTest} and product Id: {productIdTest}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<PortfolioProduct>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<PortfolioProduct, bool>>>())

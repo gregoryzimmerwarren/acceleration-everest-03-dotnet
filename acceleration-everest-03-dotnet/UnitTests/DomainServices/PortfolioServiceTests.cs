@@ -1,4 +1,5 @@
-﻿using DomainModels.Models;
+﻿using Castle.Core.Resource;
+using DomainModels.Models;
 using DomainServices.Services;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
@@ -37,6 +38,7 @@ public class PortfolioServiceTests
 
         // Arrange
         result.Should().Be(1);
+
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Portfolio>().Add(It.IsAny<Portfolio>()), Times.Once);
     }
 
@@ -60,7 +62,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Remove(portfolioTest));
 
         // Action
-        await _portfolioService.DeleteAsync(It.IsAny<long>()).ConfigureAwait(false);
+        await _portfolioService.DeleteAsync(portfolioTest.Id).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -74,7 +76,7 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotDeleteAsync_Throwing_ArgumentNullException_When_TotalBalance_IsBiggerThan0()
+    public async void ShouldNot_DeleteAsync_Throwing_ArgumentException_When_TotalBalance_IsBiggerThan0()
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
@@ -90,10 +92,12 @@ public class PortfolioServiceTests
             .ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.DeleteAsync(It.IsAny<long>());
+        var action = () => _portfolioService.DeleteAsync(portfolioTest.Id);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($@"It is not possible to delete the portfolio for Id: {portfolioTest.Id}.
+Value available for redeem: R${portfolioTest.TotalBalance}.
+Value available for withdraw: R${portfolioTest.AccountBalance}.");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -104,7 +108,7 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotDeleteAsync_Throwing_ArgumentNullException_When_AcccountBalance_IsBiggerThan0()
+    public async void ShouldNot_DeleteAsync_Throwing_ArgumentException_When_AcccountBalance_IsBiggerThan0()
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
@@ -120,10 +124,12 @@ public class PortfolioServiceTests
             .ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.DeleteAsync(It.IsAny<long>());
+        var action = () => _portfolioService.DeleteAsync(portfolioTest.Id);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($@"It is not possible to delete the portfolio for Id: {portfolioTest.Id}.
+Value available for redeem: R${portfolioTest.TotalBalance}.
+Value available for withdraw: R${portfolioTest.AccountBalance}.");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -138,6 +144,7 @@ public class PortfolioServiceTests
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
+
         decimal amountTest = 17.05m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -152,7 +159,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.DepositAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
+        await _portfolioService.DepositAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -181,10 +188,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(portfolioTest);
 
         // Action
-        var result = await _portfolioService.GetPortfolioByIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _portfolioService.GetPortfolioByIdAsync(portfolioTest.Id).ConfigureAwait(false);
 
         // Assert
-        result.Should().NotBeNull();
+        result.Should().Be(portfolioTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -195,7 +202,7 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotGetPortfolioByIdAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetPortfolioByIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
@@ -210,10 +217,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(It.IsAny<Portfolio>());
 
         // Action
-        var action = () => _portfolioService.GetPortfolioByIdAsync(It.IsAny<long>());
+        var action = () => _portfolioService.GetPortfolioByIdAsync(portfolioTest.Id);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No portfolio found for Id: {portfolioTest.Id}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -227,6 +234,8 @@ public class PortfolioServiceTests
     public async void Should_GetPortfoliosByCustomerIdAsync_Successfully()
     {
         // Arrange
+        long customerIdTest = 1;
+
         var listportfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(3);
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -239,10 +248,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(listportfoliosTest);
 
         // Action
-        var result = await _portfolioService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>()).ConfigureAwait(false);
+        var result = await _portfolioService.GetPortfoliosByCustomerIdAsync(customerIdTest).ConfigureAwait(false);
 
         // Assert
-        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(listportfoliosTest);
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -253,9 +262,11 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotGetPortfoliosByCustomerIdAsync_Throwing_ArgumentNullException()
+    public async void ShouldNot_GetPortfoliosByCustomerIdAsync_Throwing_ArgumentNullException()
     {
         // Arrange
+        long customerIdTest = 1;
+
         var listportfoliosTest = PortfolioFixture.GenerateListPortfolioFixture(0);
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -268,10 +279,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(listportfoliosTest);
 
         // Action
-        var action = () => _portfolioService.GetPortfoliosByCustomerIdAsync(It.IsAny<long>());
+        var action = () => _portfolioService.GetPortfoliosByCustomerIdAsync(customerIdTest);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentNullException>($"No portfolio found for Customer with Id: {customerIdTest}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .MultipleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -287,6 +298,7 @@ public class PortfolioServiceTests
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 20m;
+
         decimal amountTest = 17.05m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -301,7 +313,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.InvestAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
+        await _portfolioService.InvestAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -315,11 +327,12 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotInvestAsync_ArgumentNullException_When_Amount_IsBiggerThan_AcccountBalance()
+    public async void ShouldNot_InvestAsync_ArgumentException_When_Amount_IsBiggerThan_AcccountBalance()
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 17.05m;
+
         decimal amountTest = 20m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -332,10 +345,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.InvestAsync(It.IsAny<long>(), amountTest);
+        var action = () => _portfolioService.InvestAsync(portfolioTest.Id, amountTest);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Portfolio does not have sufficient balance for this investment. Current balance: R${portfolioTest.AccountBalance}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -351,6 +364,7 @@ public class PortfolioServiceTests
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.TotalBalance = 20m;
+
         decimal amountTest = 17.05m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -365,7 +379,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
+        await _portfolioService.RedeemToPortfolioAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -379,11 +393,12 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotRedeemToPortfolioAsync_ArgumentNullException_When_Amount_IsBiggerThan_TotalBalance()
+    public async void ShouldNot_RedeemToPortfolioAsync_ArgumentException_When_Amount_IsBiggerThan_TotalBalance()
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.TotalBalance = 17.05m;
+
         decimal amountTest = 20m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -396,10 +411,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.RedeemToPortfolioAsync(It.IsAny<long>(), amountTest);
+        var action = () => _portfolioService.RedeemToPortfolioAsync(portfolioTest.Id, amountTest);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Portfolio does not have sufficient balance for this redeem. Current balance: R${portfolioTest.TotalBalance}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
@@ -415,6 +430,7 @@ public class PortfolioServiceTests
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 20m;
+
         decimal amountTest = 17.05m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -429,7 +445,7 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Repository<Portfolio>().Update(portfolioTest));
 
         // Action
-        await _portfolioService.WithdrawFromPortfolioAsync(It.IsAny<long>(), amountTest).ConfigureAwait(false);
+        await _portfolioService.WithdrawFromPortfolioAsync(portfolioTest.Id, amountTest).ConfigureAwait(false);
 
         // Assert
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -443,11 +459,12 @@ public class PortfolioServiceTests
     }
 
     [Fact]
-    public async void Should_NotWithdrawFromPortfolioAsync_ArgumentNullException_When_Amount_IsBiggerThan_AccountBalance()
+    public async void ShouldNot_WithdrawFromPortfolioAsync_ArgumentException_When_Amount_IsBiggerThan_AccountBalance()
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
         portfolioTest.AccountBalance = 17.05m;
+
         decimal amountTest = 20m;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
@@ -460,10 +477,10 @@ public class PortfolioServiceTests
             .ReturnsAsync(portfolioTest);
 
         // Action
-        var action = () => _portfolioService.WithdrawFromPortfolioAsync(It.IsAny<long>(), amountTest);
+        var action = () => _portfolioService.WithdrawFromPortfolioAsync(portfolioTest.Id, amountTest);
 
         // Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<ArgumentException>($"Portfolio does not have sufficient balance for this withdraw. Current balance: R${portfolioTest.AccountBalance}");
 
         _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())

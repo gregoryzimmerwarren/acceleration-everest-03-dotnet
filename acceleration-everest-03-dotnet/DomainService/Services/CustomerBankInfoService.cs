@@ -56,7 +56,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
         var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!customersBankInfos.Any())
-            throw new ArgumentException();
+            throw new ArgumentException("No bank information found");
 
         return customersBankInfos;
     }
@@ -74,8 +74,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
 
     public async Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false)
-            ?? throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         return customerBankInfo.AccountBalance;
     }

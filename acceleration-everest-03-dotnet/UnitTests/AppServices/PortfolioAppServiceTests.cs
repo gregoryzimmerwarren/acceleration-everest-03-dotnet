@@ -108,7 +108,7 @@ public class PortfolioAppServiceTests
     }
 
     [Fact]
-    public async void Should_Not_DepositPortfolioAsync_Throwing_ArgumentException()
+    public async void ShouldNot_DepositPortfolioAsync_Throwing_ArgumentException()
     {
         // Arrage
         long customerIdTest = 1;

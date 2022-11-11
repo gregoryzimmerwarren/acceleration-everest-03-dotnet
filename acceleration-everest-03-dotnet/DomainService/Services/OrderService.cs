@@ -42,14 +42,14 @@ public class OrderService : IOrderService
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
         if (!orders.Any())
-            throw new ArgumentException();
+            throw new ArgumentException("No order found");
 
         return orders;
     }
 
     public async Task<int> GetAvailableQuotes(long portfolioId, long productId)
     {
-        var orders = await GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
+        var orders = await GetOrdersByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
 
         var availableQuotes = 0;
 
@@ -80,7 +80,7 @@ public class OrderService : IOrderService
         return order;
     }
 
-    public async Task<IEnumerable<Order>> GetOrderByPorfolioIdAndProductIdAsync(long portfolioId, long productId)
+    public async Task<IEnumerable<Order>> GetOrdersByPorfolioIdAndProductIdAsync(long portfolioId, long productId)
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId)
