@@ -1,7 +1,6 @@
 ﻿using AppModels.CustomersBankInfo;
 using AppServices.Profiles;
 using AutoMapper;
-using DomainModels.Models;
 using FluentAssertions;
 using UnitTests.Fixtures.Customers;
 using UnitTests.Fixtures.CustomersBankInfo;
@@ -14,12 +13,7 @@ public class CustomerBankInfoProfileTests : CustomerBankInfoProfile
 
     public CustomerBankInfoProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<CustomerBankInfo, CustomerBankInfoResult>();
-            cfg.CreateMap<CustomerBankInfo, CustomerBankInfoResultForCustomerDtos>();
-        });
-        _mapper = config.CreateMapper();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<CustomerBankInfoProfile>(); }).CreateMapper();
     }
 
     [Fact]

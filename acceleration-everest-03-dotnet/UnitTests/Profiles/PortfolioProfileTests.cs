@@ -15,13 +15,7 @@ public class PortfolioProfileTests : PortfolioProfile
 
     public PortfolioProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Portfolio, PortfolioResult>();
-            cfg.CreateMap<Portfolio, PortfolioResultForOthersDtos>();
-            cfg.CreateMap<CreatePortfolio, Portfolio>();
-        });
-        _mapper = config.CreateMapper();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<PortfolioProfile>(); }).CreateMapper();
     }
 
     [Fact]

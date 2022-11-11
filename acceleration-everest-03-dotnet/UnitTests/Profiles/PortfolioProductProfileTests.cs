@@ -1,7 +1,6 @@
 ﻿using AppModels.PortfoliosProducts;
 using AppServices.Profiles;
 using AutoMapper;
-using DomainModels.Models;
 using FluentAssertions;
 using UnitTests.Fixtures.Portfolios;
 using UnitTests.Fixtures.PortfoliosProducts;
@@ -15,11 +14,7 @@ public class PortfolioProductProfileTests : PortfolioProductProfile
 
     public PortfolioProductProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<PortfolioProduct, PortfolioProductResult>();
-        });
-        _mapper = config.CreateMapper();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<PortfolioProductProfile>(); }).CreateMapper();
     }
 
     [Fact]

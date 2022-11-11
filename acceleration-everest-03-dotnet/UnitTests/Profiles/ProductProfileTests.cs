@@ -14,13 +14,7 @@ public class ProductProfileTests : ProductProfile
 
     public ProductProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Product, ProductResult>();
-            cfg.CreateMap<CreateProduct, Product>();
-            cfg.CreateMap<UpdateProduct, Product>();
-        });
-        _mapper = config.CreateMapper();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<ProductProfile>(); }).CreateMapper();
     }
 
     [Fact]

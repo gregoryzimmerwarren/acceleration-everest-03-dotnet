@@ -22,16 +22,10 @@ public class CustomerAppServiceTests
 
     public CustomerAppServiceTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Customer, CustomerResult>();
-            cfg.CreateMap<CreateCustomer, Customer>();
-            cfg.CreateMap<UpdateCustomer, Customer>();
-        });
-        _mapper = config.CreateMapper();
         _mockCustomerService = new Mock<ICustomerService>();
         _mockCustomerBankInfoService = new Mock<ICustomerBankInfoService>();
         _mockCustomerBankInfoAppService = new Mock<ICustomerBankInfoAppService>();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<CustomerProfile>(); }).CreateMapper();
         _customerBankInfoAppService = new CustomerBankInfoAppService(_mockCustomerBankInfoService.Object, _mapper);
         _customerAppService = new CustomerAppService(_mockCustomerBankInfoAppService.Object, _mockCustomerService.Object, _mapper);
     }

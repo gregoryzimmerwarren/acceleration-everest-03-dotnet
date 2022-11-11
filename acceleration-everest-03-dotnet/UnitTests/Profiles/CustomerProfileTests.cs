@@ -15,14 +15,7 @@ public class CustomerProfileTests : CustomerProfile
 
     public CustomerProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Customer, CustomerResult>();
-            cfg.CreateMap<Customer, CustomerResultForOtherDtos>();
-            cfg.CreateMap<CreateCustomer, Customer>();
-            cfg.CreateMap<UpdateCustomer, Customer>();
-        });
-        _mapper = config.CreateMapper();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<CustomerProfile>(); }).CreateMapper();
     }
 
     [Fact]

@@ -1,14 +1,13 @@
 ﻿using AppModels.Orders;
 using AppModels.Portfolios;
 using AppServices.Interfaces;
+using AppServices.Profiles;
 using AppServices.Services;
 using AutoMapper;
 using DomainModels.Models;
 using DomainServices.Interfaces;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Collections.Generic;
 using UnitTests.Fixtures.Orders;
 using UnitTests.Fixtures.Portfolios;
 using UnitTests.Fixtures.PortfoliosProducts;
@@ -27,18 +26,12 @@ public class PortfolioAppServiceTests
 
     public PortfolioAppServiceTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Portfolio, PortfolioResult>();
-            cfg.CreateMap<Portfolio, PortfolioResultForOthersDtos>();
-            cfg.CreateMap<CreatePortfolio, Portfolio>();
-        });
-        _mapper = config.CreateMapper();
         _mockOrderAppService = new Mock<IOrderAppService>();
         _mockPortfolioService = new Mock<IPortfolioService>();
         _mockProductAppService = new Mock<IProductAppService>();
         _mockPortfolioProductService = new Mock<IPortfolioProductService>();
         _mockCustomerBankInfoAppService = new Mock<ICustomerBankInfoAppService>();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<PortfolioProfile>(); }).CreateMapper();
         _portfolioAppService = new PortfolioAppService(_mockCustomerBankInfoAppService.Object, _mockPortfolioProductService.Object,
             _mockProductAppService.Object, _mockPortfolioService.Object, _mockOrderAppService.Object, _mapper);
     }

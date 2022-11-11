@@ -15,14 +15,7 @@ public class OrderProfileTests : OrderProfile
 
     public OrderProfileTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Order, OrderResult>();
-            cfg.CreateMap<Order, OrderResultForOtherDtos>();
-            cfg.CreateMap<CreateOrder, Order>();
-            cfg.CreateMap<UpdateOrder, Order>();
-        });
-        _mapper = config.CreateMapper();
+        _mapper = new MapperConfiguration(cfg => { cfg.AddProfile<OrderProfile>(); }).CreateMapper();
     }
 
 

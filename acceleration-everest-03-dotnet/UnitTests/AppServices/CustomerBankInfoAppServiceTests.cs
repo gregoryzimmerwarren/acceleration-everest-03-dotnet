@@ -1,7 +1,7 @@
 ﻿using AppModels.CustomersBankInfo;
+using AppServices.Profiles;
 using AppServices.Services;
 using AutoMapper;
-using DomainModels.Models;
 using DomainServices.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -18,13 +18,8 @@ public class CustomerBankInfoAppServiceTests
 
     public CustomerBankInfoAppServiceTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<CustomerBankInfo, CustomerBankInfoResult>();
-            cfg.CreateMap<CustomerBankInfo, CustomerBankInfoResultForCustomerDtos>();
-        });
-        _mapper = config.CreateMapper();
         _mockCustomerBankInfoService = new Mock<ICustomerBankInfoService>();
+        _mapper = new MapperConfiguration(cfg =>{ cfg.AddProfile<CustomerBankInfoProfile>(); }).CreateMapper();
         _customerBankInfoAppService = new CustomerBankInfoAppService(_mockCustomerBankInfoService.Object, _mapper);
     }
 

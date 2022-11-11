@@ -1,6 +1,6 @@
 ﻿using AppModels.Orders;
-using AppModels.Products;
 using AppServices.Interfaces;
+using AppServices.Profiles;
 using AppServices.Services;
 using AutoMapper;
 using DomainModels.Models;
@@ -22,15 +22,11 @@ public class OrderAppServiceTests
 
     public OrderAppServiceTests()
     {
-        var config = new MapperConfiguration(cfg =>
+        _mapper = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Product, ProductResult>();
-            cfg.CreateMap<Order, OrderResult>();
-            cfg.CreateMap<Order, OrderResultForOtherDtos>();
-            cfg.CreateMap<CreateOrder, Order>();
-            cfg.CreateMap<UpdateOrder, Order>();
-        });
-        _mapper = config.CreateMapper();
+            cfg.AddProfile<ProductProfile>();
+            cfg.AddProfile<OrderProfile>();
+        }).CreateMapper();
         _mockOrderService = new Mock<IOrderService>();
         _mockProductAppService = new Mock<IProductAppService>();
         _orderAppService = new OrderAppService(_mockProductAppService.Object, _mockOrderService.Object, _mapper);

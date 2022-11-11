@@ -1,4 +1,5 @@
 ﻿using AppModels.Products;
+using AppServices.Profiles;
 using AppServices.Services;
 using AutoMapper;
 using DomainModels.Models;
@@ -19,14 +20,8 @@ public class ProductAppServiceTests
 
     public ProductAppServiceTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Product, ProductResult>();
-            cfg.CreateMap<CreateProduct, Product>();
-            cfg.CreateMap<UpdateProduct, Product>();
-        });
-        _mapper = config.CreateMapper();
         _mockProductService = new Mock<IProductService>();
+        _mapper = new MapperConfiguration(cfg =>{ cfg.AddProfile<ProductProfile>(); }).CreateMapper();
         _productAppService = new ProductAppService(_mockProductService.Object, _mapper);
     }
 
