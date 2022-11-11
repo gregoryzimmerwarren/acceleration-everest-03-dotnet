@@ -41,26 +41,14 @@ public class CreatePortfolioValidatorTests
         result.ShouldHaveValidationErrorFor(createPortfolio => createPortfolio.Name);
     }
 
-    [Fact]
-    public void ShouldNot_CreatePortfolio_When_Description_Empty()
+    [Theory]
+    [InlineData("")]
+    [InlineData("Test")]
+    public void ShouldNot_CreatePortfolio_When_Description_Empty_Or_LessThan5Characters(string description)
     {
         // Arrange
         var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
-        createPortfolioTest.Description = string.Empty;
-
-        // Action
-        var result = _validCreatePortfolio.TestValidate(createPortfolioTest);
-
-        // Assert
-        result.ShouldHaveValidationErrorFor(createPortfolio => createPortfolio.Description);
-    }
-
-    [Fact]
-    public void ShouldNot_CreatePortfolio_When_Description_LessThan5Characters()
-    {
-        // Arrange
-        var createPortfolioTest = CreatePortfolioFixture.GenerateCreatePortfolioFixture();
-        createPortfolioTest.Description = "Test";
+        createPortfolioTest.Description = description;
 
         // Action
         var result = _validCreatePortfolio.TestValidate(createPortfolioTest);

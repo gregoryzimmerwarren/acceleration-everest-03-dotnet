@@ -41,9 +41,6 @@ public class OrderService : IOrderService
             .Include(order => order.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (!orders.Any())
-            throw new ArgumentException("No order found");
-
         return orders;
     }
 

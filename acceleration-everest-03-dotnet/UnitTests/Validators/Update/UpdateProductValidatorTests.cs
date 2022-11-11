@@ -27,26 +27,14 @@ public class UpdateProductValidatorTests
         result.IsValid.Should().BeTrue();
     }
 
-    [Fact]
-    public void ShouldNot_UpdateProduct_When_Symbol_Empty()
+    [Theory]
+    [InlineData("")]
+    [InlineData("ab")]
+    public void ShouldNot_UpdateProduct_When_Symbol_Empty_Or_LessThan3Characters(string symbol)
     {
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
-        updateProductTest.Symbol = string.Empty;
-
-        // Action
-        var result = _validUpdateProduct.TestValidate(updateProductTest);
-
-        // Assert
-        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.Symbol);
-    }
-
-    [Fact]
-    public void ShouldNot_UpdateProduct_When_Symbol_LessThan3Characters()
-    {
-        // Arrange
-        var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
-        updateProductTest.Symbol = "ab";
+        updateProductTest.Symbol = symbol;
 
         // Action
         var result = _validUpdateProduct.TestValidate(updateProductTest);
@@ -70,7 +58,7 @@ public class UpdateProductValidatorTests
     }
 
     [Fact]
-    public void ShouldNot_UpdateProduct_When_ExpirationAt_BeforeToday_Successfully()
+    public void ShouldNot_UpdateProduct_When_ExpirationAt_BeforeToday()
     {
         // Arrange
         var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
@@ -81,5 +69,21 @@ public class UpdateProductValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.ExpirationAt);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(6)]
+    public void ShouldNot_UpdateProduct_When_Type_LessThan1_Or_GreaterThan5(int type)
+    {
+        // Arrange
+        var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
+        updateProductTest.Type = type;
+
+        // Action
+        var result = _validUpdateProduct.TestValidate(updateProductTest);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.Type);
     }
 }

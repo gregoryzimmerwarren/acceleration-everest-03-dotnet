@@ -96,32 +96,6 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllProductsAsync_Throwing_ArgumentException()
-    {
-        // Arrange
-        var listProductTest = ProductFixture.GenerateListProductFixture(0);
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>().MultipleResultQuery())
-            .Returns(It.IsAny<IMultipleResultQuery<Product>>());
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Product>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default))
-            .ReturnsAsync(listProductTest);
-
-        // Action
-        var action = () => _productService.GetAllProductsAsync();
-
-        // Arrange
-        await action.Should().ThrowAsync<ArgumentException>("No product found");
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
-        .MultipleResultQuery(), Times.Once);
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Product>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Product>>(), default), Times.Once);
-    }
-
-    [Fact]
     public async void Should_GetProductByIdAsync_Successfully()
     {
         // Arrange

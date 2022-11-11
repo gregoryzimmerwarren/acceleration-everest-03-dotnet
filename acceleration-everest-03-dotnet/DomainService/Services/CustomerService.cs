@@ -60,9 +60,6 @@ public class CustomerService : ICustomerService
             .Include(customer => customer.Portfolios));
         var customers = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (!customers.Any())
-            throw new ArgumentException("No customer found");
-
         return customers;
     }
 

@@ -70,33 +70,6 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllOrdersAsync_Throwing_ArgumentException()
-    {
-        // Arrange
-        var listOrderTest = OrderFixture.GenerateListOrderFixture(0);
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()))
-            .Returns(It.IsAny<IMultipleResultQuery<Order>>());
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default))
-            .ReturnsAsync(listOrderTest);
-
-        // Action
-        var action = () => _orderService.GetAllOrdersAsync();
-
-        // Arrange
-        await action.Should().ThrowAsync<ArgumentException>("No order found");
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
-        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Order>, IIncludableQueryable<Order, object>>>()), Times.Once);
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Order>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Order>>(), default), Times.Once);
-    }
-
-    [Fact]
     public async void Should_GetAvailableQuotesGetAvailableQuotes_Successfully()
     {
         // Arrange

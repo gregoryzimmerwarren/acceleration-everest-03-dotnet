@@ -27,26 +27,14 @@ public class CreateProductValidatorTests
         result.IsValid.Should().BeTrue();
     }
 
-    [Fact]
-    public void ShouldNot_CreateProduct_When_Symbol_Empty()
+    [Theory]
+    [InlineData("")]
+    [InlineData("ab")]
+    public void ShouldNot_CreateProduct_When_Symbol_Empty_Or_LessThan3Characters(string symbol)
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        createProductTest.Symbol = string.Empty;
-
-        // Action
-        var result = _validCreateProduct.TestValidate(createProductTest);
-
-        // Assert
-        result.ShouldHaveValidationErrorFor(createProduct => createProduct.Symbol);
-    }
-
-    [Fact]
-    public void ShouldNot_CreateProduct_When_Symbol_LessThan3Characters()
-    {
-        // Arrange
-        var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        createProductTest.Symbol = "ab";
+        createProductTest.Symbol = symbol;
 
         // Action
         var result = _validCreateProduct.TestValidate(createProductTest);
@@ -83,26 +71,14 @@ public class CreateProductValidatorTests
         result.ShouldHaveValidationErrorFor(createProduct => createProduct.ExpirationAt);
     }
 
-    [Fact]
-    public void ShouldNot_CreateProduct_When_Type_LessThan1()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(6)]
+    public void ShouldNot_CreateProduct_When_Type_LessThan1_Or_GreaterThan5(int type)
     {
         // Arrange
         var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        createProductTest.Type = 0;
-
-        // Action
-        var result = _validCreateProduct.TestValidate(createProductTest);
-
-        // Assert
-        result.ShouldHaveValidationErrorFor(createProduct => createProduct.Type);
-    }
-
-    [Fact]
-    public void ShouldNot_CreateProduct_When_Type_GreaterThan5()
-    {
-        // Arrange
-        var createProductTest = CreateProductFixture.GenerateCreateProductFixture();
-        createProductTest.Type = 6;
+        createProductTest.Type = type;
 
         // Action
         var result = _validCreateProduct.TestValidate(createProductTest);

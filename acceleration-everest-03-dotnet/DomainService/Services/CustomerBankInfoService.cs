@@ -55,9 +55,6 @@ public class CustomerBankInfoService : ICustomerBankInfoService
             .Include(customerBankInfo => customerBankInfo.Include(customerBankInfo => customerBankInfo.Customer));
         var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (!customersBankInfos.Any())
-            throw new ArgumentException("No bank information found");
-
         return customersBankInfos;
     }
 

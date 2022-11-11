@@ -183,33 +183,6 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllCustomersAsync_Throwing_ArgumentException()
-    {
-        // Arrange
-        var listcustomerTest = CustomerFixture.GenerateListCustomerFixture(0);
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>().MultipleResultQuery()
-        .Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()))
-            .Returns(It.IsAny<IMultipleResultQuery<Customer>>());
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Customer>>(), default))
-            .ReturnsAsync(listcustomerTest);
-
-        // Action
-        var action = () => _customerService.GetAllCustomersAsync();
-
-        // Arrange
-        await action.Should().ThrowAsync<ArgumentException>("No customer found.");
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>>()), Times.Once);
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Customer>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<Customer>>(), default), Times.Once);
-    }
-
-    [Fact]
     public async void Should_GetCustomerByIdAsync_Successfully()
     {
         // Arrange

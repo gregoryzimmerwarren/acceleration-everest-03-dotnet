@@ -75,44 +75,15 @@ public class PortfolioServiceTests
         _mockUnitOfWork.Verify(unitOfWork => unitOfWork.Repository<Portfolio>().Remove(It.IsAny<Portfolio>()), Times.Once);
     }
 
-    [Fact]
-    public async void ShouldNot_DeleteAsync_Throwing_ArgumentException_When_TotalBalance_IsBiggerThan0()
+    [Theory]
+    [InlineData(0, 1)]
+    [InlineData(1, 0)]
+    public async void ShouldNot_DeleteAsync_Throwing_ArgumentException_When_AccountBalance_Or_TotalBalance_IsBiggerThan0(decimal accountBalance, decimal totalBalance)
     {
         // Arrange
         var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
-        portfolioTest.AccountBalance = 0;
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
-        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>()))
-            .Returns(It.IsAny<IQuery<Portfolio>>());
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
-        .SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default))
-            .ReturnsAsync(portfolioTest);
-
-        // Action
-        var action = () => _portfolioService.DeleteAsync(portfolioTest.Id);
-
-        // Assert
-        await action.Should().ThrowAsync<ArgumentException>($@"It is not possible to delete the portfolio for Id: {portfolioTest.Id}.
-Value available for redeem: R${portfolioTest.TotalBalance}.
-Value available for withdraw: R${portfolioTest.AccountBalance}.");
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
-        .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())
-        .Include(It.IsAny<Func<IQueryable<Portfolio>, IIncludableQueryable<Portfolio, object>>>()), Times.Once);
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<Portfolio>()
-        .SingleOrDefaultAsync(It.IsAny<IQuery<Portfolio>>(), default), Times.Once);
-    }
-
-    [Fact]
-    public async void ShouldNot_DeleteAsync_Throwing_ArgumentException_When_AcccountBalance_IsBiggerThan0()
-    {
-        // Arrange
-        var portfolioTest = PortfolioFixture.GeneratePortfolioFixture();
-        portfolioTest.TotalBalance = 0;
+        portfolioTest.AccountBalance = accountBalance;
+        portfolioTest.TotalBalance = totalBalance;
 
         _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<Portfolio>()
         .SingleResultQuery().AndFilter(It.IsAny<Expression<Func<Portfolio, bool>>>())

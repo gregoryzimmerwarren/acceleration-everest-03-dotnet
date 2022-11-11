@@ -132,32 +132,6 @@ public class CustomerBankInfoServiceTests
     }
 
     [Fact]
-    public async void ShouldNot_GetAllCustomersBankInfoAsync_Throwing_ArgumentException()
-    {
-        // Arrange
-        var listcustomerBankInfoTest = CustomerBankInfoFixture.GenerateListCustomerBankInfoFixture(0);
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
-        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()))
-            .Returns(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>());
-
-        _mockRepositoryFactory.Setup(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>(), default)).ReturnsAsync(listcustomerBankInfoTest);
-
-        // Action
-        var action = () => _customerBankInfoService.GetAllCustomersBankInfoAsync();
-
-        // Arrange
-        await action.Should().ThrowAsync<ArgumentException>("No bank information found");
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
-        .MultipleResultQuery().Include(It.IsAny<Func<IQueryable<CustomerBankInfo>, IIncludableQueryable<CustomerBankInfo, object>>>()), Times.Once);
-
-        _mockRepositoryFactory.Verify(repositoryFactory => repositoryFactory.Repository<CustomerBankInfo>()
-        .SearchAsync(It.IsAny<IMultipleResultQuery<CustomerBankInfo>>(), default), Times.Once);
-    }
-
-    [Fact]
     public async void Should_GetCustomerBankInfoByCustomerIdAsync_Successfully()
     {
         // Arrange
