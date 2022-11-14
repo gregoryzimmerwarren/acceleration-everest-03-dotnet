@@ -1,4 +1,4 @@
-﻿namespace DomainModels.Enums;
+﻿namespace Infrastructure.CrossCutting.Enums;
 
 public enum OrderDirection
 {

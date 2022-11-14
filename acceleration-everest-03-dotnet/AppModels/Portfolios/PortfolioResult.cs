@@ -17,7 +17,7 @@ public class PortfolioResult
         decimal totalBalance, 
         decimal accountBalance,
         CustomerResultForOtherDtos customer,
-        IEnumerable<OrderResultOtherDtos> orders)
+        IEnumerable<OrderResultForOtherDtos> orders)
     {
         Id = id;
         Name = name;
@@ -34,5 +34,5 @@ public class PortfolioResult
     public decimal TotalBalance { get; set; }
     public decimal AccountBalance { get; set; }
     public CustomerResultForOtherDtos Customer { get; set; }
-    public IEnumerable<OrderResultOtherDtos> Orders { get; set; }
+    public IEnumerable<OrderResultForOtherDtos> Orders { get; set; }
 }

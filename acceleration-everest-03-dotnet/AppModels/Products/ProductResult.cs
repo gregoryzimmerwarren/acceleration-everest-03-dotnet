@@ -1,4 +1,4 @@
-﻿using AppModels.Enums;
+﻿using Infrastructure.CrossCutting.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 

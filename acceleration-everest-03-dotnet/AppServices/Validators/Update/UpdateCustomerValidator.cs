@@ -30,7 +30,7 @@ public class UpdateCustomerValidator : AbstractValidator<UpdateCustomer>
 
         RuleFor(customer => customer.Cellphone)
             .NotEmpty()
-            .MaximumLength(13)
+            .MaximumLength(14)
             .Must(IsValidCellphone)
             .WithMessage("Cellphone must have a valid format '(XX)9XXXX-XXXX'.");
 
@@ -109,14 +109,14 @@ public class UpdateCustomerValidator : AbstractValidator<UpdateCustomer>
     {
         cellphone = cellphone.FormatCellphone();
 
-        if (cellphone.Length < 10 && cellphone.Length > 11)
+        if (cellphone.Length < 10 || cellphone.Length > 11)
             return false;
 
         if (cellphone.Length == 11 && cellphone[2].ToString() != "9")
             return false;
 
         if (cellphone.Length == 10)
-            cellphone = cellphone.Substring(0, 2) + "9" + cellphone.Substring(3, 8);
+            cellphone = cellphone.Substring(0, 2) + "9" + cellphone.Substring(2, 8);
 
         for (int i = 0; i < 11; i++)
         {

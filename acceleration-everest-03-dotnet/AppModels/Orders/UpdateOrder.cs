@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.CrossCutting.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -10,7 +11,7 @@ public class UpdateOrder
         long id,
         int quotes,
         decimal unitPrice,
-        string direction,
+        OrderDirection direction,
         bool wasExecuted,
         DateTime liquidatedAt,
         long portfolioId,
@@ -31,7 +32,7 @@ public class UpdateOrder
     public int Quotes { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal NetValue { get; set; }
-    public string Direction { get; set; }
+    public OrderDirection Direction { get; set; }
     public bool WasExecuted { get; set; }
     public long PortfolioId { get; set; }
     public long ProductId { get; set; }

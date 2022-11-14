@@ -1,4 +1,4 @@
-﻿using DomainModels.Enums;
+﻿using Infrastructure.CrossCutting.Enums;
 using System;
 
 namespace DomainModels.Models;

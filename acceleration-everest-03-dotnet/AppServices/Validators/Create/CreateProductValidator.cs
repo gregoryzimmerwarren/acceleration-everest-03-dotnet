@@ -18,19 +18,18 @@ namespace AppServices.Validators.Create
                 .WithMessage("Unit price must be more than R$0,00.");
 
             RuleFor(product => product.IssuanceAt)
-                .NotEmpty()
+                .NotEmpty();
             
             RuleFor(product => product.ExpirationAt)
                 .NotEmpty()
                 .GreaterThanOrEqualTo(DateTime.Now.Date);
 
             RuleFor(product => product.Type)
-                .NotNull()
-                .Must(EnunIsValid)
-                .IsInEnum();
+                .NotEmpty()
+                .Must(IsValidEnum);
         }
 
-        private bool EnunIsValid(int direction)
+        private bool IsValidEnum(int direction)
         {
             if (direction < 1 || direction > 5)
                 return false;

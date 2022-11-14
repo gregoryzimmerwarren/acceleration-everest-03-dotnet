@@ -1,4 +1,6 @@
-﻿namespace HostedServiceCronos.Interfaces;
+﻿using System;
+
+namespace HostedServiceCronos.Interfaces;
 
 public interface IScheduleConfig<T>
 {

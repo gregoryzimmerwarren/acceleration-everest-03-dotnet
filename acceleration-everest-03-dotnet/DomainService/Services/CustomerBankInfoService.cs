@@ -55,9 +55,6 @@ public class CustomerBankInfoService : ICustomerBankInfoService
             .Include(customerBankInfo => customerBankInfo.Include(customerBankInfo => customerBankInfo.Customer));
         var customersBankInfos = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (!customersBankInfos.Any())
-            throw new ArgumentException();
-
         return customersBankInfos;
     }
 
@@ -74,8 +71,7 @@ public class CustomerBankInfoService : ICustomerBankInfoService
 
     public async Task<decimal> GetAccountBalanceByCustomerIdAsync(long customerId)
     {
-        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false)
-            ?? throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
+        var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
 
         return customerBankInfo.AccountBalance;
     }
@@ -83,9 +79,6 @@ public class CustomerBankInfoService : ICustomerBankInfoService
     public async Task<bool> WithdrawAsync(long customerId, decimal amount)
     {
         var customerBankInfo = await GetCustomerBankInfoByCustomerIdAsync(customerId).ConfigureAwait(false);
-
-        if (customerBankInfo == null)
-            throw new ArgumentNullException($"No bank information found for customer Id: {customerId}");
 
         if (customerBankInfo.AccountBalance < amount)
             throw new ArgumentException($"Customer bank info does not have sufficient balance for this withdraw. Current balance: R${customerBankInfo.AccountBalance}");

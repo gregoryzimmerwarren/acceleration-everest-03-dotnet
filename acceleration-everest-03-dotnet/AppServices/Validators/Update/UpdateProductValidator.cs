@@ -4,7 +4,7 @@ using System;
 
 namespace AppServices.Validators.Update
 {
-    internal class UpdateProductValidator : AbstractValidator<CreateProduct>
+    public class UpdateProductValidator : AbstractValidator<UpdateProduct>
     {
         public UpdateProductValidator()
         {
@@ -18,7 +18,7 @@ namespace AppServices.Validators.Update
                 .WithMessage("Unit price must be more than R$0,00.");
 
             RuleFor(product => product.IssuanceAt)
-                .NotEmpty()
+                .NotEmpty();
 
             RuleFor(product => product.ExpirationAt)
                 .NotEmpty()

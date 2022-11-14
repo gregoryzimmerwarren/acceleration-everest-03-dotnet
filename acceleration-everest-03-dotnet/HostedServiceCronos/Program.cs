@@ -1,8 +1,10 @@
 using AppServices.DependencyInjections;
 using DomainServices.DependencyInjections;
-using HostedServiceCronos.DependecyInjection;
 using HostedServiceCronos.Services;
 using Infrastructure.Data.DependencyInjections;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Reflection;
 
 IHost host = Host.CreateDefaultBuilder(args)

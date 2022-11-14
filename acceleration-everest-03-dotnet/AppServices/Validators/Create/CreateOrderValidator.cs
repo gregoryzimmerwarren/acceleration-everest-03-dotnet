@@ -1,5 +1,4 @@
 ﻿using AppModels.Orders;
-using DomainModels.Enums;
 using FluentValidation;
 using System;
 

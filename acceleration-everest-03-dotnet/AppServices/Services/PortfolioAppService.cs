@@ -1,4 +1,4 @@
-﻿using AppModels.Enums;
+﻿using Infrastructure.CrossCutting.Enums;
 using AppModels.Orders;
 using AppModels.Portfolios;
 using AppServices.Interfaces;
@@ -80,9 +80,9 @@ public class PortfolioAppService : IPortfolioAppService
 
         foreach (var order in orders)
         {
-            if (order.LiquidatedAt == DateTime.Now.Date && order.WasExecuted == false)
+            if (order.LiquidatedAt.Date == DateTime.Now.Date && order.WasExecuted == false)
             {
-                if (order.Direction == "Buy")
+                if (order.Direction == OrderDirection.Buy)
                 {
                     await ExecuteBuyOrderAsync(order.Product.Id, order.Product.Id, order.NetValue).ConfigureAwait(false);
                 }
@@ -126,7 +126,7 @@ public class PortfolioAppService : IPortfolioAppService
         createOrderDto.NetValue = createOrderDto.UnitPrice * createOrderDto.Quotes;
         createOrderDto.Direction = OrderDirection.Buy;
 
-        if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
+        if (createOrderDto.LiquidatedAt.Date <= DateTime.Now.Date)
         {
             await ExecuteBuyOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, createOrderDto.NetValue);
             createOrderDto.WasExecuted = true;
@@ -141,7 +141,7 @@ public class PortfolioAppService : IPortfolioAppService
         createOrderDto.NetValue = createOrderDto.UnitPrice * createOrderDto.Quotes;
         createOrderDto.Direction = OrderDirection.Sell;
 
-        if (createOrderDto.LiquidatedAt <= DateTime.Now.Date)
+        if (createOrderDto.LiquidatedAt.Date <= DateTime.Now.Date)
         {
             await ExecuteSellOrderAsync(createOrderDto.PortfolioId, createOrderDto.ProductId, createOrderDto.NetValue);
             createOrderDto.WasExecuted = true;

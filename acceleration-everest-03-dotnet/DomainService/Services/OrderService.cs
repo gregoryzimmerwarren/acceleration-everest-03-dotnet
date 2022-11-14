@@ -1,7 +1,7 @@
-﻿using DomainModels.Enums;
-using DomainModels.Models;
+﻿using DomainModels.Models;
 using DomainServices.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
+using Infrastructure.CrossCutting.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -41,15 +41,12 @@ public class OrderService : IOrderService
             .Include(order => order.Product));
         var orders = await repository.SearchAsync(query).ConfigureAwait(false);
 
-        if (!orders.Any())
-            throw new ArgumentException();
-
         return orders;
     }
 
     public async Task<int> GetAvailableQuotes(long portfolioId, long productId)
     {
-        var orders = await GetOrderByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
+        var orders = await GetOrdersByPorfolioIdAndProductIdAsync(portfolioId, productId).ConfigureAwait(false);
 
         var availableQuotes = 0;
 
@@ -80,7 +77,7 @@ public class OrderService : IOrderService
         return order;
     }
 
-    public async Task<IEnumerable<Order>> GetOrderByPorfolioIdAndProductIdAsync(long portfolioId, long productId)
+    public async Task<IEnumerable<Order>> GetOrdersByPorfolioIdAndProductIdAsync(long portfolioId, long productId)
     {
         var repository = _repositoryFactory.Repository<Order>();
         var query = repository.MultipleResultQuery().AndFilter(order => order.PortfolioId == portfolioId && order.ProductId == productId)

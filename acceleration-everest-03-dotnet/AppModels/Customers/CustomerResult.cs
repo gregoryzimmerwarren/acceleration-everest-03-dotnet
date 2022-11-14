@@ -16,7 +16,7 @@ public class CustomerResult
         string cellphone, 
         string city, 
         string postalCode,
-        CustomerBankInfoResultForOthersDtos customerBankInfo, 
+        CustomerBankInfoResultForCustomerDtos customerBankInfo, 
         IEnumerable<PortfolioResultForOthersDtos> portfolios)
     {
         Id = id;
@@ -37,6 +37,6 @@ public class CustomerResult
     public string Cellphone { get; set; }
     public string City { get; set; }
     public string PostalCode { get; set; }
-    public CustomerBankInfoResultForOthersDtos CustomerBankInfo { get; set; }
+    public CustomerBankInfoResultForCustomerDtos CustomerBankInfo { get; set; }
     public IEnumerable<PortfolioResultForOthersDtos> Portfolios { get; set; }
 }
