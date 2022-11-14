@@ -70,20 +70,4 @@ public class UpdateProductValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.ExpirationAt);
     }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(6)]
-    public void ShouldNot_UpdateProduct_When_Type_LessThan1_Or_GreaterThan5(int type)
-    {
-        // Arrange
-        var updateProductTest = UpdateProductFixture.GenerateUpdateProductFixture();
-        updateProductTest.Type = type;
-
-        // Action
-        var result = _validUpdateProduct.TestValidate(updateProductTest);
-
-        // Assert
-        result.ShouldHaveValidationErrorFor(updateProduct => updateProduct.Type);
-    }
 }
