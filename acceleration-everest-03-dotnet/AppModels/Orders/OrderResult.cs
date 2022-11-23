@@ -1,6 +1,6 @@
-﻿using AppModels.Portfolios;
+﻿using AppModels.Enums;
+using AppModels.Portfolios;
 using AppModels.Products;
-using Infrastructure.CrossCutting.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 

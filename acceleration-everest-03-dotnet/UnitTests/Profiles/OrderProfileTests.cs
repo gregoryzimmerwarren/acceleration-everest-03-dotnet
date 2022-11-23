@@ -35,7 +35,7 @@ public class OrderProfileTests : OrderProfile
             unitPrice: orderTest.UnitPrice,
             netValue: orderTest.NetValue,
             liquidatedAt: orderTest.LiquidatedAt,
-            direction: orderTest.Direction,
+            direction: (AppModels.Enums.OrderDirection)orderTest.Direction,
             wasExecuted: orderTest.WasExecuted,
             portfolio: portfolioResultForOthersDtosTest,
             product: productResultTest);
@@ -65,7 +65,7 @@ public class OrderProfileTests : OrderProfile
             unitPrice: orderTest.UnitPrice,
             netValue: orderTest.NetValue,
             liquidatedAt: orderTest.LiquidatedAt,
-            direction: orderTest.Direction,
+            direction: (AppModels.Enums.OrderDirection)orderTest.Direction,
             wasExecuted: orderTest.WasExecuted,
             product: productResultTest);
 
@@ -88,7 +88,7 @@ public class OrderProfileTests : OrderProfile
             quotes: createOrderTest.Quotes,
             unitPrice: createOrderTest.UnitPrice,
             liquidatedAt: createOrderTest.LiquidatedAt,
-            direction: createOrderTest.Direction,
+            direction: (DomainModels.Enums.OrderDirection)createOrderTest.Direction,
             wasExecuted: createOrderTest.WasExecuted,
             portfolioId: 1,
             productId: 1);
@@ -110,7 +110,7 @@ public class OrderProfileTests : OrderProfile
             quotes: updateOrderTest.Quotes,
             unitPrice: updateOrderTest.UnitPrice,
             liquidatedAt: updateOrderTest.LiquidatedAt,
-            direction: updateOrderTest.Direction,
+            direction: (DomainModels.Enums.OrderDirection)updateOrderTest.Direction,
             wasExecuted: updateOrderTest.WasExecuted,
             portfolioId: 1,
             productId: 1);

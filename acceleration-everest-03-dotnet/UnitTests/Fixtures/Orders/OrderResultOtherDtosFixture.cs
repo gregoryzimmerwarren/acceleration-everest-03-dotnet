@@ -1,6 +1,6 @@
-﻿using AppModels.Orders;
+﻿using AppModels.Enums;
+using AppModels.Orders;
 using Bogus;
-using Infrastructure.CrossCutting.Enums;
 using UnitTests.Fixtures.Products;
 
 namespace UnitTests.Fixtures.Orders;

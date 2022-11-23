@@ -1,4 +1,4 @@
-﻿using Infrastructure.CrossCutting.Enums;
+﻿using AppModels.Enums;
 using AppModels.Orders;
 using AppModels.Portfolios;
 using AppServices.Interfaces;

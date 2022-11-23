@@ -1,5 +1,4 @@
-﻿using Infrastructure.CrossCutting.Extensions;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppModels.Customers;
@@ -24,12 +23,12 @@ public class UpdateCustomer
         FullName = fullName;
         Email = email;
         EmailConfirmation = emailConfirmation;
-        Cpf = cpf.FormatCpf();
-        Cellphone = cellphone.FormatCellphone();
+        Cpf = cpf;
+        Cellphone = cellphone;
         Country = country;
         City = city;
         Address = address;
-        PostalCode = postalCode.FormatPostalCode();
+        PostalCode = postalCode;
         Number = number;
         EmailSms = emailSms;
         Whatsapp = whatsapp;

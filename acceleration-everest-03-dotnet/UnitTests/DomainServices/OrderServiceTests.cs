@@ -1,9 +1,9 @@
-﻿using DomainModels.Models;
+﻿using DomainModels.Enums;
+using DomainModels.Models;
 using DomainServices.Services;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using FluentAssertions;
-using Infrastructure.CrossCutting.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;

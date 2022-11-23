@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.CrossCutting.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace DomainModels.Models;
@@ -21,12 +22,12 @@ public class Customer : IEntity
     {
         FullName = fullName;
         Email = email;
-        Cpf = cpf;
-        Cellphone = cellphone;
+        Cpf = cpf.FormatCpf();
+        Cellphone = cellphone.FormatCellphone();
         Country = country;
         City = city;
         Address = address;
-        PostalCode = postalCode;
+        PostalCode = postalCode.FormatPostalCode();
         Number = number;
         EmailSms = emailSms;
         Whatsapp = whatsapp;
