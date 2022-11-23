@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.CrossCutting.Enums;
+﻿namespace AppModels.Enums;
 
 public enum OrderDirection
 {

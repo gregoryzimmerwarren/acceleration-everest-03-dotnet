@@ -41,9 +41,11 @@ public class ProductController : ControllerBase
 
             return Ok(result);
         }
-        catch
+        catch (Exception exception)
         {
-            return NoContent();
+            var message = exception.InnerException?.Message ?? exception.Message;
+
+            return Problem(message);
         }
     }
 

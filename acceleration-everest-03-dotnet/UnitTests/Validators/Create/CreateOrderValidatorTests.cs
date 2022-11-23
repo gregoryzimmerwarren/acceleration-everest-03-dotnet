@@ -1,7 +1,7 @@
-﻿using AppServices.Validators.Create;
+﻿using AppModels.Enums;
+using AppServices.Validators.Create;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using Infrastructure.CrossCutting.Enums;
 using UnitTests.Fixtures.Orders;
 
 namespace UnitTests.Validators.Create;

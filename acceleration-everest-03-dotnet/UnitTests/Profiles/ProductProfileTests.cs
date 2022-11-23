@@ -1,9 +1,9 @@
 ﻿using AppModels.Products;
 using AppServices.Profiles;
 using AutoMapper;
+using DomainModels.Enums;
 using DomainModels.Models;
 using FluentAssertions;
-using Infrastructure.CrossCutting.Enums;
 using UnitTests.Fixtures.Products;
 
 namespace UnitTests.Profiles;
@@ -29,7 +29,7 @@ public class ProductProfileTests : ProductProfile
             unitPrice: productTest.UnitPrice,
             daysToExpire: productTest.DaysToExpire,
             expirationAt: productTest.ExpirationAt,
-            type: productTest.Type);
+            type: (AppModels.Enums.ProductType)productTest.Type);
 
         // Action
         var result = _mapper.Map<ProductResult>(productTest);

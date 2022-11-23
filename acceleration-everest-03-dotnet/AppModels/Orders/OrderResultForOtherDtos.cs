@@ -1,5 +1,5 @@
-﻿using AppModels.Products;
-using Infrastructure.CrossCutting.Enums;
+﻿using AppModels.Enums;
+using AppModels.Products;
 using System;
 using System.ComponentModel.DataAnnotations;
 
